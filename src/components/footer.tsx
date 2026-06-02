@@ -65,6 +65,8 @@ const footerNav = {
     { label: "Track Your Order", href: "/account/orders" },
     { label: "Order Status", href: "/account/lookup" },
     { label: "Wholesale", href: "/wholesale" },
+    { label: "Affiliate Program", href: "/affiliates" },
+    { label: "Refer a Colleague", href: "/refer" },
   ],
   Legal: [
     { label: "Terms of Service", href: "/terms" },
