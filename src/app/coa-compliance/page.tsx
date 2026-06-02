@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import PprLegalShell from "@/components/legal/PprLegalShell";
 import { getLegalPage } from "@/components/legal/legalContent";
 
-const page = getLegalPage("terms")!;
+const page = getLegalPage("coa-compliance")!;
 
 export const metadata: Metadata = {
   title: page.metaTitle,
@@ -22,7 +22,7 @@ const JSONLD = {
   publisher: { "@type": "Organization", name: "Nexphoria" },
 };
 
-export default function TermsPage() {
+export default function CoaCompliancePage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(JSONLD) }} />
