@@ -1,13 +1,14 @@
 "use client";
 
-import { Suspense, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
-import { Check, Package, ArrowRight, FlaskConical, Copy } from "lucide-react";
+import { Check, Package, ArrowRight, FlaskConical } from "lucide-react";
 import { useCart, getItemUnitPrice } from "@/lib/cart";
 import { buildItem, trackPurchase } from "@/lib/analytics";
 import { easing, duration } from "@/lib/motion";
+import PprReferral from "@/components/post-purchase/PprReferral";
 
 const NEXT_STEPS = [
   "Order confirmation and receipt sent to your email",
@@ -23,7 +24,6 @@ function SuccessBody() {
   const items = useCart((s) => s.items);
   const getTotalPrice = useCart((s) => s.getTotalPrice);
   const cleared = useRef(false);
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     if (!cleared.current) {
@@ -46,16 +46,6 @@ function SuccessBody() {
   }, [clearCart]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const referralCode = `RESEARCH-${orderId.replace("NX-", "")}`;
-
-  async function copyCode() {
-    try {
-      await navigator.clipboard.writeText(referralCode);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1800);
-    } catch {
-      setCopied(false);
-    }
-  }
 
   return (
     <main className="mx-auto max-w-2xl px-5 py-16 lg:py-20">
@@ -147,47 +137,9 @@ function SuccessBody() {
       </Link>
 
       {/* Refer a researcher */}
-      <section
-        className="mb-8 rounded-lg p-6"
-        style={{
-          backgroundColor: "color-mix(in srgb, var(--accent) 6%, var(--ink-2))",
-          border: "1px solid var(--accent)",
-        }}
-      >
-        <h2
-          className="mb-1.5 text-[18px] font-semibold"
-          style={{ fontFamily: "var(--font-display)", color: "var(--platinum)" }}
-        >
-          Refer a researcher — give $20, get $20
-        </h2>
-        <p className="mb-4 text-[13px]" style={{ fontFamily: "var(--font-body)", color: "var(--silver-1)" }}>
-          Share your code. They receive $20 off their first protocol; you earn $20 in lab credit
-          on their first order.
-        </p>
-        <div className="flex items-center gap-2">
-          <code
-            className="flex-1 rounded-md px-4 py-3 text-[15px]"
-            style={{
-              backgroundColor: "var(--ink)",
-              border: "1px solid var(--steel)",
-              color: "var(--accent)",
-              fontFamily: "var(--font-mono)",
-              letterSpacing: "0.04em",
-            }}
-          >
-            {referralCode}
-          </code>
-          <button
-            type="button"
-            onClick={copyCode}
-            className="flex items-center gap-2 rounded-md px-4 py-3 text-[13px] font-semibold transition-opacity focus:outline-none focus-visible:ring-2"
-            style={{ backgroundColor: "var(--accent)", color: "var(--ink)", fontFamily: "var(--font-body)" }}
-          >
-            {copied ? <Check size={15} aria-hidden="true" /> : <Copy size={15} aria-hidden="true" />}
-            {copied ? "Copied" : "Copy"}
-          </button>
-        </div>
-      </section>
+      <div className="mb-8">
+        <PprReferral code={referralCode} />
+      </div>
 
       <div className="flex flex-col gap-3 sm:flex-row sm:justify-center">
         <Link

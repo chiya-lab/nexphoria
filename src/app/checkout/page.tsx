@@ -90,7 +90,7 @@ export default function CheckoutPage() {
   function placeOrder() {
     setCompleted((prev) => new Set(prev).add("payment"));
     const orderId = `NX-${Math.floor(100000 + Math.random() * 900000)}`;
-    router.push(`/checkout/success?order=${orderId}`);
+    router.push(`/checkout/upsell?order=${orderId}`);
   }
 
   if (items.length === 0) {
