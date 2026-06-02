@@ -1,4 +1,4 @@
-# Pepperis — Conversion Playbook
+# Nexphoria — Conversion Playbook
 
 **Mandate:** Every page is a conversion machine. Every section earns its scroll. No page exists without a conversion action.
 
@@ -38,7 +38,7 @@ Below hero, in order:
 2. **Bestseller rail** — 8 SKU cards, price + 3-pack price + "Add to cart" inline
 3. **"Build your stack" CTA band** — full-width dark with single accent button to /quiz
 4. **Social proof** — verified review carousel (5 reviews, name-redacted but credential-shown: "M.D., dermatology, Boston" etc.)
-5. **The Pepperis Standard** — 4-tile grid: HPLC tested · 99%+ purity · Cold-chain shipped · US-fulfilled
+5. **The Nexphoria Standard** — 4-tile grid: HPLC tested · 99%+ purity · Cold-chain shipped · US-fulfilled
 6. **Protocols** — 3 featured 3-month protocols with monthly subscription price
 7. **Editorial** — 3 latest research articles teaser
 8. **Newsletter capture** — single field, "Cited research, monthly. No promos." (very different from typical brands)
@@ -111,7 +111,7 @@ Same dark editorial layout, every page ends with:
 - `/faq`: searchable, accordion grouped (Ordering, Shipping, Research Use, Subscriptions, COAs)
 - `/shipping`: cold-chain explanation, free over $150, US-only by default (note Canada/UK Q4)
 - `/returns`: 30-day satisfaction guarantee, unopened only
-- `/contact`: form + research@pepperis.com + 24h response SLA
+- `/contact`: form + research@nexphoria.com + 24h response SLA
 - `/wholesale`: tier card (lab/clinic/distributor), application form
 
 ### Interactive routes

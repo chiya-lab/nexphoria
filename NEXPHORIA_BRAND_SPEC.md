@@ -1,8 +1,8 @@
-# Pepperis — Brand Spec (canonical)
+# Nexphoria — Brand Spec v2 (canonical, dark/peptide-research)
 
-**Status:** New brand replacing Nexphoria. This spec is the source of truth for every page, component, and asset.
+**Status:** This spec supersedes the older Nexphoria v1 (light ceramic / nootropic-voiced) brand. Same brand name, total visual + voice overhaul. This document is the source of truth for every page, component, and asset.
 
-**Visual DNA:** Dark, molecular, clinical — premium boutique research lab. Inspired by the user's actual packaging: matte black PET vial label, silver hot-foil logo, hexagonal molecular pattern, soft acid-green accent on the gift box. We are NOT FLVR Digital's old light/ceramic Nexphoria.
+**Visual DNA:** Dark, molecular, clinical — premium boutique research lab. Inspired by the user's actual packaging: matte black PET vial label, silver hot-foil logo, hexagonal molecular pattern, soft acid-green accent on the gift box. We are NOT the old light/ceramic FLVR-era Nexphoria.
 
 ---
 
@@ -48,7 +48,7 @@
 
 ## Brandmark
 
-Pepperis "P" wordmark in custom letterforms, paired with a **hexagonal molecular icon** (3-bond hex with a single highlighted node — same DNA as the packaging hex). Silver fill on dark backgrounds, ink fill on platinum backgrounds.
+Nexphoria "P" wordmark in custom letterforms, paired with a **hexagonal molecular icon** (3-bond hex with a single highlighted node — same DNA as the packaging hex). Silver fill on dark backgrounds, ink fill on platinum backgrounds.
 
 Tagline candidates (pick at PDP time):
 - "Advanced peptide research. Pharmaceutical discipline."
@@ -60,9 +60,9 @@ Tagline candidates (pick at PDP time):
 
 ## Brand Pivot — Nootropics → Peptides (CRITICAL)
 
-The original Nexphoria brand was built around **nootropics for cognitive performance** ("mental clarity", "focus", "productivity"). Pepperis is a **complete category pivot** to **advanced peptide research**.
+The original Nexphoria brand was built around **nootropics for cognitive performance** ("mental clarity", "focus", "productivity"). Nexphoria is a **complete category pivot** to **advanced peptide research**.
 
-**Category positioning:** Pepperis is the boutique research-peptide supplier — sitting between mass-market grey-market vendors (Pure Rawz, Amino Asylum) and clinical-grade APIs. We are the premium tier in research peptides, period.
+**Category positioning:** Nexphoria is the boutique research-peptide supplier — sitting between mass-market grey-market vendors (Pure Rawz, Amino Asylum) and clinical-grade APIs. We are the premium tier in research peptides, period.
 
 **Audience:** Independent researchers, anti-aging clinicians, longevity-focused biohackers, academic labs needing small-batch material, compounding pharmacists exploring novel peptides.
 

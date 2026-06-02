@@ -1,15 +1,15 @@
-# Pepperis — Project Config
+# Nexphoria — Project Config
 
 ## Project
-Premium e-commerce storefront for **Pepperis**, an advanced peptide research brand.
+Premium e-commerce storefront for **Nexphoria**, an advanced peptide research brand.
 Aesthetic target: precision instrument / dark editorial / molecular lab. Spec-forward,
 peer-to-peer with researchers, restraint over hype, no consumer-wellness language.
 
-**This project pivoted from "Nexphoria" (light/nootropic) to "Pepperis" (dark/peptide-research).**
-The canonical source of truth is `PEPPERIS_BRAND_SPEC.md` and `PEPPERIS_CONVERSION_PLAYBOOK.md`
+**This project pivoted from "Nexphoria" (light/nootropic) to "Nexphoria" (dark/peptide-research).**
+The canonical source of truth is `NEXPHORIA_BRAND_SPEC.md` and `NEXPHORIA_CONVERSION_PLAYBOOK.md`
 at the repo root. Read both before modifying brand, styling, or copy.
 
-## Brand (Pepperis — canonical, supersedes any prior locked spec)
+## Brand (Nexphoria — canonical, supersedes any prior locked spec)
 Palette (dark):
 - --ink #0A0B0D, --ink-2 #111317, --steel #2A2F36
 - --silver-1 #C8CDD3, --silver-2 #8B9099, --platinum #F3F5F7
@@ -44,7 +44,7 @@ wellness, ritual, supplement, vitamin, biohack, miracle, breakthrough,
 - Wellness → Research integrity
 
 ## Conversion mandate
-Every page is a conversion machine. See `PEPPERIS_CONVERSION_PLAYBOOK.md` for the
+Every page is a conversion machine. See `NEXPHORIA_CONVERSION_PLAYBOOK.md` for the
 universal mechanics (sticky CTAs, live-stock chips, subscribe-by-default toggles,
 cart-drawer + free-shipping bar, exit intent, post-purchase upsell, etc.) and the
 page-by-page tactic list.
@@ -67,7 +67,7 @@ KPI targets (12 weeks): 2.0% visitor→purchase, $215 AOV, 35% subscription atta
 - Fork: chyosopo/nexphoria (remote `fork`)
 - Upstream (read-only): chiya-lab/nexphoria (remote `origin`)
 - Identity: Chiya Yosopov <chiya@noribar.com>
-- All Pepperis work on branches prefixed `pepperis/`.
+- All Nexphoria work on branches prefixed `nexphoria/`.
 - Merge via `gh pr merge --merge --admin` against `main` of `chyosopo/nexphoria`.
 
 ## Compliance (non-negotiable)
