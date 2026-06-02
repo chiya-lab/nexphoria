@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Script from "next/script";
 import { products } from "@/lib/products";
-import ProductDetailLaunch from "./ProductDetailLaunch";
+import PprProductDetail from "@/components/pdp/PprProductDetail";
 
 export function generateStaticParams() {
   return products.map((p) => ({ slug: p.slug }));
@@ -178,7 +178,7 @@ export default async function ProductPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
-      <ProductDetailLaunch product={product} related={related} />
+      <PprProductDetail product={product} paired={related} />
     </>
   );
 }
