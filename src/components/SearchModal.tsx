@@ -28,6 +28,22 @@ const STATIC_PAGES: SearchResult[] = [
   { type: "page", title: "Tools", href: "/tools" },
 ];
 
+const POPULAR_COMPOUNDS = [
+  { label: "BPC-157", href: "/products/bpc-157" },
+  { label: "Tirzepatide", href: "/products/tirzepatide" },
+  { label: "Semaglutide", href: "/products/semaglutide" },
+  { label: "TB-500", href: "/products/tb-500" },
+  { label: "Ipamorelin", href: "/products/ipamorelin" },
+  { label: "MK-677", href: "/products/mk-677" },
+];
+
+const CATEGORY_JUMPS = [
+  { label: "Recovery & Healing", href: "/products?cat=Recovery+%26+Healing" },
+  { label: "Weight Management", href: "/products?cat=Weight+Management" },
+  { label: "Growth Hormone", href: "/products?cat=Growth+Hormone" },
+  { label: "Cognitive", href: "/products?cat=Cognitive" },
+];
+
 export default function SearchModal() {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState("");
@@ -181,7 +197,7 @@ export default function SearchModal() {
     <AnimatePresence>
       {isOpen && (
         <motion.div
-          className="search-overlay fixed inset-0 z-[60] flex items-start justify-center pt-[10vh] px-4"
+          className="search-overlay fixed inset-0 z-[60] flex items-start justify-center sm:pt-[10vh] sm:px-4"
           style={{ backgroundColor: "rgba(0,0,0,0.7)", backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
@@ -189,7 +205,7 @@ export default function SearchModal() {
           transition={{ duration: 0.2 }}
           onClick={handleClose}
         >
-          {/* Panel — stop propagation so clicking inside doesn't close */}
+          {/* Panel — full-screen on mobile, centered modal on desktop */}
           <motion.div
             role="dialog"
             aria-modal="true"
@@ -198,7 +214,7 @@ export default function SearchModal() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: -24 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full rounded-2xl border shadow-2xl overflow-hidden"
+            className="w-full h-full sm:h-auto flex flex-col sm:block border-0 sm:border sm:rounded-2xl shadow-2xl overflow-hidden"
             style={{
               maxWidth: "600px",
               backgroundColor: "#FFFFFF",
@@ -229,7 +245,7 @@ export default function SearchModal() {
                 className="flex-1 bg-transparent text-lg outline-none placeholder:text-[#AAAAAA]"
                 style={{
                   color: "#1A1A1A",
-                  caretColor: "#C4A265",
+                  caretColor: "#B8A44C",
                   // gold focus ring handled via CSS below
                 }}
                 aria-autocomplete="list"
@@ -252,7 +268,7 @@ export default function SearchModal() {
               id="search-results"
               role="listbox"
               aria-label="Search results"
-              className="max-h-[420px] overflow-y-auto"
+              className="flex-1 sm:flex-none sm:max-h-[420px] overflow-y-auto"
             >
               {/* Live region for screen readers */}
               <div aria-live="polite" aria-atomic="true" className="sr-only">
@@ -268,12 +284,52 @@ export default function SearchModal() {
               )}
 
               {!query && (
-                <div className="px-5 py-8 text-center">
-                  <p className="text-sm" style={{ color: "#999999" }}>
-                    Search compounds, guides, or pages
-                  </p>
-                  <p className="text-xs mt-2" style={{ color: "#CCCCCC" }}>
-                    Try &ldquo;BPC-157&rdquo;, &ldquo;reconstitution&rdquo;, &ldquo;GLP-1&rdquo;
+                <div className="px-5 py-6">
+                  <div className="mb-6">
+                    <p
+                      className="text-[10px] uppercase tracking-widest font-medium mb-3"
+                      style={{ color: "#B8A44C", letterSpacing: "0.2em" }}
+                    >
+                      Popular Compounds
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {POPULAR_COMPOUNDS.map((c) => (
+                        <button
+                          key={c.href}
+                          onClick={() => handleNavigate(c.href)}
+                          className="px-3 py-1.5 text-xs font-medium rounded-full border transition-colors hover:bg-[#FBF9F5]"
+                          style={{ borderColor: "#E5E5E5", color: "#1A1A1A" }}
+                        >
+                          {c.label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <p
+                      className="text-[10px] uppercase tracking-widest font-medium mb-3"
+                      style={{ color: "#B8A44C", letterSpacing: "0.2em" }}
+                    >
+                      Jump to a Category
+                    </p>
+                    <div className="grid grid-cols-2 gap-2">
+                      {CATEGORY_JUMPS.map((cat) => (
+                        <button
+                          key={cat.href}
+                          onClick={() => handleNavigate(cat.href)}
+                          className="flex items-center justify-between gap-2 px-3 py-2.5 text-sm font-medium rounded-lg border text-left transition-colors hover:bg-[#FBF9F5]"
+                          style={{ borderColor: "#E5E5E5", color: "#1A1A1A" }}
+                        >
+                          <span className="truncate">{cat.label}</span>
+                          <ArrowRight className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "#B8A44C" }} />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <p className="text-xs mt-6 text-center" style={{ color: "#CCCCCC" }}>
+                    Or type to search compounds, guides, and pages
                   </p>
                 </div>
               )}
@@ -284,7 +340,7 @@ export default function SearchModal() {
                   {results.some((r) => r.type === "product") && (
                     <div
                       className="px-5 py-2 text-[10px] uppercase tracking-widest font-medium"
-                      style={{ color: "#C4A265", letterSpacing: "0.2em" }}
+                      style={{ color: "#B8A44C", letterSpacing: "0.2em" }}
                     >
                       Compounds
                     </div>
@@ -309,7 +365,7 @@ export default function SearchModal() {
                         >
                           <div
                             className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0 text-xs font-semibold uppercase"
-                            style={{ backgroundColor: "rgba(196,162,101,0.12)", color: "#C4A265" }}
+                            style={{ backgroundColor: "rgba(196,162,101,0.12)", color: "#B8A44C" }}
                           >
                             {result.title.slice(0, 2)}
                           </div>
@@ -327,7 +383,7 @@ export default function SearchModal() {
                             )}
                           </div>
                           {absIndex === selectedIndex && (
-                            <ArrowRight className="w-4 h-4 flex-shrink-0" style={{ color: "#C4A265" }} />
+                            <ArrowRight className="w-4 h-4 flex-shrink-0" style={{ color: "#B8A44C" }} />
                           )}
                         </button>
                       );
@@ -337,7 +393,7 @@ export default function SearchModal() {
                   {results.some((r) => r.type === "article") && (
                     <div
                       className="px-5 pt-3 pb-2 text-[10px] uppercase tracking-widest font-medium"
-                      style={{ color: "#C4A265", letterSpacing: "0.2em", borderTop: "1px solid #F0EDE7" }}
+                      style={{ color: "#B8A44C", letterSpacing: "0.2em", borderTop: "1px solid #F0EDE7" }}
                     >
                       Articles
                     </div>
@@ -380,7 +436,7 @@ export default function SearchModal() {
                             )}
                           </div>
                           {absIndex === selectedIndex && (
-                            <ArrowRight className="w-4 h-4 flex-shrink-0" style={{ color: "#C4A265" }} />
+                            <ArrowRight className="w-4 h-4 flex-shrink-0" style={{ color: "#B8A44C" }} />
                           )}
                         </button>
                       );
@@ -407,7 +463,7 @@ export default function SearchModal() {
                         >
                           <div
                             className="w-8 h-8 rounded flex items-center justify-center flex-shrink-0 text-xs font-medium"
-                            style={{ backgroundColor: "rgba(196,162,101,0.06)", color: "#C4A265" }}
+                            style={{ backgroundColor: "rgba(196,162,101,0.06)", color: "#B8A44C" }}
                           >
                             Pg
                           </div>
@@ -420,7 +476,7 @@ export default function SearchModal() {
                             </div>
                           </div>
                           {absIndex === selectedIndex && (
-                            <ArrowRight className="w-4 h-4 flex-shrink-0" style={{ color: "#C4A265" }} />
+                            <ArrowRight className="w-4 h-4 flex-shrink-0" style={{ color: "#B8A44C" }} />
                           )}
                         </button>
                       );
