@@ -78,7 +78,7 @@ const advisors = [
     credentials: [
       "M.D. — Charles University, Prague",
       "Fellowship in Clinical Immunology — University of Vienna",
-      "Dual specialization: gastroenterology and immune peptide therapeutics",
+      "Dual specialization: gastroenterology and immune peptide research",
       "11 years clinical and translational research",
     ],
     bio: "Dr. Reinholt-Varga bridges bench research and clinical application in immunomodulatory peptides. His work on BPC-157's gastrointestinal mechanisms, KPV's NF-κB inhibition pathway, and TB-500's anti-inflammatory phase activity informs both Nexphoria's compound selection and the protocol guidance we provide to research teams. He reviews all research protocols referenced in Nexphoria's educational materials for biological plausibility.",

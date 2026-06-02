@@ -1,17 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import RUOBanner from "@/components/RUOBanner";
 
 export const metadata: Metadata = {
-  title: "Clinical Programs — Physician-Guided Peptide Therapy | Nexphoria",
+  title: "Research Compounds, Not Clinical Services | Nexphoria",
   description:
-    "Nexphoria clinical programs: telehealth consultation, custom prescriptions, compounding pharmacy delivery. Starting at $149/month.",
+    "Nexphoria supplies research-grade peptide compounds for qualified in vitro and animal-model research only. We do not provide clinical services, prescriptions, or conduct human studies.",
   alternates: {
     canonical: "https://nexphoria.com/clinical",
   },
+  robots: { index: false, follow: true },
   openGraph: {
-    title: "Clinical Programs — Physician-Guided Peptide Therapy | Nexphoria",
-    description: "Telehealth consultation, custom prescriptions, compounding pharmacy delivery. Starting at $149/month.",
+    title: "Research Compounds, Not Clinical Services | Nexphoria",
+    description:
+      "Nexphoria supplies research-grade peptide compounds for qualified research use only. We do not provide clinical services or conduct human studies.",
     url: "https://nexphoria.com/clinical",
     siteName: "Nexphoria",
     type: "website",
@@ -19,168 +22,157 @@ export const metadata: Metadata = {
   },
 };
 
-const protocols = [
+const clarifications = [
   {
-    name: "Recovery Protocol",
-    description: "Targeted tissue repair and accelerated recovery for active individuals.",
-    includes: ["BPC-157 (injectable)", "TB-500 (injectable)", "Monthly physician check-in"],
-    price: "$189/mo",
+    heading: "What Nexphoria provides",
+    body: "Lyophilized, research-grade peptide compounds for qualified in vitro and animal-model research. Every lot ships with a lot-specific Certificate of Analysis documenting independent HPLC purity and ESI-MS identity verification.",
   },
   {
-    name: "Longevity Protocol",
-    description: "Cellular repair, NAD+ optimization, and healthy aging support.",
-    includes: ["Epitalon (injectable)", "NAD+ (IV or SubQ)", "Quarterly labs included"],
-    price: "$249/mo",
+    heading: "What Nexphoria does not provide",
+    body: "We do not offer clinical programs, telehealth consultations, prescriptions, or compounded medications. We do not conduct human studies, and nothing on this site is medical advice or guidance for use in or on the human body.",
   },
   {
-    name: "Cognitive Protocol",
-    description: "Neuroprotection and cognitive performance for demanding professionals.",
-    includes: ["Semax (nasal)", "Selank (nasal)", "Bi-weekly physician consult"],
-    price: "$149/mo",
+    heading: "Who our materials are for",
+    body: "Credentialed researchers, licensed professionals, and qualified institutions conducting laboratory research. All compounds are supplied strictly for research use only (RUO).",
   },
-];
-
-const steps = [
-  { num: "01", title: "Consultation", desc: "Schedule a telehealth visit with a licensed prescriber. 15-minute assessment of your goals, history, and labs." },
-  { num: "02", title: "Assessment", desc: "Your physician reviews bloodwork, medical history, and determines which compounds are appropriate for your biology." },
-  { num: "03", title: "Prescription", desc: "Custom prescription sent to a licensed 503A compounding pharmacy. FDA-registered facility, USP standards." },
-  { num: "04", title: "Delivery", desc: "Pre-mixed, ready-to-use compounds shipped cold-chain to your door. Monthly auto-refill. Physician monitoring ongoing." },
 ];
 
 export default function ClinicalPage() {
   return (
-    <div style={{ backgroundColor: "#EAE7E3", minHeight: "100vh" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#0F0F0E" }}>
       {/* Hero */}
-      <section style={{ paddingTop: "160px", paddingBottom: "80px" }} className="px-6 md:px-12">
-        <div className="max-w-5xl mx-auto">
-          <Breadcrumb items={[{label:"Home",href:"/"},{label:"Clinical Programs"}]} variant="light" className="mb-6" />
-          <p
-            className="text-xs uppercase mb-6"
-            style={{ color: "#B8923A", letterSpacing: "0.25em", fontWeight: 500 }}
-          >
-            Clinical Programs
-          </p>
+      <section className="relative pt-36 pb-20 border-b" style={{ borderColor: "#2A2A28" }}>
+        <div className="container-nex">
+          <Breadcrumb
+            items={[{ label: "Home", href: "/" }, { label: "Research Compounds Only" }]}
+            variant="dark"
+            className="mb-6"
+          />
+          <span className="eyebrow mb-5 block" style={{ color: "#B8A44C" }}>
+            Compliance Notice
+          </span>
           <h1
-            className="text-5xl md:text-6xl mb-8"
-            style={{ fontWeight: 200, color: "#010101", letterSpacing: "-0.01em", lineHeight: 1.1 }}
+            className="font-bold tracking-tight mb-6 max-w-3xl leading-tight"
+            style={{
+              fontFamily: "Georgia, serif",
+              fontSize: "clamp(2.4rem, 5vw, 4rem)",
+              lineHeight: 1.1,
+              color: "#FDFCF8",
+            }}
           >
-            Physician-Guided<br />Peptide Therapy
+            Research Compounds.{" "}
+            <em className="italic" style={{ color: "#B8A44C" }}>
+              Not Clinical Services.
+            </em>
           </h1>
-          <p className="text-lg max-w-2xl" style={{ color: "#7F7F7D", lineHeight: 1.7 }}>
-            Telehealth consultation with a licensed prescriber. Custom compounded peptides from
-            FDA-registered 503A pharmacies. Delivered cold-chain to your door monthly.
-            Real medicine. Real oversight. No gray areas.
+          <p className="text-lg max-w-2xl leading-relaxed text-secondary">
+            Nexphoria manufactures and supplies research-grade peptide compounds for qualified
+            in vitro and animal-model research. We do not provide clinical services, write
+            prescriptions, or conduct human studies.
           </p>
         </div>
       </section>
 
-      {/* How It Works */}
-      <section className="px-6 md:px-12 pb-24">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-3xl mb-12" style={{ fontWeight: 200, color: "#010101" }}>
-            How It Works
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {steps.map((step) => (
-              <div key={step.num} className="flex gap-5">
-                <div
-                  className="text-3xl shrink-0"
-                  style={{ fontWeight: 200, color: "#B8923A", fontFamily: "monospace" }}
+      {/* Clarifications */}
+      <section className="py-24" style={{ backgroundColor: "#1A1A18" }}>
+        <div className="container-nex">
+          <div className="grid md:grid-cols-3 gap-px border" style={{ backgroundColor: "#2A2A28", borderColor: "#2A2A28" }}>
+            {clarifications.map((c) => (
+              <div key={c.heading} className="p-8" style={{ backgroundColor: "#1C1C1A" }}>
+                <h2
+                  className="text-lg font-bold mb-3"
+                  style={{ fontFamily: "Georgia, serif", color: "#FDFCF8" }}
                 >
-                  {step.num}
-                </div>
-                <div>
-                  <h3 className="text-lg mb-2" style={{ fontWeight: 400, color: "#010101" }}>
-                    {step.title}
-                  </h3>
-                  <p className="text-sm" style={{ color: "#7F7F7D", lineHeight: 1.7 }}>
-                    {step.desc}
-                  </p>
-                </div>
+                  {c.heading}
+                </h2>
+                <p className="text-sm leading-relaxed text-secondary">{c.body}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Protocols */}
-      <section style={{ backgroundColor: "#FFFFFF" }} className="py-24 px-6 md:px-12">
-        <div className="max-w-5xl mx-auto">
-          <p
-            className="text-xs uppercase mb-4"
-            style={{ color: "#B8923A", letterSpacing: "0.25em" }}
-          >
-            Available Protocols
-          </p>
-          <h2 className="text-3xl mb-12" style={{ fontWeight: 200, color: "#010101" }}>
-            Choose Your Path
-          </h2>
+      {/* Where to go next */}
+      <section className="py-24 border-t" style={{ backgroundColor: "#0F0F0E", borderColor: "#2A2A28" }}>
+        <div className="container-nex">
+          <div className="max-w-3xl mb-12">
+            <span className="eyebrow mb-4 block" style={{ color: "#B8A44C" }}>
+              What You May Be Looking For
+            </span>
+            <h2
+              className="font-bold tracking-tight"
+              style={{
+                fontFamily: "Georgia, serif",
+                fontSize: "clamp(1.8rem, 3.5vw, 2.6rem)",
+                color: "#FDFCF8",
+              }}
+            >
+              Explore Our Research Resources
+            </h2>
+          </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            {protocols.map((protocol) => (
-              <div
-                key={protocol.name}
-                className="p-8 rounded-lg"
-                style={{ backgroundColor: "#FFFFFF", border: "1px solid rgba(0,0,0,0.08)", borderTop: "2px solid #B8923A" }}
-              >
-                <h3 className="text-xl mb-3" style={{ fontWeight: 300, color: "#010101" }}>
-                  {protocol.name}
-                </h3>
-                <p className="text-sm mb-6" style={{ color: "#7F7F7D", lineHeight: 1.6 }}>
-                  {protocol.description}
-                </p>
-                <ul className="space-y-2 mb-8">
-                  {protocol.includes.map((item) => (
-                    <li key={item} className="text-sm flex items-start gap-2" style={{ color: "#010101" }}>
-                      <span style={{ color: "#B8923A" }}>·</span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-                <div className="text-2xl mb-6" style={{ fontWeight: 200, color: "#010101" }}>
-                  {protocol.price}
-                </div>
-                <Link href="#waitlist" className="btn-primary w-full text-center block">
-                  Join Waitlist
-                </Link>
-              </div>
-            ))}
+          <div className="grid sm:grid-cols-2 gap-6">
+            <Link
+              href="/science"
+              className="block p-8 border rounded-2xl transition-colors"
+              style={{ borderColor: "#2A2A28", backgroundColor: "#1C1C1A" }}
+            >
+              <h3 className="text-lg font-bold mb-2" style={{ fontFamily: "Georgia, serif", color: "#FDFCF8" }}>
+                Testing &amp; Methodology
+              </h3>
+              <p className="text-sm leading-relaxed text-secondary mb-4">
+                How we verify every compound — independent HPLC / ESI-MS, what a COA shows, and how
+                to read one.
+              </p>
+              <span className="text-xs font-medium uppercase tracking-[0.15em]" style={{ color: "#B8A44C" }}>
+                View the science &rarr;
+              </span>
+            </Link>
+
+            <Link
+              href="/research"
+              className="block p-8 border rounded-2xl transition-colors"
+              style={{ borderColor: "#2A2A28", backgroundColor: "#1C1C1A" }}
+            >
+              <h3 className="text-lg font-bold mb-2" style={{ fontFamily: "Georgia, serif", color: "#FDFCF8" }}>
+                Research Methods
+              </h3>
+              <p className="text-sm leading-relaxed text-secondary mb-4">
+                Study-design considerations for in vitro and animal-model work, and how to cite
+                Nexphoria materials in research.
+              </p>
+              <span className="text-xs font-medium uppercase tracking-[0.15em]" style={{ color: "#B8A44C" }}>
+                Research framing &rarr;
+              </span>
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* Waitlist */}
-      <section id="waitlist" className="py-24 px-6 md:px-12" style={{ backgroundColor: "#EAE7E3" }}>
-        <div className="max-w-lg mx-auto text-center">
-          <h2 className="text-3xl mb-4" style={{ fontWeight: 200, color: "#010101" }}>
-            Join the Waitlist
-          </h2>
-          <p className="text-sm mb-8" style={{ color: "#7F7F7D" }}>
-            Clinical programs launching Q3 2026. Enter your email for priority access.
-          </p>
-          <form className="flex gap-3">
-            <input
-              type="email"
-              placeholder="your@email.com"
-              className="flex-1 px-4 py-3 text-sm rounded-sm"
-              style={{ border: "1px solid rgba(0,0,0,0.1)", backgroundColor: "#FFFFFF", outline: "none" }}
-            />
-            <button type="submit" className="btn-primary">
-              Join
-            </button>
-          </form>
+      {/* CTA */}
+      <section className="py-20" style={{ backgroundColor: "#1A1A18" }}>
+        <div className="container-nex flex flex-col md:flex-row items-center justify-between gap-8">
+          <div>
+            <h2
+              className="font-bold tracking-tight mb-2"
+              style={{ fontFamily: "Georgia, serif", fontSize: "2rem", color: "#FDFCF8" }}
+            >
+              Browse the research catalog
+            </h2>
+            <p className="text-sm" style={{ color: "rgba(255,255,255,0.55)" }}>
+              Every compound ships with a lot-specific COA and full technical documentation.
+            </p>
+          </div>
+          <Link href="/products" className="btn-outline-gold whitespace-nowrap">
+            Browse Compounds &rarr;
+          </Link>
         </div>
       </section>
 
-      {/* Disclaimer */}
-      <section className="px-6 md:px-12 pb-24" style={{ backgroundColor: "#EAE7E3" }}>
-        <div className="max-w-3xl mx-auto p-6 rounded-lg" style={{ border: "1px solid #B8923A", backgroundColor: "rgba(184,146,58,0.03)" }}>
-          <p className="text-xs" style={{ color: "#7F7F7D", lineHeight: 1.7 }}>
-            <strong style={{ color: "#B8923A" }}>Clinical Disclosure:</strong> All clinical programs require a licensed prescriber.
-            Compounds are dispensed by FDA-registered 503A compounding pharmacies under individual patient prescriptions.
-            These are not FDA-approved drugs. Compounded medications are prescribed at the discretion of the treating physician.
-            Nexphoria does not practice medicine. Telehealth services provided by independent licensed medical professionals.
-          </p>
+      {/* RUO */}
+      <section className="px-6 py-16">
+        <div className="max-w-3xl mx-auto">
+          <RUOBanner variant="card" tone="dark" />
         </div>
       </section>
     </div>
