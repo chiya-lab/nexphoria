@@ -6,9 +6,18 @@ import Breadcrumb from "@/components/Breadcrumb";
 import ShareButtons from "@/components/ShareButtons";
 import { categoryToSlug } from "../category/[category]/page";
 import { getTagsForArticle } from "@/lib/article-tags";
+import { getProduct } from "@/lib/products";
+import ArticleToc, { type TocItem } from "./ArticleToc";
 
 interface Props {
   params: Promise<{ slug: string }>;
+}
+
+function slugifyHeading(text: string): string {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 export async function generateStaticParams() {
@@ -50,13 +59,13 @@ function formatDate(iso: string) {
   });
 }
 
-function RenderSection({ section }: { section: BlogSection }) {
+function RenderSection({ section, id }: { section: BlogSection; id?: string }) {
   switch (section.type) {
     case "paragraph":
       return (
         <p
           className="text-base md:text-[17px] mb-6"
-          style={{ color: "#2a2a2a", lineHeight: 1.8, fontWeight: 300 }}
+          style={{ color: "#2a2a2a", lineHeight: 1.85, fontWeight: 300 }}
         >
           {section.text}
         </p>
@@ -65,11 +74,12 @@ function RenderSection({ section }: { section: BlogSection }) {
     case "heading":
       return (
         <h2
-          className="text-xl md:text-2xl mt-10 mb-4"
+          id={id}
+          className="text-xl md:text-[1.7rem] mt-14 mb-4 scroll-mt-28"
           style={{
             fontWeight: 500,
             color: "#010101",
-            letterSpacing: "-0.01em",
+            letterSpacing: "-0.015em",
             lineHeight: 1.25,
           }}
         >
@@ -80,8 +90,9 @@ function RenderSection({ section }: { section: BlogSection }) {
     case "subheading":
       return (
         <h3
-          className="text-base md:text-lg mt-7 mb-3"
-          style={{ fontWeight: 500, color: "#010101", lineHeight: 1.3 }}
+          id={id}
+          className="text-base md:text-lg mt-9 mb-3 scroll-mt-28"
+          style={{ fontWeight: 600, color: "#010101", lineHeight: 1.35 }}
         >
           {section.text}
         </h3>
@@ -260,6 +271,40 @@ export default async function BlogArticlePage({ params }: Props) {
   // Compound tags for this article
   const compoundTags = getTagsForArticle(article.slug);
 
+  // Compounds referenced that map to an actual product page
+  const referencedProducts = compoundTags
+    .map((t) => ({ tag: t, product: getProduct(t.slug) }))
+    .filter((x): x is { tag: typeof x.tag; product: NonNullable<typeof x.product> } =>
+      Boolean(x.product)
+    );
+
+  // Build a unique-id'd list of headings for the sticky table of contents
+  const usedIds = new Set<string>();
+  const headingIds: (string | undefined)[] = [];
+  const tocItems: TocItem[] = [];
+  for (const section of article.body) {
+    if (
+      (section.type === "heading" || section.type === "subheading") &&
+      section.text
+    ) {
+      const base = slugifyHeading(section.text) || "section";
+      let unique = base;
+      let n = 2;
+      while (usedIds.has(unique)) {
+        unique = `${base}-${n++}`;
+      }
+      usedIds.add(unique);
+      headingIds.push(unique);
+      tocItems.push({
+        id: unique,
+        text: section.text,
+        level: section.type === "heading" ? 2 : 3,
+      });
+    } else {
+      headingIds.push(undefined);
+    }
+  }
+
   return (
     <>
       <script
@@ -322,65 +367,119 @@ export default async function BlogArticlePage({ params }: Props) {
 
         {/* Article body */}
         <section className="px-6 py-20 md:py-28">
-          <div className="max-w-3xl mx-auto">
-            <article>
-              {article.body.map((section, i) => (
-                <RenderSection key={i} section={section} />
-              ))}
-            </article>
+          <div className="max-w-6xl mx-auto lg:grid lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-16">
+            {/* Reading column */}
+            <div className="mx-auto w-full" style={{ maxWidth: "720px" }}>
+              <article>
+                {article.body.map((section, i) => (
+                  <RenderSection key={i} section={section} id={headingIds[i]} />
+                ))}
+              </article>
 
-            {/* Share buttons */}
-            <ShareButtons
-              url={canonicalUrl}
-              title={article.title}
-            />
+              {/* Share buttons */}
+              <ShareButtons
+                url={canonicalUrl}
+                title={article.title}
+              />
 
-            {/* Compound tags */}
-            {compoundTags.length > 0 && (
-              <div className="mt-8 pt-6" style={{ borderTop: "1px solid rgba(0,0,0,0.07)" }}>
-                <p
-                  className="text-xs uppercase tracking-widest mb-3"
-                  style={{ color: "#A0A0A0" }}
+              {/* Compounds referenced — links to product pages */}
+              {referencedProducts.length > 0 && (
+                <div
+                  className="mt-12 rounded-2xl px-6 py-6"
+                  style={{
+                    backgroundColor: "#F0EDE8",
+                    border: "1px solid rgba(0,0,0,0.06)",
+                  }}
                 >
-                  Research Compounds
-                </p>
-                <div className="flex flex-wrap gap-2">
-                  {compoundTags.map((t) => (
-                    <Link
-                      key={t.slug}
-                      href={`/blog/tag/${t.slug}`}
-                      className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full transition-opacity hover:opacity-70"
-                      style={{
-                        backgroundColor: "#F0EDE8",
-                        border: "1px solid rgba(0,0,0,0.10)",
-                        color: "#555",
-                      }}
-                    >
-                      <span style={{ color: "#B8A44C" }}>#</span>{t.displayName}
-                    </Link>
-                  ))}
+                  <p
+                    className="text-xs uppercase tracking-widest mb-4"
+                    style={{ color: "#B8A44C" }}
+                  >
+                    Compounds Referenced
+                  </p>
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    {referencedProducts.map(({ tag, product }) => (
+                      <Link
+                        key={product.slug}
+                        href={`/products/${product.slug}`}
+                        className="group flex items-center justify-between rounded-lg px-4 py-3 transition-colors"
+                        style={{
+                          backgroundColor: "#F9F9F9",
+                          border: "1px solid rgba(0,0,0,0.07)",
+                        }}
+                      >
+                        <span
+                          className="text-sm"
+                          style={{ color: "#010101", fontWeight: 500 }}
+                        >
+                          {tag.displayName}
+                        </span>
+                        <span
+                          className="text-xs inline-flex items-center gap-1"
+                          style={{ color: "#B8923A" }}
+                        >
+                          View <span aria-hidden>→</span>
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            <div
-              className="mt-12 rounded-lg px-6 py-5"
-              style={{
-                backgroundColor: "#F0EDE8",
-                border: "1px solid rgba(0,0,0,0.06)",
-              }}
-            >
-              <p className="text-xs uppercase tracking-widest mb-2" style={{ color: "#B8A44C" }}>
-                Research Use Only
-              </p>
-              <p className="text-xs" style={{ color: "#777", lineHeight: 1.7 }}>
-                All content on this site is for educational and research
-                purposes only. Nexphoria compounds are sold exclusively for
-                qualified research use. They are not intended for human
-                consumption, therapeutic use, or diagnostic purposes. Nothing on
-                this site constitutes medical advice.
-              </p>
+              {/* Explore by topic — tag pills */}
+              {compoundTags.length > 0 && (
+                <div className="mt-8 pt-6" style={{ borderTop: "1px solid rgba(0,0,0,0.07)" }}>
+                  <p
+                    className="text-xs uppercase tracking-widest mb-3"
+                    style={{ color: "#A0A0A0" }}
+                  >
+                    Explore by Topic
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {compoundTags.map((t) => (
+                      <Link
+                        key={t.slug}
+                        href={`/blog/tag/${t.slug}`}
+                        className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full transition-opacity hover:opacity-70"
+                        style={{
+                          backgroundColor: "#F0EDE8",
+                          border: "1px solid rgba(0,0,0,0.10)",
+                          color: "#555",
+                        }}
+                      >
+                        <span style={{ color: "#B8A44C" }}>#</span>{t.displayName}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div
+                className="mt-12 rounded-2xl px-6 py-5"
+                style={{
+                  backgroundColor: "#F0EDE8",
+                  border: "1px solid rgba(0,0,0,0.06)",
+                }}
+              >
+                <p className="text-xs uppercase tracking-widest mb-2" style={{ color: "#B8A44C" }}>
+                  Research Use Only
+                </p>
+                <p className="text-xs" style={{ color: "#777", lineHeight: 1.7 }}>
+                  All content on this site is for educational and research
+                  purposes only. Nexphoria compounds are sold exclusively for
+                  qualified research use. They are not intended for human
+                  consumption, therapeutic use, or diagnostic purposes. Nothing on
+                  this site constitutes medical advice.
+                </p>
+              </div>
             </div>
+
+            {/* Sticky table of contents — desktop only */}
+            <aside className="hidden lg:block">
+              <div className="sticky top-28">
+                <ArticleToc items={tocItems} />
+              </div>
+            </aside>
           </div>
         </section>
 
