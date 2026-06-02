@@ -12,6 +12,7 @@ import {
   Boxes,
   Grid3x3,
   Download,
+  Image as ImageIcon,
   Menu,
   X,
 } from "lucide-react";
@@ -30,6 +31,7 @@ const NAV: NavItem[] = [
   { href: "/admin/coa", label: "CoA queue", icon: FileCheck2 },
   { href: "/admin/inventory", label: "Inventory", icon: Boxes },
   { href: "/admin/cohorts", label: "Cohorts", icon: Grid3x3 },
+  { href: "/admin/image-briefs", label: "Image briefs", icon: ImageIcon },
   { href: "/admin/reports", label: "Reports", icon: Download },
 ];
 
