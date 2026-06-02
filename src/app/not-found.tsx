@@ -314,6 +314,29 @@ export default function NotFound() {
           </Link>
         </div>
 
+        {/* Secondary quick links */}
+        <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 mt-8 px-6">
+          {[
+            { href: "/products", label: "Catalog" },
+            { href: "/science", label: "The Science" },
+            { href: "/blog", label: "Research Journal" },
+          ].map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-[11px] uppercase font-light transition-opacity duration-200 hover:opacity-100"
+              style={{
+                letterSpacing: "0.18em",
+                color: "#7A7065",
+                opacity: 0.85,
+                textDecoration: "none",
+              }}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+
         {/* Bottom divider line */}
         <div
           aria-hidden

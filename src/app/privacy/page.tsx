@@ -2,12 +2,28 @@ import Link from "next/link";
 import { ArrowLeft, Shield, Lock } from "lucide-react";
 import type { Metadata } from "next";
 import Breadcrumb from "@/components/Breadcrumb";
+import LegalToc, { type TocItem } from "@/components/LegalToc";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Nexphoria Research Peptides",
   description:
     "Nexphoria Privacy Policy — how we collect, use, protect, and handle your data. CCPA and GDPR-aligned. Research peptide supplier for qualified researchers.",
 };
+
+const TOC_ITEMS: TocItem[] = [
+  { id: "information-collected", label: "1. Information We Collect" },
+  { id: "how-we-use", label: "2. How We Use Information" },
+  { id: "information-sharing", label: "3. Sharing & Disclosure" },
+  { id: "cookies", label: "4. Cookies & Tracking" },
+  { id: "data-security", label: "5. Data Security" },
+  { id: "data-retention", label: "6. Data Retention" },
+  { id: "your-rights", label: "7. Your Privacy Rights" },
+  { id: "childrens-privacy", label: "8. Children's Privacy" },
+  { id: "international", label: "9. International Data" },
+  { id: "third-party-links", label: "10. Third-Party Links" },
+  { id: "changes", label: "11. Changes to Policy" },
+  { id: "contact", label: "12. Contact Us" },
+];
 
 export default function PrivacyPage() {
   const lastUpdated = "May 29, 2026";
@@ -31,7 +47,7 @@ export default function PrivacyPage() {
       </div>
 
       <div style={{ paddingTop: "80px" }}>
-        <div className="max-w-4xl mx-auto px-6 md:px-12 py-12">
+        <div className="max-w-6xl mx-auto px-6 md:px-12 py-12">
           <Breadcrumb
             variant="dark"
             className="mb-8"
@@ -62,16 +78,45 @@ export default function PrivacyPage() {
               </span>
             </div>
             <h1
-              className="mb-3 text-4xl font-bold tracking-tight lg:text-5xl"
+              className="mb-4 text-4xl font-bold tracking-tight lg:text-5xl"
               style={{ color: "#FDFCF8" }}
             >
               Privacy Policy
             </h1>
-            <p className="text-sm" style={{ color: "#6B6B6B" }}>
-              Effective Date: {effectiveDate} &nbsp;·&nbsp; Last Updated: {lastUpdated}
-            </p>
+            <div className="flex flex-wrap items-center gap-2.5 text-xs">
+              <span
+                className="inline-flex items-center rounded-full px-3 py-1 font-medium"
+                style={{
+                  backgroundColor: "rgba(212,175,55,0.10)",
+                  border: "1px solid rgba(212,175,55,0.30)",
+                  color: "#d4af37",
+                }}
+              >
+                Last Updated: {lastUpdated}
+              </span>
+              <span
+                className="inline-flex items-center rounded-full px-3 py-1"
+                style={{
+                  border: "1px solid rgba(255,255,255,0.10)",
+                  color: "#6B6B6B",
+                }}
+              >
+                Effective: {effectiveDate}
+              </span>
+            </div>
           </div>
 
+          {/* Two-column reading layout: sticky TOC + content */}
+          <div className="lg:grid lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-12">
+            {/* Sticky TOC — desktop only */}
+            <aside className="hidden lg:block">
+              <div className="sticky" style={{ top: "104px" }}>
+                <LegalToc items={TOC_ITEMS} variant="dark" />
+              </div>
+            </aside>
+
+            {/* Content column */}
+            <div className="min-w-0" style={{ maxWidth: "48rem" }}>
           {/* Intro */}
           <div
             className="rounded-lg p-5 border mb-10 text-sm"
@@ -590,6 +635,10 @@ export default function PrivacyPage() {
               Contact
             </Link>
           </div>
+            </div>
+            {/* end content column */}
+          </div>
+          {/* end reading grid */}
         </div>
       </div>
     </div>

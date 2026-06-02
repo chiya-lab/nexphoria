@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Breadcrumb from "@/components/Breadcrumb";
+import LegalToc, { type TocItem } from "@/components/LegalToc";
 
 export const metadata: Metadata = {
   title: "Shipping & Returns Policy",
@@ -53,10 +54,28 @@ const sections = [
   },
 ];
 
+function slugify(title: string) {
+  return title
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "");
+}
+
+const TOC_ITEMS: TocItem[] = sections.map((s) => ({
+  id: slugify(s.title),
+  label: s.title,
+}));
+
 export default function ShippingReturnsPage() {
+  const lastUpdated = new Date().toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+
   return (
-    <div className="bg-ceramic text-black pt-36 pb-32">
-      <div className="max-w-4xl mx-auto px-6 md:px-12">
+    <div style={{ backgroundColor: "#F9F9F9", color: "#1A1A1A" }} className="pt-36 pb-32">
+      <div className="max-w-6xl mx-auto px-6 md:px-12">
         <Breadcrumb
           className="mb-8"
           items={[
@@ -66,27 +85,53 @@ export default function ShippingReturnsPage() {
           ]}
         />
         <div className="mb-12">
-          <span className="section-label text-label text-grey-olive mb-5 block">Legal</span>
-          <h1 className="text-h1 font-medium leading-tight tracking-tight">
+          <span className="eyebrow mb-5 block">Legal</span>
+          <h1
+            className="font-medium leading-tight tracking-tight"
+            style={{ fontSize: "clamp(2rem, 5vw, 3rem)", color: "#1A1A1A" }}
+          >
             Shipping &amp; Returns
           </h1>
-          <p className="text-sm text-grey-olive mt-4">
-            Last updated:{" "}
-            {new Date().toLocaleDateString("en-US", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })}
-          </p>
+          <div className="mt-5">
+            <span
+              className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium"
+              style={{
+                backgroundColor: "rgba(184,164,76,0.12)",
+                border: "1px solid rgba(184,164,76,0.35)",
+                color: "#7A6B2A",
+              }}
+            >
+              Last Updated: {lastUpdated}
+            </span>
+          </div>
         </div>
 
-        <div className="space-y-8 text-grey-olive">
-          {sections.map((section) => (
-            <section key={section.title}>
-              <h2 className="text-xl font-medium mb-3 text-black">{section.title}</h2>
-              <p className="leading-relaxed text-sm">{section.content}</p>
-            </section>
-          ))}
+        {/* Two-column reading layout */}
+        <div className="lg:grid lg:grid-cols-[220px_minmax(0,1fr)] lg:gap-12">
+          <aside className="hidden lg:block">
+            <div className="sticky" style={{ top: "104px" }}>
+              <LegalToc items={TOC_ITEMS} variant="light" />
+            </div>
+          </aside>
+
+          <div className="min-w-0" style={{ maxWidth: "44rem" }}>
+            <div className="space-y-9" style={{ color: "#444" }}>
+              {sections.map((section) => (
+                <section
+                  key={section.title}
+                  id={slugify(section.title)}
+                  className="scroll-mt-28"
+                >
+                  <h2 className="text-xl font-medium mb-3" style={{ color: "#1A1A1A" }}>
+                    {section.title}
+                  </h2>
+                  <p className="text-sm" style={{ lineHeight: 1.75 }}>
+                    {section.content}
+                  </p>
+                </section>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

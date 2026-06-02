@@ -13,6 +13,8 @@ import {
   BarChart2,
   RefreshCw,
   Calendar,
+  Zap,
+  Award,
 } from "lucide-react";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -482,28 +484,28 @@ export default function FunnelDashboardPage() {
             </h2>
             {[
               {
-                icon: "🔻",
+                icon: <TrendingDown size={16} />,
                 color: "#E05252",
                 bg: "#FEF2F2",
                 title: "Biggest drop: Product View → Cart",
                 body: `Only ${pct(stages[2].count, stages[1].count)} of product viewers add to cart. A/B test the vial product page CTA.`,
               },
               {
-                icon: "⚡",
+                icon: <Zap size={16} />,
                 color: "#7A6B2A",
                 bg: "#FAF6F0",
                 title: "Checkout abandonment opportunity",
                 body: `${cartAbandon} of initiated checkouts don't complete. Consider exit-intent + abandoned cart email sequence.`,
               },
               {
-                icon: "🏆",
+                icon: <Award size={16} />,
                 color: "#4CAF7D",
                 bg: "#F0F8F3",
                 title: "Tirzepatide leads in conversion",
                 body: "22.1% cart rate, 11.7% purchase rate — highest of all compounds. Prioritize in ads and homepage.",
               },
               {
-                icon: "📈",
+                icon: <TrendingUp size={16} />,
                 color: "#5B8FA8",
                 bg: "#F0F4F7",
                 title: "Visit → Product view is healthy",
@@ -521,7 +523,7 @@ export default function FunnelDashboardPage() {
                   alignItems: "flex-start",
                 }}
               >
-                <span style={{ fontSize: "1rem", flexShrink: 0 }}>{ins.icon}</span>
+                <span style={{ flexShrink: 0, color: ins.color, marginTop: 1 }}>{ins.icon}</span>
                 <div>
                   <div style={{ fontSize: "0.78rem", fontWeight: 600, color: ins.color, marginBottom: 3 }}>
                     {ins.title}
