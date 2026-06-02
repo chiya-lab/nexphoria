@@ -351,6 +351,8 @@ export default function ContactClient() {
                   </div>
 
                   <p className="text-xs" style={{ color: "rgba(138,128,117,0.55)" }}>
+                    Prefer email? Reach us directly at{" "}
+                    <a href="mailto:research@nexphoria.com" className="underline text-secondary">research@nexphoria.com</a>.{" "}
                     By submitting, you confirm you are a qualified researcher or licensed
                     professional. See our{" "}
                     <a
