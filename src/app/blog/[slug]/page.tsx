@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { articles, getArticleBySlug, type BlogSection } from "@/lib/blog";
-import Breadcrumb from "@/components/Breadcrumb";
-import ShareButtons from "@/components/ShareButtons";
 import { categoryToSlug } from "../category/[category]/page";
 import { getTagsForArticle } from "@/lib/article-tags";
+import { buildToc, estimateCitations, headingId } from "@/lib/journal-meta";
+import { EmailCapture } from "@/components/email-capture";
+import PprArticleToc from "@/components/journal/PprArticleToc";
+import PprCitedCompounds from "@/components/journal/PprCitedCompounds";
+import PprShareRow from "@/components/journal/PprShareRow";
 
 interface Props {
   params: Promise<{ slug: string }>;
@@ -43,20 +46,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  return new Date(iso).toLocaleDateString("en-CA"); // YYYY-MM-DD
 }
 
-function RenderSection({ section }: { section: BlogSection }) {
+function RenderSection({ section, index }: { section: BlogSection; index: number }) {
   switch (section.type) {
     case "paragraph":
       return (
         <p
-          className="text-base md:text-[17px] mb-6"
-          style={{ color: "#2a2a2a", lineHeight: 1.8, fontWeight: 300 }}
+          className="mb-6"
+          style={{ color: "var(--silver-1)", fontSize: 17, lineHeight: 1.65, fontWeight: 400 }}
         >
           {section.text}
         </p>
@@ -65,12 +64,16 @@ function RenderSection({ section }: { section: BlogSection }) {
     case "heading":
       return (
         <h2
-          className="text-xl md:text-2xl mt-10 mb-4"
+          id={headingId(section.text ?? "", index)}
+          className="mt-12 mb-4 inline-block scroll-mt-28 pb-1.5"
           style={{
-            fontWeight: 500,
-            color: "#010101",
+            fontFamily: "var(--font-display)",
+            fontSize: 32,
+            fontWeight: 600,
+            color: "var(--platinum)",
+            lineHeight: 1.2,
             letterSpacing: "-0.01em",
-            lineHeight: 1.25,
+            borderBottom: "2px solid var(--accent)",
           }}
         >
           {section.text}
@@ -80,8 +83,15 @@ function RenderSection({ section }: { section: BlogSection }) {
     case "subheading":
       return (
         <h3
-          className="text-base md:text-lg mt-7 mb-3"
-          style={{ fontWeight: 500, color: "#010101", lineHeight: 1.3 }}
+          id={headingId(section.text ?? "", index)}
+          className="mt-8 mb-3 scroll-mt-28"
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: 22,
+            fontWeight: 600,
+            color: "var(--platinum)",
+            lineHeight: 1.3,
+          }}
         >
           {section.text}
         </h3>
@@ -89,16 +99,17 @@ function RenderSection({ section }: { section: BlogSection }) {
 
     case "list":
       return (
-        <ul className="mb-7 space-y-2 pl-5">
+        <ul className="mb-7 space-y-2.5 pl-5">
           {(section.items || []).map((item, i) => (
             <li
               key={i}
-              className="text-base relative"
-              style={{ color: "#2a2a2a", lineHeight: 1.75, fontWeight: 300 }}
+              className="relative"
+              style={{ color: "var(--silver-1)", fontSize: 17, lineHeight: 1.6, fontWeight: 400 }}
             >
               <span
-                className="absolute -left-4 top-2.5 w-1.5 h-1.5 rounded-full flex-shrink-0"
-                style={{ backgroundColor: "#B8A44C" }}
+                className="absolute -left-4 top-2.5 h-1.5 w-1.5 rounded-full"
+                style={{ backgroundColor: "var(--accent)" }}
+                aria-hidden="true"
               />
               {item}
             </li>
@@ -109,41 +120,36 @@ function RenderSection({ section }: { section: BlogSection }) {
     case "callout":
       return (
         <div
-          className="rounded-lg px-6 py-5 my-8"
-          style={{
-            backgroundColor: "#F5F3EE",
-            borderLeft: "3px solid #B8A44C",
-          }}
+          className="my-8 rounded-md px-6 py-5"
+          style={{ backgroundColor: "var(--ink-2)", borderLeft: "3px solid var(--accent)" }}
         >
-          <p
-            className="text-sm md:text-base"
-            style={{ color: "#333", lineHeight: 1.75, fontWeight: 300 }}
-          >
+          <p style={{ color: "var(--silver-1)", fontSize: 16, lineHeight: 1.65, fontWeight: 400 }}>
             {section.text}
           </p>
         </div>
       );
 
     case "divider":
-      return (
-        <hr
-          className="my-10"
-          style={{ borderColor: "rgba(0,0,0,0.08)" }}
-        />
-      );
+      return <hr className="my-10" style={{ border: "none", borderTop: "1px solid var(--steel)" }} />;
 
     case "table":
       return (
-        <div className="overflow-x-auto my-8">
-          <table className="w-full text-sm border-collapse">
+        <div className="my-8 overflow-x-auto">
+          <table className="w-full border-collapse text-[14px]">
             {section.headers && (
               <thead>
-                <tr style={{ borderBottom: "2px solid #d4af37" }}>
+                <tr style={{ backgroundColor: "var(--ink-2)" }}>
                   {section.headers.map((h, i) => (
                     <th
                       key={i}
-                      className="py-2 px-3 text-left"
-                      style={{ fontWeight: 600, color: "#010101", whiteSpace: "nowrap" }}
+                      className="px-3 py-2.5 text-left"
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        fontWeight: 600,
+                        color: "var(--platinum)",
+                        border: "1px solid var(--steel)",
+                        whiteSpace: "nowrap",
+                      }}
                     >
                       {h}
                     </th>
@@ -153,15 +159,19 @@ function RenderSection({ section }: { section: BlogSection }) {
             )}
             <tbody>
               {(section.rows || []).map((row, ri) => (
-                <tr
-                  key={ri}
-                  style={{ borderBottom: "1px solid rgba(0,0,0,0.07)", background: ri % 2 === 0 ? "transparent" : "rgba(0,0,0,0.02)" }}
-                >
+                <tr key={ri}>
                   {row.map((cell, ci) => (
                     <td
                       key={ci}
-                      className="py-2 px-3"
-                      style={{ color: ci === 0 ? "#010101" : "#2a2a2a", fontWeight: ci === 0 ? 500 : 300, lineHeight: 1.6, verticalAlign: "top" }}
+                      className="px-3 py-2.5"
+                      style={{
+                        color: ci === 0 ? "var(--platinum)" : "var(--silver-1)",
+                        fontFamily: ci === 0 ? "var(--font-body)" : "var(--font-mono)",
+                        fontWeight: ci === 0 ? 500 : 400,
+                        border: "1px solid var(--steel)",
+                        lineHeight: 1.55,
+                        verticalAlign: "top",
+                      }}
                     >
                       {cell}
                     </td>
@@ -176,10 +186,10 @@ function RenderSection({ section }: { section: BlogSection }) {
     case "disclaimer":
       return (
         <div
-          className="my-8 px-5 py-4 rounded-lg text-sm"
-          style={{ background: "rgba(0,0,0,0.04)", borderLeft: "3px solid #d4af37", color: "#555", lineHeight: 1.7 }}
+          className="my-8 rounded-md px-5 py-4 text-[14px]"
+          style={{ backgroundColor: "var(--ink-2)", borderLeft: "3px solid var(--accent)", color: "var(--silver-2)", lineHeight: 1.65 }}
         >
-          <strong style={{ color: "#010101" }}>Research Use Only Disclaimer: </strong>
+          <strong style={{ color: "var(--platinum)" }}>Research Use Only: </strong>
           {section.text}
         </div>
       );
@@ -201,38 +211,24 @@ export default async function BlogArticlePage({ params }: Props) {
       : `https://nexphoria.com${article.ogImage}`
     : "https://nexphoria.com/og-image.jpg";
 
+  const citations = estimateCitations(article.slug, article.readMinutes);
+  const toc = buildToc(article.body);
+
   const articleSchema = {
     "@context": "https://schema.org",
     "@type": "BlogPosting",
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": canonicalUrl,
-    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": canonicalUrl },
     headline: article.title,
     description: article.description,
-    image: {
-      "@type": "ImageObject",
-      url: imageUrl,
-      width: 1200,
-      height: 630,
-    },
+    image: { "@type": "ImageObject", url: imageUrl, width: 1200, height: 630 },
     datePublished: article.publishedAt,
     dateModified: article.publishedAt,
-    author: {
-      "@type": "Organization",
-      name: "Nexphoria Research Team",
-      url: "https://nexphoria.com",
-    },
+    author: { "@type": "Organization", name: "Nexphoria Research Team", url: "https://nexphoria.com" },
     publisher: {
       "@type": "Organization",
       name: "Nexphoria",
       url: "https://nexphoria.com",
-      logo: {
-        "@type": "ImageObject",
-        url: "https://nexphoria.com/logo.png",
-        width: 200,
-        height: 60,
-      },
+      logo: { "@type": "ImageObject", url: "https://nexphoria.com/logo.png", width: 200, height: 60 },
     },
     url: canonicalUrl,
     articleSection: article.category,
@@ -241,14 +237,9 @@ export default async function BlogArticlePage({ params }: Props) {
     timeRequired: `PT${article.readMinutes}M`,
     inLanguage: "en-US",
     isAccessibleForFree: true,
-    isPartOf: {
-      "@type": "Blog",
-      name: "Nexphoria Research Journal",
-      url: "https://nexphoria.com/blog",
-    },
+    isPartOf: { "@type": "Blog", name: "Nexphoria Journal", url: "https://nexphoria.com/blog" },
   };
 
-  // Related articles: same category first, then fill with others — up to 3
   const sameCategory = articles.filter(
     (a) => a.slug !== article.slug && a.category === article.category
   );
@@ -257,8 +248,8 @@ export default async function BlogArticlePage({ params }: Props) {
   );
   const related = [...sameCategory, ...otherCategory].slice(0, 3);
 
-  // Compound tags for this article
   const compoundTags = getTagsForArticle(article.slug);
+  const citedSlugs = compoundTags.map((t) => t.slug);
 
   return (
     <>
@@ -267,236 +258,237 @@ export default async function BlogArticlePage({ params }: Props) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
       />
 
-      <div style={{ backgroundColor: "#F9F9F9" }}>
-        {/* Hero */}
-        <section
-          className="relative px-6 pt-32 pb-14 md:pt-40 md:pb-16"
-          style={{ backgroundColor: "#010101" }}
-        >
-          <div className="max-w-3xl mx-auto">
-            <Breadcrumb
-              variant="dark"
-              className="mb-8"
-              items={[
-                { label: "Home", href: "/" },
-                { label: "Journal", href: "/blog" },
-                { label: article.title },
-              ]}
-            />
-
-            <div className="flex flex-wrap items-center gap-4 mb-6">
-              <Link
-                href={`/blog/category/${categoryToSlug(article.category)}`}
-                className="text-xs uppercase tracking-widest px-3 py-1 rounded-full hover:opacity-80 transition-opacity"
-                style={{ backgroundColor: "#B8A44C", color: "#010101" }}
-              >
-                {article.category}
-              </Link>
-              <span className="text-xs" style={{ color: "#666" }}>
-                {formatDate(article.publishedAt)}
-              </span>
-              <span className="text-xs" style={{ color: "#666" }}>
-                {article.readMinutes} min read
-              </span>
-            </div>
-
+      <main style={{ backgroundColor: "var(--ink)" }}>
+        {/* Article header */}
+        <section className="ppr-grid-hex px-6 pt-32 pb-12 md:pt-40 md:pb-16">
+          <div className="mx-auto max-w-[1120px]">
+            <Link
+              href={`/blog/category/${categoryToSlug(article.category)}`}
+              className="text-[11px] uppercase transition-colors hover:text-[color:var(--accent-glow)]"
+              style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.16em", color: "var(--accent)" }}
+            >
+              {article.category}
+            </Link>
             <h1
-              className="text-3xl md:text-5xl mb-6"
+              className="mt-4 max-w-[900px]"
               style={{
-                fontWeight: 500,
-                color: "#F9F9F9",
-                lineHeight: 1.1,
+                fontFamily: "var(--font-display)",
+                fontSize: "clamp(34px, 6vw, 56px)",
+                fontWeight: 600,
+                color: "var(--platinum)",
+                lineHeight: 1.08,
                 letterSpacing: "-0.02em",
               }}
             >
               {article.title}
             </h1>
-            <p
-              className="text-base md:text-lg max-w-2xl"
-              style={{ fontWeight: 300, lineHeight: 1.6, color: "#A0A0A0" }}
+            <div
+              className="mt-6 flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px]"
+              style={{ fontFamily: "var(--font-mono)", color: "var(--silver-2)" }}
             >
-              {article.description}
-            </p>
+              <span>Nexphoria Research Team</span>
+              <span style={{ color: "var(--steel)" }}>·</span>
+              <span>{formatDate(article.publishedAt)}</span>
+              <span style={{ color: "var(--steel)" }}>·</span>
+              <span>{article.readMinutes} min read</span>
+              <span style={{ color: "var(--steel)" }}>·</span>
+              <span>{citations} citations</span>
+            </div>
           </div>
         </section>
 
-        {/* Article body */}
-        <section className="px-6 py-20 md:py-28">
-          <div className="max-w-3xl mx-auto">
-            <article>
+        {/* Featured image placeholder */}
+        <section className="px-6">
+          <div className="mx-auto max-w-[1120px]">
+            <div
+              className="ppr-grid-hex flex h-[260px] items-end rounded-lg p-6 md:h-[360px]"
+              style={{ border: "1px solid var(--steel)" }}
+            >
+              <span
+                className="text-[12px] uppercase"
+                style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.16em", color: "var(--silver-3)" }}
+              >
+                {article.category}
+              </span>
+            </div>
+          </div>
+        </section>
+
+        {/* Body + sticky TOC */}
+        <section className="px-6 py-16 md:py-20">
+          <div className="mx-auto flex max-w-[1120px] gap-12">
+            <article className="min-w-0 flex-1" style={{ maxWidth: 800 }}>
               {article.body.map((section, i) => (
-                <RenderSection key={i} section={section} />
+                <RenderSection key={i} section={section} index={i} />
               ))}
+
+              {/* References note (Vancouver-style placeholder) */}
+              <div className="mt-12 border-t pt-6" style={{ borderColor: "var(--steel)" }}>
+                <p
+                  className="mb-2 text-[12px] uppercase"
+                  style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.16em", color: "var(--silver-3)" }}
+                >
+                  References
+                </p>
+                <p className="text-[13px]" style={{ fontFamily: "var(--font-body)", color: "var(--silver-2)", lineHeight: 1.6 }}>
+                  Primary-literature citations for this review are catalogued in the Nexphoria research
+                  library. Contact research@nexphoria.com for the full Vancouver-format reference list.
+                </p>
+              </div>
+
+              {/* Share */}
+              <div className="mt-10">
+                <PprShareRow url={canonicalUrl} title={article.title} />
+              </div>
             </article>
 
-            {/* Share buttons */}
-            <ShareButtons
-              url={canonicalUrl}
-              title={article.title}
-            />
+            <aside className="hidden w-[240px] flex-shrink-0 lg:block">
+              <PprArticleToc entries={toc} />
+            </aside>
+          </div>
+        </section>
 
-            {/* Compound tags */}
+        {/* Footer: author bio + tags + cited compounds */}
+        <section className="px-6 pb-4">
+          <div className="mx-auto max-w-[1120px]">
+            {/* Author bio card */}
+            <div
+              className="flex flex-col gap-4 rounded-lg p-6 sm:flex-row sm:items-center"
+              style={{ backgroundColor: "var(--ink-2)", border: "1px solid var(--steel)" }}
+            >
+              <div
+                className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full text-[18px]"
+                style={{ backgroundColor: "var(--ink-3)", color: "var(--accent)", fontFamily: "var(--font-display)", fontWeight: 600 }}
+                aria-hidden="true"
+              >
+                NX
+              </div>
+              <div>
+                <p style={{ fontFamily: "var(--font-display)", fontSize: 18, fontWeight: 600, color: "var(--platinum)" }}>
+                  Nexphoria Research Team
+                </p>
+                <p className="mt-1 text-[14px]" style={{ fontFamily: "var(--font-body)", color: "var(--silver-2)", lineHeight: 1.55 }}>
+                  Peptide chemists and assay scientists writing methods-grade reviews for the bench.
+                </p>
+              </div>
+            </div>
+
+            {/* Tags */}
             {compoundTags.length > 0 && (
-              <div className="mt-8 pt-6" style={{ borderTop: "1px solid rgba(0,0,0,0.07)" }}>
+              <div className="mt-8">
                 <p
-                  className="text-xs uppercase tracking-widest mb-3"
-                  style={{ color: "#A0A0A0" }}
+                  className="mb-3 text-[12px] uppercase"
+                  style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.16em", color: "var(--silver-3)" }}
                 >
-                  Research Compounds
+                  Tagged
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {compoundTags.map((t) => (
                     <Link
                       key={t.slug}
                       href={`/blog/tag/${t.slug}`}
-                      className="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-full transition-opacity hover:opacity-70"
+                      className="rounded-full px-3 py-1.5 text-[12px] transition-colors hover:border-[color:var(--accent)] hover:text-[color:var(--accent)]"
                       style={{
-                        backgroundColor: "#F0EDE8",
-                        border: "1px solid rgba(0,0,0,0.10)",
-                        color: "#555",
+                        fontFamily: "var(--font-mono)",
+                        border: "1px solid var(--steel)",
+                        color: "var(--silver-2)",
                       }}
                     >
-                      <span style={{ color: "#B8A44C" }}>#</span>{t.displayName}
+                      {t.displayName}
                     </Link>
                   ))}
                 </div>
               </div>
             )}
 
-            <div
-              className="mt-12 rounded-lg px-6 py-5"
-              style={{
-                backgroundColor: "#F0EDE8",
-                border: "1px solid rgba(0,0,0,0.06)",
-              }}
-            >
-              <p className="text-xs uppercase tracking-widest mb-2" style={{ color: "#B8A44C" }}>
-                Research Use Only
-              </p>
-              <p className="text-xs" style={{ color: "#777", lineHeight: 1.7 }}>
-                All content on this site is for educational and research
-                purposes only. Nexphoria compounds are sold exclusively for
-                qualified research use. They are not intended for human
-                consumption, therapeutic use, or diagnostic purposes. Nothing on
-                this site constitutes medical advice.
-              </p>
-            </div>
+            {/* Cited compounds conversion rail */}
+            {citedSlugs.length > 0 && (
+              <div className="mt-12">
+                <PprCitedCompounds slugs={citedSlugs} />
+              </div>
+            )}
           </div>
         </section>
 
         {/* Related articles */}
         {related.length > 0 && (
-          <section
-            className="px-6 py-20 md:py-28"
-            style={{ backgroundColor: "#EAE7E3" }}
-          >
-            <div className="max-w-3xl mx-auto">
-              <div className="flex items-baseline justify-between mb-7">
-              <p
-                className="text-xs uppercase tracking-widest"
-                style={{ color: "#B8A44C" }}
-              >
-                Related Articles
-              </p>
-              <Link
-                href="/blog"
-                className="text-xs hover:opacity-70 transition-opacity"
-                style={{ color: "#B8A44C" }}
-              >
-                All articles →
-              </Link>
-            </div>
-              <div className={`grid gap-5 ${
-                related.length === 3 ? "sm:grid-cols-3" : "sm:grid-cols-2"
-              }`}>
+          <section className="px-6 py-16 md:py-20">
+            <div className="mx-auto max-w-[1120px]">
+              <div className="mb-7 flex items-baseline justify-between">
+                <p
+                  className="text-[12px] uppercase"
+                  style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.16em", color: "var(--accent)" }}
+                >
+                  Related articles
+                </p>
+                <Link
+                  href="/blog"
+                  className="text-[13px] transition-colors hover:text-[color:var(--platinum)]"
+                  style={{ fontFamily: "var(--font-body)", color: "var(--accent)" }}
+                >
+                  All articles &rarr;
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-3">
                 {related.map((rel) => (
-                  <div
+                  <Link
                     key={rel.slug}
-                    className="group rounded-lg p-6"
-                    style={{
-                      backgroundColor: "#F9F9F9",
-                      border: "1px solid rgba(0,0,0,0.06)",
-                    }}
+                    href={`/blog/${rel.slug}`}
+                    className="group flex h-full flex-col rounded-lg p-6 transition-transform duration-300 hover:-translate-y-1"
+                    style={{ backgroundColor: "var(--ink-2)", border: "1px solid var(--steel)" }}
                   >
-                    <div className="flex items-center gap-2 mb-3">
-                      <Link
-                        href={`/blog/category/${categoryToSlug(rel.category)}`}
-                        className="text-xs uppercase tracking-widest hover:opacity-70 transition-opacity"
-                        style={{ color: "#B8A44C" }}
-                      >
-                        {rel.category}
-                      </Link>
-                      {rel.category === article.category && (
-                        <span
-                          className="text-xs px-1.5 py-0.5 rounded-full"
-                          style={{ backgroundColor: "#B8A44C", color: "#010101", fontSize: "0.6rem", letterSpacing: "0.05em" }}
-                        >
-                          RELATED
-                        </span>
-                      )}
-                    </div>
+                    <span
+                      className="text-[11px] uppercase"
+                      style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.14em", color: "var(--accent)" }}
+                    >
+                      {rel.category}
+                    </span>
                     <h3
-                      className="text-base mb-2"
-                      style={{
-                        fontWeight: 400,
-                        color: "#010101",
-                        lineHeight: 1.3,
-                      }}
+                      className="mt-3 transition-colors group-hover:text-[color:var(--accent)]"
+                      style={{ fontFamily: "var(--font-display)", fontSize: 18, fontWeight: 600, color: "var(--platinum)", lineHeight: 1.3 }}
                     >
-                      <Link
-                        href={`/blog/${rel.slug}`}
-                        className="hover:opacity-70 transition-opacity"
-                        style={{ color: "inherit" }}
-                      >
-                        {rel.title}
-                      </Link>
+                      {rel.title}
                     </h3>
-                    <p
-                      className="text-xs mb-3 line-clamp-2"
-                      style={{ color: "#777", lineHeight: 1.6 }}
+                    <span
+                      className="mt-auto pt-5 text-[12px]"
+                      style={{ fontFamily: "var(--font-mono)", color: "var(--silver-2)" }}
                     >
-                      {rel.description}
-                    </p>
-                    <Link
-                      href={`/blog/${rel.slug}`}
-                      className="text-xs inline-flex items-center gap-1"
-                      style={{ color: "#B8A44C" }}
-                    >
-                      {rel.readMinutes} min read <span aria-hidden>→</span>
-                    </Link>
-                  </div>
+                      {rel.readMinutes} min read &rarr;
+                    </span>
+                  </Link>
                 ))}
               </div>
             </div>
           </section>
         )}
 
-        {/* CTA */}
-        <section className="px-6 py-20 md:py-28">
-          <div className="max-w-3xl mx-auto text-center">
+        {/* Newsletter band */}
+        <section className="px-6 py-24" style={{ backgroundColor: "var(--ink-2)" }}>
+          <div className="mx-auto max-w-[640px] text-center">
             <p
-              className="text-xs uppercase tracking-widest mb-4"
-              style={{ color: "#B8A44C" }}
+              className="text-[12px] uppercase"
+              style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.18em", color: "var(--accent)" }}
             >
-              Research Catalog
+              Lab notes, monthly
             </p>
             <h2
-              className="text-3xl md:text-4xl mb-5 font-medium tracking-tight"
-              style={{
-                color: "#010101",
-              }}
+              className="mt-3"
+              style={{ fontFamily: "var(--font-display)", fontSize: 40, fontWeight: 600, color: "var(--platinum)", lineHeight: 1.1 }}
             >
-              Browse the compounds.
+              Keep reading the literature.
             </h2>
-            <Link
-              href="/products"
-              className="btn-primary"
+            <p
+              className="mx-auto mt-4 max-w-[520px] text-[15px]"
+              style={{ fontFamily: "var(--font-body)", color: "var(--silver-2)", lineHeight: 1.55 }}
             >
-              View Catalog
-            </Link>
+              New compound reviews and methodology notes, first Monday of every month. No promotions.
+            </p>
+            <div className="mx-auto mt-8 max-w-[480px]">
+              <EmailCapture variant="dark" />
+            </div>
           </div>
         </section>
-      </div>
+      </main>
     </>
   );
 }
