@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Cormorant_Garamond } from "next/font/google";
+import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/header";
 import { Footer } from "@/components/footer";
@@ -7,19 +7,29 @@ import RUOBanner from "@/components/RUOBanner";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import ClientModals from "@/components/ClientModals";
 
+// Body — Inter (dense, ubiquitous)
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  // "optional" eliminates font-swap CLS; locally-hosted fonts load within the 100ms block window
+  // "optional" eliminates font-swap CLS; self-hosted fonts load within the 100ms block window
   display: "optional",
-  weight: ["300", "400", "500", "700"],
+  weight: ["400", "500", "600"],
 });
 
-const cormorant = Cormorant_Garamond({
+// Display / headings — Space Grotesk (web fallback for Aeonik Pro)
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-cormorant",
+  variable: "--font-space-grotesk",
   display: "optional",
-  weight: ["300", "400", "700"],
+  weight: ["400", "500", "600", "700"],
+});
+
+// Mono / data — JetBrains Mono (dosages, SKU codes, COA values)
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  display: "optional",
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
@@ -200,7 +210,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`h-full antialiased ${inter.variable} ${cormorant.variable}`}>
+    <html lang="en" className={`h-full antialiased ${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable}`}>
       <head>
         {/* Next.js font/google self-hosts fonts, so no external googleapis preconnect needed */}
         <link rel="preconnect" href="https://nexphoria-checkout.chiya-b60.workers.dev" crossOrigin="anonymous" />
@@ -232,7 +242,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(siteNavigationSchema) }}
         />
       </head>
-      <body className="min-h-full" style={{ backgroundColor: "#FAF8F5" }}>
+      <body className="min-h-full" style={{ backgroundColor: "var(--ink)" }}>
         <a
           href="#main-content"
           className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[200] focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:rounded focus:bg-[#1A1A1A] focus:text-white focus:outline-none"
