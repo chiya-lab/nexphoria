@@ -1,49 +1,42 @@
 import type { Metadata } from "next";
-import { Suspense } from "react";
 import Script from "next/script";
 import ProductsClient from "./client";
 import Breadcrumb from "@/components/Breadcrumb";
-import { products } from "@/lib/products";
+import { MOCK_PRODUCTS } from "@/lib/mock-products";
 
 export const metadata: Metadata = {
-  title: "Peptide Catalog — Research Compounds | Nexphoria",
+  title: "Catalog — Research Compounds | Nexphoria",
   description:
-    "Browse Nexphoria's research compound catalog. cGMP-manufactured peptides with full Certificate of Analysis and HPLC-verified purity. BPC-157, Semaglutide, Tirzepatide, GHK-Cu, and 30+ more. Research use only.",
+    "14 research compounds. Lot-traceable. Cold-chain shipped. HPLC-verified purity with full Certificate of Analysis. BPC-157, TB-500, Semaglutide, GHK-Cu, and more. Research use only.",
   alternates: {
     canonical: "https://nexphoria.com/products",
   },
   openGraph: {
-    title: "Peptide Catalog — Research Compounds | Nexphoria",
+    title: "Catalog — Research Compounds | Nexphoria",
     description:
-      "cGMP-manufactured peptides with full Certificate of Analysis and HPLC-verified purity. BPC-157, Semaglutide, Tirzepatide, GHK-Cu, and 30+ more.",
+      "14 research compounds. Lot-traceable. Cold-chain shipped. HPLC-verified purity with full Certificate of Analysis.",
     url: "https://nexphoria.com/products",
     siteName: "Nexphoria",
     type: "website",
-    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Nexphoria Peptide Catalog" }],
+    images: [{ url: "/og-image.jpg", width: 1200, height: 630, alt: "Nexphoria Research Compound Catalog" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Peptide Catalog — Research Compounds | Nexphoria",
-    description: "cGMP-manufactured peptides with HPLC-verified purity and Certificate of Analysis.",
+    title: "Catalog — Research Compounds | Nexphoria",
+    description: "14 research compounds with HPLC-verified purity and Certificate of Analysis.",
     images: ["/og-image.jpg"],
   },
 };
 
-export default function ProductsPage({
-  searchParams,
-}: {
-  searchParams?: { cat?: string };
-}) {
-  // ItemList JSON-LD for the catalog listing — gives every product a position
-  // in a structured collection so search engines understand site hierarchy.
+export default function ProductsPage() {
   const itemListLd = {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    name: "Nexphoria Research Peptide Catalog",
+    name: "Nexphoria Research Compound Catalog",
     description:
-      "Complete catalog of cGMP-manufactured research peptides with HPLC-verified purity and Certificate of Analysis.",
-    numberOfItems: products.length,
-    itemListElement: products.map((p, i) => ({
+      "Catalog of research compounds with HPLC-verified purity and Certificate of Analysis.",
+    numberOfItems: MOCK_PRODUCTS.length,
+    itemListElement: MOCK_PRODUCTS.map((p, i) => ({
       "@type": "ListItem",
       position: i + 1,
       url: `https://nexphoria.com/products/${p.slug}`,
@@ -52,18 +45,14 @@ export default function ProductsPage({
         "@type": "Product",
         name: p.name,
         sku: p.slug,
-        mpn: p.casNumber,
         category: p.category,
-        description: p.tagline,
         url: `https://nexphoria.com/products/${p.slug}`,
         brand: { "@type": "Brand", name: "Nexphoria" },
         offers: {
           "@type": "Offer",
           priceCurrency: "USD",
-          price: (p.dosages?.[0]?.price ?? p.price).toFixed(2),
-          availability: p.comingSoon
-            ? "https://schema.org/PreOrder"
-            : "https://schema.org/InStock",
+          price: p.price.toFixed(2),
+          availability: p.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
           url: `https://nexphoria.com/products/${p.slug}`,
         },
       },
@@ -74,34 +63,22 @@ export default function ProductsPage({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     itemListElement: [
-      {
-        "@type": "ListItem",
-        position: 1,
-        name: "Home",
-        item: "https://nexphoria.com",
-      },
-      {
-        "@type": "ListItem",
-        position: 2,
-        name: "Shop",
-        item: "https://nexphoria.com/products",
-      },
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://nexphoria.com" },
+      { "@type": "ListItem", position: 2, name: "Catalog", item: "https://nexphoria.com/products" },
     ],
   };
 
   const collectionLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Peptide Catalog — Research Compounds",
-    description:
-      "Browse Nexphoria's research compound catalog. cGMP-manufactured peptides with full Certificate of Analysis.",
+    name: "Catalog — Research Compounds",
+    description: "Nexphoria research compound catalog. Lot-traceable, cold-chain shipped.",
     url: "https://nexphoria.com/products",
     isPartOf: { "@type": "WebSite", url: "https://nexphoria.com" },
-    mainEntity: { "@id": "#catalog-itemlist" },
   };
 
   return (
-    <div className="min-h-screen bg-cream">
+    <main style={{ backgroundColor: "var(--ink)" }}>
       <Script
         id="products-itemlist-jsonld"
         type="application/ld+json"
@@ -117,52 +94,53 @@ export default function ProductsPage({
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
-      {/* Page Hero */}
-      <div
-        className="pt-36 pb-16 border-b"
-        style={{ backgroundColor: "#F5F3F0", borderColor: "var(--border-subtle)" }}
-      >
-        <div className="container-nex">
-          <Breadcrumb items={[{label:"Home",href:"/"},{label:"Shop"}]} variant="light" className="mb-6" />
-          <span className="eyebrow mb-5 block" style={{ color: "#C9A24B" }}>Research Compounds</span>
+
+      {/* Header band */}
+      <section className="ppr-grid-hex px-6 pt-32 pb-12 md:pt-40 md:pb-16" style={{ borderBottom: "1px solid var(--steel)" }}>
+        <div className="mx-auto max-w-[1280px]">
+          <Breadcrumb items={[{ label: "Home", href: "/" }, { label: "Catalog" }]} variant="dark" className="mb-6" />
+          <span
+            className="mb-5 block text-[12px] uppercase"
+            style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.18em", color: "var(--accent)" }}
+          >
+            Research Compounds
+          </span>
           <h1
-            className="font-bold tracking-tight mb-4"
             style={{
               fontFamily: "var(--font-display)",
-              fontSize: "clamp(2.5rem, 5vw, 4rem)",
-              color: "#010101",
-              lineHeight: 1.05,
+              fontSize: "clamp(40px, 7vw, 56px)",
+              fontWeight: 600,
+              color: "var(--platinum)",
+              lineHeight: 1.04,
+              letterSpacing: "-0.02em",
             }}
           >
-            The Catalog
+            Catalog
           </h1>
-          <p className="leading-relaxed" style={{ color: "#7F7F7D", maxWidth: "520px" }}>
-            cGMP-manufactured research compounds. Full Certificate of Analysis and technical
-            documentation for every production lot. Available as lyophilized vials ready for research.
+          <p
+            className="mt-4 text-[15px]"
+            style={{ fontFamily: "var(--font-body)", color: "var(--silver-2)", maxWidth: 560, lineHeight: 1.6 }}
+          >
+            {MOCK_PRODUCTS.length} research compounds. Lot-traceable. Cold-chain shipped.
           </p>
         </div>
-      </div>
+      </section>
 
-      {/* Research disclaimer */}
-      <div style={{ borderBottom: "1px solid #E8E5DF" }}>
-        <div className="container-nex py-3">
+      {/* RUO disclaimer band */}
+      <div style={{ borderBottom: "1px solid var(--steel)", backgroundColor: "var(--ink-2)" }}>
+        <div className="mx-auto max-w-[1280px] px-6 py-3">
           <p
-            className="text-center"
-            style={{
-              fontSize: "0.6rem",
-              letterSpacing: "0.18em",
-              textTransform: "uppercase",
-              color: "#737373",
-            }}
+            className="text-center text-[10px] uppercase"
+            style={{ fontFamily: "var(--font-mono)", letterSpacing: "0.18em", color: "var(--silver-3)" }}
           >
             All compounds for qualified research use only — not for human consumption, diagnostic, or therapeutic use.
           </p>
         </div>
       </div>
 
-      <Suspense fallback={null}>
-        <ProductsClient initialCategory={searchParams?.cat} />
-      </Suspense>
-    </div>
+      <div className="pt-12">
+        <ProductsClient />
+      </div>
+    </main>
   );
 }
