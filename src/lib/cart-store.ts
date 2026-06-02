@@ -36,3 +36,26 @@ export const closeDrawer = () => useCart.getState().closeDrawer();
 
 /** Free cold-chain shipping threshold, in USD. */
 export const freeShippingThreshold = 150;
+
+/**
+ * Selector hook: free-shipping progress as a 0–100 percentage of the
+ * cold-chain threshold, clamped so a full bar never overflows.
+ */
+export const useFreeShippingProgress = () =>
+  useCart((s) => {
+    const subtotal = s.items.reduce((sum, item) => sum + item.monthlyPrice * item.quantity, 0);
+    return Math.min(100, (subtotal / freeShippingThreshold) * 100);
+  });
+
+/** Selector hook: total subscription savings on the current shipment, in USD. */
+export const useSubscriptionSavings = () =>
+  useCart((s) =>
+    s.items.reduce((total, item) => {
+      if (item.discount <= 0) return total;
+      const listPrice = item.monthlyPrice / (1 - item.discount);
+      return total + (listPrice - item.monthlyPrice) * item.quantity;
+    }, 0),
+  );
+
+/** Selector hook: whether the bac-water reconstitution add-on is included. */
+export const useBacWaterIncluded = () => useCart((s) => s.bacWaterIncluded);

@@ -89,9 +89,9 @@ export default function PprProductCard({ product }: { product: MockProduct }) {
       {/* 3-tier price grid */}
       <div className="mt-auto grid grid-cols-3 gap-1.5 pt-4">
         {[
-          { label: "1 vial", value: product.packPrices.find((p) => p.qty === 1)?.price },
-          { label: "3-pack", value: product.packPrices.find((p) => p.qty === 3)?.price },
-          { label: "6-pack", value: product.packPrices.find((p) => p.qty === 6)?.price },
+          { label: "1 vial", value: product.packPrices[0]?.price },
+          { label: "3-pack", value: product.packPrices[1]?.price },
+          { label: "6-pack", value: product.packPrices[2]?.price },
         ].map((tier) => (
           <div
             key={tier.label}

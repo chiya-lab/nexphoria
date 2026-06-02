@@ -4,7 +4,7 @@ import "./globals.css";
 import PprAnnouncementBar from "@/components/chrome/PprAnnouncementBar";
 import PprHeader from "@/components/chrome/PprHeader";
 import PprFooter from "@/components/chrome/PprFooter";
-import PprCartDrawerStub from "@/components/chrome/PprCartDrawerStub";
+import PprCartDrawer from "@/components/cart/PprCartDrawer";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import ClientModals from "@/components/ClientModals";
 
@@ -254,7 +254,7 @@ export default function RootLayout({
         <PprHeader />
         <main id="main-content">{children}</main>
         <PprFooter />
-        <PprCartDrawerStub />
+        <PprCartDrawer />
         <ClientModals />
       </body>
     </html>

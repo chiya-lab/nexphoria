@@ -16,15 +16,22 @@ export interface CartItem {
   discount: number; // fractional discount applied
 }
 
+// Bacteriostatic water add-on offered in the cart drawer. Pre-selected because
+// it is required for reconstitution of every lyophilized research compound.
+export const BAC_WATER_PRICE = 12;
+
 interface CartState {
   items: CartItem[];
   isOpen: boolean;
+  // Bac-water reconstitution upsell — pre-checked by default.
+  bacWaterIncluded: boolean;
 
   // Actions
   addItem: (product: Product, format?: 'vial' | 'pen', selectedDosage?: { size: string; price: number }, subscriptionMonths?: number, discount?: number, subscriptionCadence?: SubscriptionCadence) => void;
   removeItem: (productSlug: string, format: 'vial' | 'pen') => void;
   updateQuantity: (productSlug: string, format: 'vial' | 'pen', quantity: number) => void;
   clearCart: () => void;
+  toggleBacWater: () => void;
 
   // Drawer controls
   openDrawer: () => void;
@@ -34,6 +41,8 @@ interface CartState {
   getTotalItems: () => number;
   getTotalPrice: () => number;
   getItemCount: (productSlug: string, format: 'vial' | 'pen') => number;
+  // Sum of per-line discount savings for subscription items (this shipment).
+  getSubscriptionSavings: () => number;
 }
 
 // Resolve the effective unit price for a product given format + dosage.
@@ -62,6 +71,7 @@ export const useCart = create<CartState>()(
     (set, get) => ({
       items: [],
       isOpen: false,
+      bacWaterIncluded: true,
 
       addItem: (product, format = 'vial', selectedDosage, subscriptionMonths = 0, discount = 0, subscriptionCadence) => {
         const existingItemIndex = get().items.findIndex(
@@ -135,6 +145,10 @@ export const useCart = create<CartState>()(
         set({ items: [] });
       },
 
+      toggleBacWater: () => {
+        set(state => ({ bacWaterIncluded: !state.bacWaterIncluded }));
+      },
+
       openDrawer: () => {
         set({ isOpen: true });
       },
@@ -160,13 +174,23 @@ export const useCart = create<CartState>()(
           item => item.product.slug === productSlug && item.format === format
         );
         return item ? item.quantity : 0;
-      }
+      },
+
+      getSubscriptionSavings: () => {
+        return get().items.reduce((total, item) => {
+          if (item.discount <= 0) return total;
+          // monthlyPrice already has the discount applied; recover the list
+          // price to measure savings against, then scale by quantity.
+          const listPrice = item.monthlyPrice / (1 - item.discount);
+          return total + (listPrice - item.monthlyPrice) * item.quantity;
+        }, 0);
+      },
     }),
     {
       name: 'nexphoria-cart',
       storage: createJSONStorage(() => localStorage),
-      // Only persist cart items, not drawer state
-      partialize: (state) => ({ items: state.items }),
+      // Persist cart contents and the bac-water selection, not drawer state.
+      partialize: (state) => ({ items: state.items, bacWaterIncluded: state.bacWaterIncluded }),
     }
   )
 );

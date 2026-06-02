@@ -292,6 +292,9 @@ export const MOCK_PRODUCTS: MockProduct[] = [
   },
 ];
 
+// Lowercase alias consumed by the homepage bestseller rail.
+export const mockProducts = MOCK_PRODUCTS;
+
 export function priceBandFor(price: number): PriceBand | undefined {
   return PRICE_BANDS.find((b) => price >= b.min && price < b.max);
 }
