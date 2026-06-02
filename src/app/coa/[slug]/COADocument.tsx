@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import type { Product } from "@/lib/products";
+import { labPartnerFor } from "@/lib/coa";
 
 interface Props {
   product: Product;
@@ -74,6 +75,7 @@ function getMassSpec(slug: string, product: Product): { label: string; value: st
 export default function COADocument({ product }: Props) {
   const [isPrinting, setIsPrinting] = useState(false);
   const batchInfo = getBatchInfo(product.slug);
+  const labPartner = labPartnerFor(product.slug);
   const hplcPeaks = getHPLCPeaks(product.slug, product.purity);
   const massSpec = getMassSpec(product.slug, product);
   const mainPurity = getPurityValue(product.purity);
@@ -363,13 +365,14 @@ export default function COADocument({ product }: Props) {
               <div className="text-sm font-bold text-green-800 mb-1">✓ BATCH RELEASE — APPROVED</div>
               <div className="text-xs text-green-700">
                 All specified tests conform to established acceptance criteria. Batch {batchInfo.batchNumber} is
-                released for research use. This certificate is issued under Nexphoria's quality management system.
+                released for research use. Independent analytical testing performed by {labPartner}.
+                This certificate is issued under Nexphoria's quality management system.
               </div>
             </div>
             <div className="grid grid-cols-2 gap-8 mt-6">
               <div>
-                <div className="border-b-2 border-gray-800 pb-1 mb-1 text-xs text-gray-400">Quality Control Analyst</div>
-                <div className="text-xs text-gray-600">Authorized Signatory — QC Department</div>
+                <div className="border-b-2 border-gray-800 pb-1 mb-1 text-xs text-gray-400">Analyzing Laboratory</div>
+                <div className="text-xs text-gray-600">{labPartner} — Independent Analytical Testing</div>
                 <div className="text-xs text-gray-400 mt-1">Date: {batchInfo.testDate}</div>
               </div>
               <div>
