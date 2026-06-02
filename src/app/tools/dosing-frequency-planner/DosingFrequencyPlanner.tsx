@@ -549,6 +549,13 @@ export default function DosingFrequencyPlanner() {
             Browse Catalog
           </Link>
         </div>
+
+        {/* Disclaimer */}
+        <p className="text-xs leading-relaxed" style={{ color: "#6b7280" }}>
+          <strong style={{ color: "#9ca3af" }}>Research Use Only.</strong> This planner produces
+          research-planning estimates only. All compounds supplied by Nexphoria are for in vitro
+          research use only. Nothing here constitutes medical advice or human-dosing guidance.
+        </p>
       </div>
     </div>
   );

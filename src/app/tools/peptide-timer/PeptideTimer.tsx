@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 // ─── Compound reference data ────────────────────────────────────────────────
 const COMPOUNDS = [
@@ -648,6 +649,9 @@ export default function PeptideTimer() {
             </Link>
           ))}
         </div>
+
+        {/* Catalog rail */}
+        <ToolCatalogCTA className="py-2" />
 
         {/* Disclaimer */}
         <p className="text-xs text-zinc-600 text-center border-t border-white/5 pt-6">

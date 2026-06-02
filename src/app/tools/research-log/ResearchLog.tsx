@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -1043,6 +1044,9 @@ export default function ResearchLog() {
       {/* ── Disclaimer + Related Tools ── */}
       <section className="no-print px-6 py-12">
         <div className="max-w-4xl mx-auto">
+          {/* Catalog rail */}
+          <ToolCatalogCTA className="py-2" />
+
           {/* Disclaimer */}
           <div className="rounded-sm p-6 mb-10" style={{ backgroundColor: "#0E0E0C", border: "1px solid #1E1E1C" }}>
             <p className="text-xs uppercase tracking-widest mb-2" style={{ color: "#444440" }}>Research Use Only</p>

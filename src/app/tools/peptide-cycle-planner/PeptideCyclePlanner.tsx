@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -855,6 +856,9 @@ export default function PeptideCyclePlanner() {
               </p>
             </div>
           )}
+
+          {/* Catalog rail */}
+          <ToolCatalogCTA className="py-2 mb-6" />
 
           {/* ── RUO Disclaimer ──────────────────────────────────────────────── */}
           <div

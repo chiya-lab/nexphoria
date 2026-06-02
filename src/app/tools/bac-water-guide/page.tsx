@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 export const metadata: Metadata = {
   title: "Bacteriostatic Water Guide: What It Is & How to Use It | Nexphoria",
@@ -762,6 +763,9 @@ export default function BacWaterGuidePage() {
               </div>
             </div>
           </section>
+
+          {/* Catalog rail */}
+          <ToolCatalogCTA className="py-2" />
 
           {/* Disclaimer */}
           <div

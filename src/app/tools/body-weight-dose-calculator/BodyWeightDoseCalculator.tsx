@@ -3,6 +3,7 @@
 import { useState, useCallback, useMemo } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 // ─── Compound database with published rodent study dosing ────────────────────
 interface CompoundDose {
@@ -1208,6 +1209,9 @@ export default function BodyWeightDoseCalculator() {
             </div>
           </div>
 
+          {/* Catalog rail */}
+          <ToolCatalogCTA className="py-2 mb-6" />
+
           {/* ── Disclaimer ── */}
           <div
             className="rounded-sm p-5"
@@ -1216,6 +1220,7 @@ export default function BodyWeightDoseCalculator() {
               border: "1px solid rgba(255,255,255,0.06)",
             }}
           >
+
             <p className="text-xs leading-relaxed" style={{ color: "#555" }}>
               <strong style={{ color: "#777" }}>Research Use Only.</strong>{" "}
               All dosing data is sourced from published preclinical literature and is provided for

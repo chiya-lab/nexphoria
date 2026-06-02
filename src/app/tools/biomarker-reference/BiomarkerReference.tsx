@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 interface Biomarker {
   name: string;
@@ -681,6 +682,9 @@ export default function BiomarkerReference() {
           </div>
         </div>
       </section>
+
+      {/* Catalog rail */}
+      <ToolCatalogCTA className="py-2" />
 
       {/* RUO Disclaimer */}
       <section className="px-6 py-12 border-t" style={{ borderColor: "#27272a" }}>

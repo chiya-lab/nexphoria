@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 /* ────────────────────────────────────────────────────────────
    DATA
@@ -736,6 +737,9 @@ export default function PurityChecker() {
         </section>
 
         {/* ── Disclaimer ── */}
+        {/* Catalog rail */}
+        <ToolCatalogCTA className="py-2" />
+
         <div
           className="rounded-sm p-5 text-xs leading-relaxed"
           style={{

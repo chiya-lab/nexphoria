@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 type SeverityLevel = "Low" | "Moderate" | "High" | "Critical";
@@ -867,6 +868,9 @@ export default function PeptideSafetyChecker() {
           >
             Research-grade safety profiles for 20+ compounds: side effects at research doses, receptor agonism/antagonism summary, contraindicated co-administration, and special handling warnings.
           </p>
+          {/* Catalog rail */}
+          <ToolCatalogCTA className="py-2" />
+
           {/* RUO disclaimer */}
           <div
             className="mt-6 px-4 py-3 rounded-sm text-xs"

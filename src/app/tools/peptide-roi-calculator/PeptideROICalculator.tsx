@@ -3,6 +3,7 @@
 import { useState, useMemo, useCallback } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 // ─────────────────────────────────────────────────────────────
 // DATA
@@ -751,6 +752,9 @@ export default function PeptideROICalculator() {
               </ul>
             </div>
           </div>
+          {/* Catalog rail */}
+          <ToolCatalogCTA className="py-2" />
+
           <div className="mt-4 p-3 bg-amber-900/20 border border-amber-700/30 rounded text-xs text-amber-300/70">
             <strong>Research Use Only Disclaimer:</strong> All calculations are for research budget planning purposes only.
             Nexphoria compounds are sold for in vitro and animal research use only, not for human use.

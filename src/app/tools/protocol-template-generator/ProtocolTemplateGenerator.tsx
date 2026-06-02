@@ -4,6 +4,7 @@ import { useState, useRef } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
 import { products } from "@/lib/products";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 // ─── Types ──────────────────────────────────────────────────────────────────
 
@@ -884,6 +885,9 @@ export default function ProtocolTemplateGenerator() {
                   ))}
                 </div>
               </div>
+
+              {/* Catalog rail */}
+              <ToolCatalogCTA className="py-2" />
 
               {/* Disclaimer */}
               <div

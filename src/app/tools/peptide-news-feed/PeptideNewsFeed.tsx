@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 interface ResearchPaper {
@@ -931,6 +932,9 @@ export default function PeptideNewsFeed() {
               view the source paper.
             </p>
           </div>
+
+          {/* Catalog rail */}
+          <ToolCatalogCTA className="py-2" />
 
           {/* Disclaimer */}
           <div

@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 // Popular concentration targets for quick reference
 const CONCENTRATION_PRESETS: {
@@ -813,6 +814,9 @@ export default function WaterVolumeCalculator() {
               </table>
             </div>
           </div>
+
+          {/* Catalog rail */}
+          <ToolCatalogCTA className="py-2" />
 
           {/* Disclaimer */}
           <div

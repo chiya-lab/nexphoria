@@ -4,6 +4,7 @@ import { useState, useMemo } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
 import { products } from "@/lib/products";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -1824,6 +1825,9 @@ export default function PeptideResearchPlanner() {
                   ))}
                 </div>
               </div>
+
+              {/* Catalog rail */}
+              <ToolCatalogCTA className="py-2" />
 
               {/* Disclaimer */}
               <div

@@ -3,6 +3,7 @@
 import { useState, useMemo } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 // ─── FDA Km values (2005 Guidance) ──────────────────────────────────────────
 interface Species {
@@ -576,6 +577,9 @@ export default function AllometricScalingCalculator() {
             </div>
           </div>
         </div>
+
+        {/* Catalog rail */}
+        <ToolCatalogCTA className="py-2" />
 
         {/* ─── RUO Disclaimer ─── */}
         <div className="bg-zinc-900 border border-red-500/20 rounded-xl p-5 text-center">

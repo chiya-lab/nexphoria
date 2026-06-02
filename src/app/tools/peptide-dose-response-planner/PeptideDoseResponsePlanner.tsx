@@ -3,6 +3,7 @@
 import { useState, useCallback, useMemo } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface CompoundData {
@@ -939,6 +940,9 @@ export default function PeptideDoseResponsePlanner() {
               </Link>
             ))}
           </div>
+
+          {/* Catalog rail */}
+          <ToolCatalogCTA className="py-2" />
 
           {/* Disclaimer */}
           <div className="rounded-sm p-5 text-xs" style={{ backgroundColor: "#F9F8F4", border: "1px solid #ECEAE4", color: "#666666" }}>

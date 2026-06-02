@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 // Compound reference database with MW, CAS, and representative assay concentrations
 interface CompoundEntry {
@@ -786,6 +787,9 @@ export default function MolarityCalculator() {
               ))}
             </div>
           </div>
+
+          {/* Catalog rail */}
+          <ToolCatalogCTA className="py-2" />
 
           {/* RUO disclaimer */}
           <div

@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 // ─── Tab definitions ────────────────────────────────────────────────────────
 type Tab = "mass" | "syringe" | "concentration" | "dilution";
@@ -957,6 +958,9 @@ export default function UnitConverter() {
               </Link>
             ))}
           </div>
+
+          {/* Catalog rail */}
+          <ToolCatalogCTA className="py-2" />
 
           {/* Disclaimer */}
           <p className="text-xs mt-8 text-center" style={{ color: "#555" }}>

@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 interface LabelData {
@@ -958,6 +959,9 @@ export default function PeptideLabelGenerator() {
               ))}
             </div>
           </div>
+
+          {/* Catalog rail */}
+          <ToolCatalogCTA className="py-2 mt-10" />
 
           {/* ── Disclaimer ─────────────────────────────────────────────────── */}
           <div className="mt-10 bg-zinc-900/50 border border-white/5 rounded-xl p-5">

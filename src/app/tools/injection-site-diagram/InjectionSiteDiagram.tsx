@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 // ─── Zone data ───────────────────────────────────────────────────────────────
 type InjectionType = "SC" | "IM" | "SC/IM";
@@ -1112,6 +1113,9 @@ export default function InjectionSiteDiagram() {
       {/* ── Disclaimer ── */}
       <section className="px-6 pb-16">
         <div className="max-w-5xl mx-auto">
+          {/* Catalog rail */}
+          <ToolCatalogCTA className="py-2 mb-6" />
+
           <div
             className="rounded-sm p-6"
             style={{
@@ -1119,6 +1123,7 @@ export default function InjectionSiteDiagram() {
               border: "1px solid #1E1E1E",
             }}
           >
+
             <p
               className="text-xs uppercase tracking-widest mb-3"
               style={{ color: "#E07B54" }}

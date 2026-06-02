@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 export const metadata: Metadata = {
   title: "Peptide Half-Life Reference Table | Nexphoria Research Tools",
@@ -713,6 +714,9 @@ export default function CompoundHalfLifeReferencePage() {
           ))}
         </div>
       </section>
+
+      {/* Catalog rail */}
+      <ToolCatalogCTA className="py-2" />
 
       {/* RUO Disclaimer */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">

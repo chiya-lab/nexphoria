@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 // Product catalog data — slug, name, vial size (mg), price ($)
 // Multi-dosage products listed once per size variant for full selection
@@ -693,6 +694,9 @@ export default function CostPerDoseCalculator() {
               </Link>
             ))}
           </div>
+
+          {/* Catalog rail */}
+          <ToolCatalogCTA className="py-2" />
 
           {/* Disclaimer */}
           <div

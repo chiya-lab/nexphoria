@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Breadcrumb from "@/components/Breadcrumb";
+import ToolCatalogCTA from "@/components/tools/ToolCatalogCTA";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 type StorageCondition =
@@ -1237,6 +1238,9 @@ export default function PeptideStabilityChecker() {
             ))}
           </div>
         </div>
+
+        {/* Catalog rail */}
+        <ToolCatalogCTA className="py-2" />
 
         {/* Disclaimer */}
         <p className="text-xs text-zinc-600 text-center pb-6">
