@@ -70,7 +70,7 @@ export default function PprProductCard({ product }: { product: MockProduct }) {
         className="mt-1.5 flex flex-wrap gap-x-3 text-[11px]"
         style={{ fontFamily: "var(--font-mono)", color: "var(--silver-2)" }}
       >
-        <span>{product.molecularWeight}</span>
+        <span>{product.mw}</span>
         <span style={{ color: "var(--accent)" }}>{product.purity}</span>
       </div>
 
@@ -89,9 +89,9 @@ export default function PprProductCard({ product }: { product: MockProduct }) {
       {/* 3-tier price grid */}
       <div className="mt-auto grid grid-cols-3 gap-1.5 pt-4">
         {[
-          { label: "1 vial", value: product.packPrices.one },
-          { label: "3-pack", value: product.packPrices.three },
-          { label: "6-pack", value: product.packPrices.six },
+          { label: "1 vial", value: product.packPrices.find((p) => p.qty === 1)?.price },
+          { label: "3-pack", value: product.packPrices.find((p) => p.qty === 3)?.price },
+          { label: "6-pack", value: product.packPrices.find((p) => p.qty === 6)?.price },
         ].map((tier) => (
           <div
             key={tier.label}
