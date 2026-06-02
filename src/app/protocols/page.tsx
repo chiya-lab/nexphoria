@@ -19,6 +19,64 @@ export const metadata: Metadata = {
   },
 };
 
+const STUDY_DESIGNS: {
+  title: string;
+  model: string;
+  objective: string;
+  considerations: string;
+  endpoints: string[];
+  compounds: { slug: string; name: string }[];
+}[] = [
+  {
+    title: "Tissue-repair recovery model",
+    model: "In vivo / animal model",
+    objective:
+      "Characterize angiogenic and connective-tissue remodeling responses to a candidate compound in a controlled injury-recovery design.",
+    considerations:
+      "Use age- and weight-matched cohorts with sham and vehicle controls. Randomize and blind outcome assessment. Predefine the observation window relative to the injury model.",
+    endpoints: [
+      "Histological tissue-repair scoring",
+      "Capillary density / angiogenesis markers",
+      "Functional recovery timeline",
+    ],
+    compounds: [
+      { slug: "bpc-157", name: "BPC-157" },
+      { slug: "tb-500", name: "TB-500" },
+    ],
+  },
+  {
+    title: "Extracellular-matrix restoration assay",
+    model: "In vitro",
+    objective:
+      "Evaluate collagen and ECM-protein expression in cultured fibroblasts exposed to a candidate compound across a concentration range.",
+    considerations:
+      "Run dose-response with technical and biological replicates. Include positive and negative controls and confirm viability to separate signal from cytotoxicity.",
+    endpoints: [
+      "Collagen I / III expression",
+      "Cell viability and proliferation",
+      "Dose-response curve fit",
+    ],
+    compounds: [{ slug: "ghk-cu", name: "GHK-Cu" }],
+  },
+  {
+    title: "Metabolic-regulation comparative outline",
+    model: "In vivo / animal model",
+    objective:
+      "Compare metabolic and body-composition responses between candidate compounds against vehicle control over a defined study period.",
+    considerations:
+      "Standardize diet and housing. Pre-register endpoints and analysis plan. Account for pair-feeding where intake differences may confound interpretation.",
+    endpoints: [
+      "Body-composition change vs. control",
+      "Fasting metabolic markers",
+      "Tolerability observations",
+    ],
+    compounds: [
+      { slug: "semaglutide", name: "Semaglutide" },
+      { slug: "tirzepatide", name: "Tirzepatide" },
+    ],
+  },
+];
+
 export default function ProtocolsPage() {
   return (
     <div style={{ backgroundColor: "#EAE7E3" }}>
@@ -240,6 +298,108 @@ export default function ProtocolsPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Study-design reference templates */}
+      <section className="px-6 py-16 md:py-20" style={{ backgroundColor: "#FFFFFF" }}>
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-1 h-1 rounded-full" style={{ backgroundColor: "#C9DD69" }} />
+            <span className="text-xs uppercase tracking-widest" style={{ color: "#B8923A" }}>
+              Study-Design References
+            </span>
+          </div>
+          <h2 className="text-2xl md:text-3xl mb-4 text-near-black" style={{ fontWeight: 200 }}>
+            Research protocol outlines.
+          </h2>
+          <p className="text-sm text-stone mb-10 max-w-2xl" style={{ lineHeight: 1.7 }}>
+            The following are skeleton study-design references for in&nbsp;vitro and
+            animal-model research only. They describe objectives, model
+            considerations, and candidate endpoints — not dosing guidance for
+            humans. Investigators are responsible for protocol approval,
+            statistical design, and compliance with institutional and regulatory
+            requirements.
+          </p>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {STUDY_DESIGNS.map((d) => (
+              <div
+                key={d.title}
+                className="rounded-2xl p-6 bg-white-card flex flex-col"
+                style={{ border: "1px solid rgba(0,0,0,0.08)", borderTop: "2px solid #B8A44C" }}
+              >
+                <p className="text-xs uppercase tracking-widest mb-3" style={{ color: "#B8923A" }}>
+                  {d.model}
+                </p>
+                <h3 className="text-lg mb-3 text-near-black" style={{ fontWeight: 500, lineHeight: 1.25 }}>
+                  {d.title}
+                </h3>
+
+                <div className="mb-4">
+                  <div className="text-[11px] uppercase tracking-wider mb-1" style={{ color: "#999" }}>
+                    Objective
+                  </div>
+                  <p className="text-sm text-stone" style={{ lineHeight: 1.6 }}>
+                    {d.objective}
+                  </p>
+                </div>
+
+                <div className="mb-4">
+                  <div className="text-[11px] uppercase tracking-wider mb-1" style={{ color: "#999" }}>
+                    Model considerations
+                  </div>
+                  <p className="text-sm text-stone" style={{ lineHeight: 1.6 }}>
+                    {d.considerations}
+                  </p>
+                </div>
+
+                <div className="mb-5">
+                  <div className="text-[11px] uppercase tracking-wider mb-1.5" style={{ color: "#999" }}>
+                    Candidate endpoints
+                  </div>
+                  <ul className="space-y-1.5">
+                    {d.endpoints.map((ep) => (
+                      <li key={ep} className="flex items-start gap-2">
+                        <span
+                          className="w-1 h-1 rounded-full mt-2 flex-shrink-0"
+                          style={{ backgroundColor: "#B8A44C" }}
+                        />
+                        <span className="text-sm text-stone" style={{ lineHeight: 1.5 }}>
+                          {ep}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="mt-auto pt-4" style={{ borderTop: "1px solid rgba(0,0,0,0.06)" }}>
+                  <div className="text-[11px] uppercase tracking-wider mb-2" style={{ color: "#999" }}>
+                    Referenced compounds
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {d.compounds.map((c) => (
+                      <Link
+                        key={c.slug}
+                        href={`/coa/${c.slug}`}
+                        className="inline-flex items-center gap-1 text-xs px-2.5 py-1 rounded-full transition-opacity hover:opacity-70"
+                        style={{ backgroundColor: "rgba(184,164,76,0.12)", color: "#7A6B2A" }}
+                      >
+                        {c.name}
+                        <span aria-hidden>· COA</span>
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <p className="text-xs text-stone mt-8" style={{ lineHeight: 1.7 }}>
+            References are illustrative starting points drawn from the peer-reviewed
+            literature in each domain. Confirm current primary sources, model
+            suitability, and ethics approval before initiating any study.
+          </p>
         </div>
       </section>
 
