@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ShieldCheck, Truck, Zap, Clock, RefreshCw, CheckCircle2 } from "lucide-react";
+import { ArrowLeft, ShieldCheck, Truck, Zap, Clock, RefreshCw, CheckCircle2, Lock, FileCheck, Snowflake } from "lucide-react";
 import { useCart, getItemUnitPrice, getCadenceLabel } from "@/lib/cart";
 import { buildItem, trackBeginCheckout } from "@/lib/analytics";
 import { CHECKOUT_URL, CRYPTO_ORDER_URL } from "@/lib/endpoints";
@@ -101,6 +101,8 @@ export default function CheckoutPage() {
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // RUO acknowledgement must be checked before an order can be placed.
+  const [ruoAcknowledged, setRuoAcknowledged] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -147,6 +149,11 @@ export default function CheckoutPage() {
   const handleCheckout = async () => {
     if (!formData.email) {
       setError("Please enter your email address.");
+      return;
+    }
+
+    if (!ruoAcknowledged) {
+      setError("Please confirm the research-use-only acknowledgement to continue.");
       return;
     }
 
@@ -920,17 +927,17 @@ export default function CheckoutPage() {
                 {/* Trust badges */}
                 <div className="grid grid-cols-2 gap-2 mb-5">
                   {[
-                    { label: "SSL Encrypted", icon: "🔒" },
-                    { label: "COA With Every Order", icon: "✓" },
-                    { label: "Cold-Chain Shipped", icon: "❄" },
-                    { label: "Cancel Anytime", icon: "↺" },
+                    { label: "TLS 1.3 Encrypted", icon: <Lock className="w-3.5 h-3.5" /> },
+                    { label: "Lot-specific COA", icon: <FileCheck className="w-3.5 h-3.5" /> },
+                    { label: "Cold-chain shipped", icon: <Snowflake className="w-3.5 h-3.5" /> },
+                    { label: "Cancel anytime", icon: <RefreshCw className="w-3.5 h-3.5" /> },
                   ].map((badge) => (
                     <div
                       key={badge.label}
                       className="flex items-center gap-1.5 px-2 py-1.5 rounded text-[11px]"
                       style={{ backgroundColor: "#F5F3F0", color: "#555" }}
                     >
-                      <span style={{ color: "#B8A44C", fontSize: "12px" }}>{badge.icon}</span>
+                      <span style={{ color: "#B8A44C" }} className="flex-shrink-0">{badge.icon}</span>
                       {badge.label}
                     </div>
                   ))}
@@ -943,11 +950,36 @@ export default function CheckoutPage() {
                   </div>
                 )}
 
+                {/* RUO acknowledgement — required before placing an order */}
+                <label
+                  id="ruo-ack"
+                  className="flex items-start gap-3 mb-4 p-3 rounded-lg cursor-pointer transition-colors"
+                  style={{
+                    backgroundColor: ruoAcknowledged ? "#B8A44C12" : "#F5F3F0",
+                    border: `1px solid ${ruoAcknowledged ? "#B8A44C" : "#E5E2DB"}`,
+                  }}
+                >
+                  <input
+                    type="checkbox"
+                    checked={ruoAcknowledged}
+                    onChange={(e) => {
+                      setRuoAcknowledged(e.target.checked);
+                      if (e.target.checked) setError(null);
+                    }}
+                    className="mt-0.5 flex-shrink-0 w-4 h-4 cursor-pointer"
+                    style={{ accentColor: "#B8A44C" }}
+                  />
+                  <span className="text-xs leading-relaxed" style={{ color: "#555" }}>
+                    I confirm these compounds are purchased for qualified research use only,
+                    and not for human consumption, therapeutic, or clinical use.
+                  </span>
+                </label>
+
                 {/* Submit Button */}
                 <button
                   type="button"
                   onClick={handleCheckout}
-                  disabled={isProcessing || !formData.email}
+                  disabled={isProcessing || !formData.email || !ruoAcknowledged}
                   className="btn-acid w-full justify-center disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {isProcessing ? "Processing..." : `Place Order · $${(totalPrice + shippingCost).toFixed(2)}`}
@@ -986,6 +1018,13 @@ export default function CheckoutPage() {
                 const el = document.getElementById("checkout-email");
                 el?.scrollIntoView({ behavior: "smooth", block: "center" });
                 el?.focus();
+                return;
+              }
+              if (!ruoAcknowledged) {
+                document
+                  .getElementById("ruo-ack")
+                  ?.scrollIntoView({ behavior: "smooth", block: "center" });
+                setError("Please confirm the research-use-only acknowledgement to continue.");
                 return;
               }
               handleCheckout();
