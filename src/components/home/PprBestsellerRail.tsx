@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { mockProducts } from "@/lib/mock-products";
+import { MOCK_PRODUCTS } from "@/lib/mock-products";
 import PprProductCard from "@/components/PprProductCard";
 
 export default function PprBestsellerRail() {
@@ -38,7 +38,7 @@ export default function PprBestsellerRail() {
           className="flex snap-x snap-mandatory gap-5 overflow-x-auto pb-4"
           style={{ scrollbarWidth: "thin" }}
         >
-          {mockProducts.map((product) => (
+          {MOCK_PRODUCTS.map((product) => (
             <div key={product.slug} className="snap-start">
               <PprProductCard product={product} />
             </div>

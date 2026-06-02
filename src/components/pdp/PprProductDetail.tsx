@@ -12,6 +12,7 @@ import PprStockChip from "./PprStockChip";
 import PprSpecTable from "./PprSpecTable";
 import PprPairedWith from "./PprPairedWith";
 import PprStickyAddBar from "./PprStickyAddBar";
+import PprReviewsBlock from "./PprReviewsBlock";
 
 const TABS = [
   "Specifications",
@@ -238,7 +239,7 @@ export default function PprProductDetail({
         {tab === "COA & Data" && <TabStub agent="06" name="COA & Data" />}
         {tab === "Reconstitution" && <TabStub agent="06" name="Reconstitution" />}
         {tab === "Citations" && <TabStub agent="07" name="Citations" />}
-        {tab === "Reviews" && <TabStub agent="07" name="Reviews" />}
+        {tab === "Reviews" && <PprReviewsBlock product={product} />}
       </div>
 
       {/* Sticky add bar */}
