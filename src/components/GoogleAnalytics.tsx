@@ -16,13 +16,14 @@ export default function GoogleAnalytics() {
 
   return (
     <>
-      {/* Load the gtag.js library */}
+      {/* Load the gtag.js library — analytics is low-priority, defer to browser idle */}
       <Script
         src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
-      {/* Bootstrap dataLayer + configure GA4 */}
-      <Script id="ga4-init" strategy="afterInteractive">
+      {/* Bootstrap dataLayer + configure GA4. gtag() calls queue in dataLayer
+          until the library loads, so lazyOnload here is safe. */}
+      <Script id="ga4-init" strategy="lazyOnload">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
