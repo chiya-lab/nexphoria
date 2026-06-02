@@ -1,10 +1,9 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import PprAnnouncementBar from "@/components/chrome/PprAnnouncementBar";
 import PprHeader from "@/components/chrome/PprHeader";
 import PprFooter from "@/components/chrome/PprFooter";
-import PprCartDrawer from "@/components/cart/PprCartDrawer";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import ClientModals from "@/components/ClientModals";
 
@@ -33,10 +32,16 @@ const jetbrainsMono = JetBrains_Mono({
   weight: ["400", "500"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#0A0B0D",
+  colorScheme: "dark",
+};
+
 export const metadata: Metadata = {
   metadataBase: new URL(
     process.env.NEXT_PUBLIC_SITE_URL || "https://nexphoria.com"
   ),
+  manifest: "/site.webmanifest",
   title: {
     default: "Nexphoria — Research-Grade Peptide Compounds",
     template: "%s | Nexphoria",
@@ -254,7 +259,6 @@ export default function RootLayout({
         <PprHeader />
         <main id="main-content">{children}</main>
         <PprFooter />
-        <PprCartDrawer />
         <ClientModals />
       </body>
     </html>

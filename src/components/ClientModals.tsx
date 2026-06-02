@@ -14,6 +14,9 @@ const PprExitIntent = dynamic(() => import("@/components/gates/PprExitIntent"), 
 const PprNewsletterBand = dynamic(() => import("@/components/marketing/PprNewsletterBand"), { ssr: false });
 const SearchModal = dynamic(() => import("@/components/SearchModal"), { ssr: false });
 const BackToTop = dynamic(() => import("@/components/BackToTop"), { ssr: false });
+// Cart drawer renders nothing until opened (gated by the cart store's isOpen).
+// Deferring it keeps framer-motion + the product catalog out of the initial layout bundle.
+const PprCartDrawer = dynamic(() => import("@/components/cart/PprCartDrawer"), { ssr: false });
 
 export default function ClientModals() {
   return (
@@ -22,6 +25,7 @@ export default function ClientModals() {
       <SearchModal />
       <PprExitIntent />
       <PprNewsletterBand />
+      <PprCartDrawer />
       <BackToTop />
     </>
   );
