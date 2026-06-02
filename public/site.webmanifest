@@ -1,0 +1,25 @@
+{
+  "name": "Nexphoria — Research-Grade Peptide Compounds",
+  "short_name": "Nexphoria",
+  "description": "Research-grade peptide compounds manufactured under cGMP standards. For qualified research use only.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0A0B0D",
+  "theme_color": "#0A0B0D",
+  "icons": [
+    {
+      "src": "/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

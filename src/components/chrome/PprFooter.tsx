@@ -69,6 +69,7 @@ function FooterColumn({
           <li key={l.href}>
             <Link
               href={l.href}
+              prefetch={false}
               className="text-[14px] transition-colors hover:text-[color:var(--platinum)]"
               style={{ fontFamily: "var(--font-body)", color: "var(--silver-1)" }}
             >
@@ -254,6 +255,7 @@ export default function PprFooter() {
                 <span style={{ color: "var(--silver-2)", fontSize: 12 }}>·</span>
                 <Link
                   href={l.href}
+                  prefetch={false}
                   className="text-[12px] transition-colors hover:text-[color:var(--platinum)]"
                   style={{ fontFamily: "var(--font-body)", color: "var(--silver-2)" }}
                 >
