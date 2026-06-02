@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ShoppingCart, Shield, FlaskConical, Truck, RefreshCw } from "lucide-react";
+import { ShoppingCart, FlaskConical, RefreshCw } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import {
   Product,
@@ -251,19 +251,20 @@ export default function BuyBox({
         </div>
       )}
 
-      {/* Add to Order button */}
+      {/* Add to Order button — primary CTA */}
       <button
         onClick={handleAddToOrder}
-        className="w-full flex items-center justify-center gap-2 font-medium uppercase transition-all duration-300 active:scale-[0.98]"
+        className="w-full flex items-center justify-center gap-2 font-semibold uppercase transition-all duration-300 active:scale-[0.98]"
         style={{
-          height: "52px",
-          fontSize: "11px",
-          letterSpacing: "0.15em",
+          height: "54px",
+          fontSize: "11.5px",
+          letterSpacing: "0.16em",
           backgroundColor: "#1A1A1A",
           color: "#F9F9F9",
           borderRadius: "999px",
           border: "1px solid #1A1A1A",
           cursor: "pointer",
+          boxShadow: "0 4px 14px rgba(26,26,26,0.18)",
         }}
         onMouseEnter={(e) => {
           (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#333";
@@ -277,21 +278,14 @@ export default function BuyBox({
         Add to Order
       </button>
 
-      {/* Compact trust strip */}
-      <div className="mt-4 flex flex-wrap items-center justify-center gap-3 text-[11px]" style={{ color: "#666666" }}>
-        <div className="flex items-center gap-1.5">
-          <FlaskConical className="w-3.5 h-3.5" style={{ color: "#7A6B2A" }} aria-hidden="true" />
-          <span>{product.purity}</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <Shield className="w-3.5 h-3.5" style={{ color: "#7A6B2A" }} aria-hidden="true" />
-          <span>HPLC Verified</span>
-        </div>
-        <div className="flex items-center gap-1.5">
-          <Truck className="w-3.5 h-3.5" style={{ color: "#7A6B2A" }} aria-hidden="true" />
-          <span>Cold-Chain</span>
-        </div>
-      </div>
+      {/* Inline assurance line — sits directly under the CTA, replaces the duplicated trust strip */}
+      <p
+        className="mt-3 text-center text-[11px]"
+        style={{ color: "#7A6B2A", letterSpacing: "0.02em" }}
+      >
+        <FlaskConical className="w-3 h-3 inline-block mr-1.5 align-[-1px]" aria-hidden="true" />
+        {product.purity} · HPLC-verified · Cold-chain shipped
+      </p>
     </div>
   );
 }

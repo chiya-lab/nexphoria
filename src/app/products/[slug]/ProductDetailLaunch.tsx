@@ -7,10 +7,7 @@ import {
   Check,
   Shield,
   FileCheck,
-  Download,
   ChevronDown,
-  Truck,
-  FlaskConical,
 } from "lucide-react";
 import Breadcrumb from "@/components/Breadcrumb";
 
@@ -27,6 +24,7 @@ import type { Product, ProductDosage } from "@/lib/products";
 import { buildItem, trackViewItem } from "@/lib/analytics";
 import { products } from "@/lib/products";
 import BuyBox from "@/components/product/BuyBox";
+import VerificationPanel from "@/components/product/VerificationPanel";
 import RestockNotifier from "@/components/RestockNotifier";
 import StickyAddToOrderBar from "@/components/product/StickyAddToOrderBar";
 import RecentlyViewedBar from "@/components/product/RecentlyViewedBar";
@@ -285,17 +283,6 @@ export default function ProductDetailLaunch({ product, related }: Props) {
                 {product.tagline}
               </p>
 
-              {/* RUO pill — always visible */}
-              <div
-                className="mb-5 inline-flex items-center gap-1.5 px-2.5 py-1"
-                style={{ border: "1px solid rgba(184,164,76,0.3)", borderRadius: "999px", backgroundColor: "rgba(184,164,76,0.05)" }}
-              >
-                <FlaskConical className="w-3 h-3" style={{ color: "#7A6B2A", strokeWidth: 1.5 }} />
-                <span style={{ fontSize: "0.625rem", fontWeight: 500, letterSpacing: "0.1em", textTransform: "uppercase", color: "#7A6B2A" }}>
-                  For Research Use Only
-                </span>
-              </div>
-
               {/* Buy box (price + toggle + buttons) */}
               {product.comingSoon ? (
                 <RestockNotifier
@@ -312,76 +299,33 @@ export default function ProductDetailLaunch({ product, related }: Props) {
                 />
               )}
 
+              {/* Verification panel — lot trust proof tightly attached to buy decision */}
+              {!product.comingSoon && (
+                <VerificationPanel
+                  purity={product.purity}
+                  lab={coa.lab}
+                  lotNumber={coa.lot}
+                  reportDate={coa.reportDate}
+                  coaAvailable={COA_AVAILABLE_SLUGS.has(product.slug)}
+                  productSlug={product.slug}
+                />
+              )}
 
-              {/* For Research Use Only badge */}
+              {/* Research Use Only — single consolidated disclaimer */}
               <div
-                className="mt-4 mb-1 inline-flex items-center gap-2 px-3 py-1.5"
-                style={{ border: "1px solid rgba(184,164,76,0.35)", borderRadius: "999px", backgroundColor: "rgba(184,164,76,0.06)" }}
+                className="mt-4 flex items-start gap-3 p-3.5"
+                style={{ border: "1px solid rgba(184,164,76,0.30)", borderRadius: "8px", backgroundColor: "rgba(184,164,76,0.05)" }}
               >
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                  <path d="M2 10V5.5l4-4 4 4V10H8V7H4v3H2z" stroke="#7A6B2A" strokeWidth="1.1" strokeLinejoin="round"/>
-                  <rect x="4.5" y="7" width="3" height="3" rx="0.5" stroke="#7A6B2A" strokeWidth="0.9"/>
-                </svg>
-                <span style={{ fontSize: "0.6875rem", fontWeight: 500, letterSpacing: "0.1em", textTransform: "uppercase", color: "#7A6B2A" }}>
-                  For Research Use Only
-                </span>
-              </div>
-
-              {/* Research Disclaimer */}
-              <div
-                className="mt-5 flex items-start gap-3 p-4"
-                style={{ border: "1px solid #E5E5E5", borderRadius: "8px", backgroundColor: "#FAFAFA" }}
-              >
-                <Shield className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: "#7A6B2A", strokeWidth: 1.5 }} />
-                <div className="text-xs leading-relaxed" style={{ color: "#666", lineHeight: 1.7 }}>
-                  <p className="font-medium mb-1" style={{ color: "#1A1A1A", fontSize: "10px", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+                <Shield className="w-4 h-4 flex-shrink-0 mt-0.5" style={{ color: "#7A6B2A", strokeWidth: 1.5 }} aria-hidden="true" />
+                <div className="text-xs leading-relaxed" style={{ color: "#5A5A5A", lineHeight: 1.6 }}>
+                  <p className="font-semibold mb-1" style={{ color: "#1A1A1A", fontSize: "10px", letterSpacing: "0.08em", textTransform: "uppercase" }}>
                     For Research Use Only — Not For Human Consumption
                   </p>
                   <p>
-                    This compound is sold exclusively for qualified research purposes. Not approved by the FDA for therapeutic use.
+                    Sold exclusively for qualified in vitro research. Not FDA-approved for therapeutic use.
                   </p>
                 </div>
               </div>
-
-              {/* COA Download */}
-              {COA_AVAILABLE_SLUGS.has(product.slug) && (
-                <div
-                  className="mt-3 flex items-center gap-3 p-4"
-                  style={{ border: "1px solid #E5E5E5", borderRadius: "8px", backgroundColor: "#FAFAFA" }}
-                >
-                  <FileCheck className="w-4 h-4 flex-shrink-0" style={{ color: "#7A6B2A", strokeWidth: 1.5 }} />
-                  <div className="flex-1 min-w-0">
-                    <p className="text-xs font-medium" style={{ color: "#1A1A1A" }}>Certificate of Analysis Available</p>
-                    <p className="text-xs mt-0.5" style={{ color: "#666666" }}>
-                      HPLC purity report, MS confirmation, batch documentation.
-                    </p>
-                  </div>
-                  <a
-                    href={`/coa/${product.slug}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-shrink-0 inline-flex items-center gap-1.5 text-xs font-medium px-3 py-2 transition-all duration-300"
-                    style={{
-                      border: "1px solid #1A1A1A",
-                      borderRadius: "999px",
-                      color: "#1A1A1A",
-                      backgroundColor: "transparent",
-                      letterSpacing: "0.1em",
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#1A1A1A";
-                      (e.currentTarget as HTMLAnchorElement).style.color = "#F9F9F9";
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "transparent";
-                      (e.currentTarget as HTMLAnchorElement).style.color = "#1A1A1A";
-                    }}
-                  >
-                    <Download className="w-3.5 h-3.5" />
-                    View COA
-                  </a>
-                </div>
-              )}
             </div>
           </div>
         </div>

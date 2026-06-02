@@ -265,46 +265,44 @@ export default function HomePage() {
               top: "50%",
               transform: "translateY(-50%)",
               zIndex: 10,
-              maxWidth: "520px",
+              maxWidth: "560px",
             }}
           >
             <p
               className="hero-eyebrow-animate eyebrow"
-              style={{ color: "#B8A44C", marginBottom: "2.25rem" }}
+              style={{ color: "#B8A44C", marginBottom: "2rem" }}
             >
-              Research-Grade Peptides
+              Research-Grade Peptides · For Qualified Research Use
             </p>
 
             <h1
               className="hero-text-animate"
               style={{
-                fontSize: "clamp(4.5rem, 7.5vw, 8.5rem)",
-                lineHeight: 0.88,
-                letterSpacing: "-0.04em",
-                marginBottom: "2.5rem",
+                fontSize: "clamp(3.25rem, 5.4vw, 5.75rem)",
+                lineHeight: 0.96,
+                letterSpacing: "-0.035em",
+                marginBottom: "2rem",
               }}
             >
               <span
                 style={{
                   display: "block",
                   fontFamily: "var(--font-display)",
-                  fontStyle: "italic",
-                  fontWeight: 300,
+                  fontWeight: 500,
                   color: "#F5F5F0",
                 }}
               >
-                Compounds
+                Batch-tested peptide
               </span>
               <span
                 style={{
                   display: "block",
                   fontFamily: "var(--font-display)",
-                  fontWeight: 700,
-                  color: "#C9DD69",
-                  letterSpacing: "-0.045em",
+                  fontWeight: 500,
+                  color: "#F5F5F0",
                 }}
               >
-                built for
+                compounds for
               </span>
               <span
                 style={{
@@ -312,82 +310,72 @@ export default function HomePage() {
                   fontFamily: "var(--font-display)",
                   fontStyle: "italic",
                   fontWeight: 300,
-                  color: "rgba(245,245,240,0.45)",
+                  color: "#C9DD69",
                 }}
               >
-                serious researchers.
+                qualified research.
               </span>
             </h1>
 
-            <p
+            <ul
               className="hero-sub-animate"
               style={{
-                fontSize: "0.9375rem",
-                color: "rgba(245,245,240,0.52)",
-                lineHeight: 1.75,
-                maxWidth: "340px",
-                marginBottom: "2.5rem",
-              }}
-            >
-              Pharmaceutical-grade synthesis. ≥99% purity verified by independent HPLC-MS.
-              Cold-chain shipped with lot-specific Certificate of Analysis.
-            </p>
-
-            {/* Inline featured product mini-cards */}
-            <div
-              className="hero-sub-animate"
-              style={{
-                display: "flex",
-                gap: "0.625rem",
-                marginBottom: "2.5rem",
-                flexWrap: "wrap",
+                listStyle: "none",
+                padding: 0,
+                margin: "0 0 2.25rem 0",
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: "0.55rem 1.25rem",
+                maxWidth: "460px",
               }}
             >
               {[
-                { slug: "bpc-157", name: "BPC-157", cat: "Recovery", price: 50 },
-                { slug: "tirzepatide", name: "Tirzepatide", cat: "Weight Mgmt", price: 120 },
-                { slug: "ghk-cu", name: "GHK-Cu", cat: "Anti-Aging", price: 66 },
-              ].map((item) => (
-                <Link
-                  key={item.slug}
-                  href={`/products/${item.slug}`}
-                  className="hero-product-card"
+                "Manufactured under cGMP standards",
+                "Independently verified by HPLC / ESI-MS",
+                "Lot-specific Certificate of Analysis",
+                "Cold-chain packed every shipment",
+              ].map((line) => (
+                <li
+                  key={line}
+                  style={{
+                    display: "flex",
+                    alignItems: "flex-start",
+                    gap: "0.5rem",
+                    fontSize: "0.8125rem",
+                    color: "rgba(245,245,240,0.7)",
+                    lineHeight: 1.45,
+                  }}
                 >
-                  <span style={{ fontSize: "0.5rem", fontWeight: 500, letterSpacing: "0.18em", textTransform: "uppercase", color: "#B8A44C", marginBottom: "0.25rem", display: "block" }}>
-                    {item.cat}
-                  </span>
-                  <span style={{ fontSize: "0.875rem", fontWeight: 400, color: "#F5F5F0", lineHeight: 1.2, marginBottom: "0.375rem", display: "block" }}>
-                    {item.name}
-                  </span>
-                  <span style={{ fontSize: "0.75rem", fontWeight: 500, color: "rgba(245,245,240,0.45)", display: "block" }}>
-                    from ${item.price}
-                  </span>
-                </Link>
+                  <svg
+                    width="11"
+                    height="11"
+                    viewBox="0 0 11 11"
+                    fill="none"
+                    aria-hidden="true"
+                    style={{ marginTop: "4px", flexShrink: 0 }}
+                  >
+                    <path
+                      d="M1.5 5.6l2.6 2.6L9.5 2.7"
+                      stroke="#B8A44C"
+                      strokeWidth="1.4"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <span>{line}</span>
+                </li>
               ))}
-            </div>
+            </ul>
 
-            <div className="hero-cta-animate flex flex-col gap-3">
-              <Link href="/products" className="btn-hero-white cta-pulse">
-                Discover the Collection
+            <div className="hero-cta-animate flex flex-row flex-wrap items-center gap-3">
+              <Link href="/products" className="btn-hero-primary cta-pulse">
+                Shop Compounds
                 <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
-                  <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" />
+                  <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
               </Link>
-              <Link
-                href="/quiz"
-                style={{
-                  fontSize: "0.6875rem",
-                  fontWeight: 400,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase",
-                  color: "rgba(245,245,240,0.38)",
-                  textDecoration: "none",
-                  transition: "color 200ms",
-                  alignSelf: "flex-start",
-                }}
-                className="hover:!text-[rgba(245,245,240,0.75)]"
-              >
-                Find your protocol →
+              <Link href="/manufacturing" className="btn-hero-outline">
+                View Testing Standards
               </Link>
             </div>
           </div>
@@ -444,58 +432,97 @@ export default function HomePage() {
           <div className="px-6 pt-8 pb-6">
             <p
               className="eyebrow"
-              style={{ color: "#B8A44C", marginBottom: "1.5rem" }}
+              style={{ color: "#B8A44C", marginBottom: "1.25rem" }}
             >
               Research-Grade Peptides
             </p>
 
             <h1
               style={{
-                fontSize: "clamp(3rem, 12vw, 4.5rem)",
-                lineHeight: 0.92,
-                letterSpacing: "-0.03em",
-                marginBottom: "1.5rem",
+                fontSize: "clamp(2.5rem, 10vw, 3.75rem)",
+                lineHeight: 1.02,
+                letterSpacing: "-0.028em",
+                marginBottom: "1.25rem",
               }}
             >
+              <span
+                style={{
+                  display: "block",
+                  fontFamily: "var(--font-display)",
+                  fontWeight: 500,
+                  color: "#F5F5F0",
+                }}
+              >
+                Batch-tested
+              </span>
+              <span
+                style={{
+                  display: "block",
+                  fontFamily: "var(--font-display)",
+                  fontWeight: 500,
+                  color: "#F5F5F0",
+                }}
+              >
+                peptide compounds
+              </span>
               <span
                 style={{
                   display: "block",
                   fontFamily: "var(--font-display)",
                   fontStyle: "italic",
                   fontWeight: 300,
-                  color: "#F5F5F0",
-                }}
-              >
-                Precision,
-              </span>
-              <span
-                style={{
-                  display: "block",
-                  fontFamily: "var(--font-display)",
-                  fontWeight: 700,
                   color: "#C9DD69",
                 }}
               >
-                delivered.
+                for qualified research.
               </span>
             </h1>
 
-            <p
+            <ul
               style={{
-                fontSize: "0.9375rem",
-                color: "rgba(245,245,240,0.52)",
-                lineHeight: 1.7,
-                marginBottom: "2.25rem",
-                maxWidth: "300px",
+                listStyle: "none",
+                padding: 0,
+                margin: "0 0 1.75rem 0",
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.45rem",
               }}
             >
-              Research-grade compounds. 99%+ purity.
-              Cold-chain shipped with COA.
-            </p>
+              {[
+                "cGMP-manufactured",
+                "HPLC / ESI-MS verified",
+                "Lot-specific COA",
+                "Cold-chain packed",
+              ].map((line) => (
+                <li
+                  key={line}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.5rem",
+                    fontSize: "0.8125rem",
+                    color: "rgba(245,245,240,0.7)",
+                  }}
+                >
+                  <svg width="11" height="11" viewBox="0 0 11 11" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
+                    <path d="M1.5 5.6l2.6 2.6L9.5 2.7" stroke="#B8A44C" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <span>{line}</span>
+                </li>
+              ))}
+            </ul>
 
-            <Link href="/products" className="btn-hero-white">
-              Discover Collection
-            </Link>
+            <div className="flex flex-col gap-3">
+              <Link href="/products" className="btn-hero-primary">
+                Shop Compounds
+                <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
+                  <path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
+              <Link href="/manufacturing" className="btn-hero-outline">
+                View Testing Standards
+              </Link>
+            </div>
           </div>
 
           <div className="px-4 pb-8 flex-1 flex flex-col justify-end">
@@ -624,43 +651,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* ─── SHOP BY RESEARCH CATEGORY ─── */}
-      <SectionReveal>
-        <section className="py-24 md:py-36 px-6" style={{ backgroundColor: "#F9F9F9" }}>
-          <div className="max-w-6xl mx-auto">
-            <div className="mb-12">
-              <p className="eyebrow mb-4">Shop by Research Category</p>
-              <h2 className="text-3xl md:text-4xl font-medium tracking-tight">
-                Find your compound.
-              </h2>
-            </div>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {RESEARCH_CATEGORIES.map((cat, i) => {
-                const count = products.filter((p) =>
-                  p.category === cat.slug ||
-                  (cat.slug === "Immune Support" && (p.category === "Immune" || p.category === "Immune Support")) ||
-                  (cat.slug === "Longevity" && (p.category === "Longevity" || p.category === "Wellness"))
-                ).length;
-                return (
-                  <Link
-                    key={cat.slug}
-                    href={`/products?category=${encodeURIComponent(cat.label)}`}
-                    className="category-card block bg-white p-5"
-                    style={{ animationDelay: `${i * 0.05}s`, border: "1px solid #E5E5E5", borderRadius: "8px" }}
-                  >
-                    <div className="mb-3">{cat.icon}</div>
-                    <h3 className="text-sm font-semibold mb-1 leading-snug">{cat.label}</h3>
-                    <p className="text-xs text-[#666666]">
-                      {count > 0 ? `${count} compound${count !== 1 ? "s" : ""}` : "Browse"}
-                    </p>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-      </SectionReveal>
 
       {/* ─── FEATURED PRODUCTS ─── */}
       <SectionReveal>
@@ -816,6 +806,43 @@ export default function HomePage() {
         </section>
       </SectionReveal>
 
+      {/* ─── SHOP BY RESEARCH CATEGORY ─── */}
+      <SectionReveal>
+        <section className="py-24 md:py-36 px-6" style={{ backgroundColor: "#F9F9F9" }}>
+          <div className="max-w-6xl mx-auto">
+            <div className="mb-12">
+              <p className="eyebrow mb-4">Shop by Research Category</p>
+              <h2 className="text-3xl md:text-4xl font-medium tracking-tight">
+                Find your compound.
+              </h2>
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {RESEARCH_CATEGORIES.map((cat, i) => {
+                const count = products.filter((p) =>
+                  p.category === cat.slug ||
+                  (cat.slug === "Immune Support" && (p.category === "Immune" || p.category === "Immune Support")) ||
+                  (cat.slug === "Longevity" && (p.category === "Longevity" || p.category === "Wellness"))
+                ).length;
+                return (
+                  <Link
+                    key={cat.slug}
+                    href={`/products?category=${encodeURIComponent(cat.label)}`}
+                    className="category-card block bg-white p-5"
+                    style={{ animationDelay: `${i * 0.05}s`, border: "1px solid #E5E5E5", borderRadius: "8px" }}
+                  >
+                    <div className="mb-3">{cat.icon}</div>
+                    <h3 className="text-sm font-semibold mb-1 leading-snug">{cat.label}</h3>
+                    <p className="text-xs text-[#666666]">
+                      {count > 0 ? `${count} compound${count !== 1 ? "s" : ""}` : "Browse"}
+                    </p>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+      </SectionReveal>
+
       {/* ─── PACKAGING ─── */}
       <SectionReveal>
         <section className="py-24 md:py-36 px-6">
@@ -865,6 +892,9 @@ export default function HomePage() {
           </div>
         </section>
       </SectionReveal>
+
+      {/* ─── CONTINUE YOUR RESEARCH ─── */}
+      <HomepageContinueResearch />
 
       {/* ─── LATEST FROM THE JOURNAL ─── */}
       <SectionReveal>
@@ -927,9 +957,6 @@ export default function HomePage() {
         </section>
       </SectionReveal>
 
-      {/* ─── CONTINUE YOUR RESEARCH ─── */}
-      <HomepageContinueResearch />
-
       {/* ─── EMAIL CAPTURE ─── */}
       <SectionReveal>
         <section className="py-20 px-6" style={{ backgroundColor: "#F7F7F7", borderTop: "1px solid #E5E5E5" }}>
@@ -974,7 +1001,7 @@ export default function HomePage() {
               Every product ships with a Certificate of Analysis.
             </p>
             <Link href="/products" className="btn-primary">
-View Collection
+              Shop Compounds
             </Link>
           </div>
         </section>
