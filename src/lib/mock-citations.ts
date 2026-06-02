@@ -75,3 +75,11 @@ export const BPC157_CITATIONS: Citation[] = [
     doi: "10.1016/j.vph.2018.02.005",
   },
 ];
+
+/** Resolve a list of DOIs to Citation records, preserving input order. */
+export function citationsByDoi(dois: string[]): Citation[] {
+  const index = new Map(BPC157_CITATIONS.map((c) => [c.doi, c]));
+  return dois
+    .map((doi) => index.get(doi))
+    .filter((c): c is Citation => c !== undefined);
+}
