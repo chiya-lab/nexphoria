@@ -499,6 +499,15 @@ export default function ResourcesPage() {
               </Link>
             ))}
           </div>
+          <div className="mt-4">
+            <Link
+              href="/coa"
+              className="inline-flex items-center gap-2 text-sm font-medium"
+              style={{ color: "#d4af37" }}
+            >
+              Search the full COA library →
+            </Link>
+          </div>
           <p className="text-white/30 text-xs mt-3">
             Additional COAs available on individual product pages. All batch data is for reference only.
           </p>
