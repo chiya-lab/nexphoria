@@ -12,6 +12,9 @@ import PprStockChip from "./PprStockChip";
 import PprSpecTable from "./PprSpecTable";
 import PprPairedWith from "./PprPairedWith";
 import PprStickyAddBar from "./PprStickyAddBar";
+import PprCoaViewer from "./PprCoaViewer";
+import PprReconCalculator from "./PprReconCalculator";
+import PprCitations from "./PprCitations";
 import PprReviewsBlock from "./PprReviewsBlock";
 
 const TABS = [
@@ -236,9 +239,9 @@ export default function PprProductDetail({
       <div className="mx-auto max-w-[1440px] px-4 py-10 md:px-8" role="tabpanel">
         {tab === "Specifications" && <PprSpecTable product={product} />}
         {tab === "Paired with" && <PprPairedWith product={product} paired={paired} />}
-        {tab === "COA & Data" && <TabStub agent="06" name="COA & Data" />}
-        {tab === "Reconstitution" && <TabStub agent="06" name="Reconstitution" />}
-        {tab === "Citations" && <TabStub agent="07" name="Citations" />}
+        {tab === "COA & Data" && <PprCoaViewer product={product} />}
+        {tab === "Reconstitution" && <PprReconCalculator />}
+        {tab === "Citations" && <PprCitations />}
         {tab === "Reviews" && <PprReviewsBlock product={product} />}
       </div>
 
