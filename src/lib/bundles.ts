@@ -51,10 +51,10 @@ export const bundles: Bundle[] = [
     name: "Cognitive Stack",
     eyebrow: "RESEARCH-BACKED",
     description:
-      "Enhance focus, memory, and mental clarity with research-backed nootropic peptides",
-    synergy: "Selank reduces anxiety and stress while Semax enhances cognitive function and memory formation. NAD+ supports brain energy metabolism — creating optimal conditions for peak mental performance.",
-    mechanism: "Neurological optimization: Selank modulates GABA and enkephalin systems for stress resilience, Semax increases BDNF and neuroplasticity, NAD+ powers mitochondrial function in neurons.",
-    timeline: "Week 1: Reduced anxiety and stress. Week 2-4: Enhanced focus and clarity. Week 6-8: Improved memory formation and cognitive endurance.",
+      "Molecular precision for neuropeptide research — Selank, Semax, and NAD+ for reproducible research outcomes",
+    synergy: "Selank and Semax are studied for distinct neuropeptide signaling pathways; NAD+ is investigated for neuronal energy metabolism. A combined protocol for receptor pharmacology and neuroplasticity research.",
+    mechanism: "Neuropeptide signaling: Selank modulates GABA and enkephalin systems, Semax is studied for BDNF and neuroplasticity endpoints, NAD+ supports mitochondrial function in neurons.",
+    timeline: "Week 1: baseline behavioral assays. Week 2-4: neuroplasticity endpoints. Week 6-8: extended protocol observation windows.",
     productSlugs: ["selank", "semax", "nad-plus"],
     totalPrice: 237,
     monthlyPrice: 57, // ~$237 * 0.72 / 3 products

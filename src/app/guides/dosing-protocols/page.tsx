@@ -86,7 +86,7 @@ For food intake and glycemic studies with acute endpoints, administration 30–6
         body: `BPC-157, TB-500, and GHK-Cu do not have strong circadian timing dependencies. Research protocols typically divide daily doses into AM/PM administrations for tissue saturation studies, or use a single daily administration for maintenance protocols. Consistency of timing across study days is more important than the specific time chosen.`,
       },
       {
-        heading: "Nootropic & Neuropeptides",
+        heading: "Neuropeptides",
         body: `Semax, Selank, DSIP, and oxytocin have behavioral and cognitive endpoints that interact with circadian cortisol curves. Protocols targeting anxiety-like behavior (EPM, open field) or cognitive endpoints (Morris Water Maze, novel object recognition) typically administer in the early active phase of the rodent light cycle (i.e., at lights-off for nocturnal rodents). Timing relative to behavioral testing is a critical design variable to specify in the protocol.`,
       },
     ],

@@ -1,31 +1,112 @@
 @import 'tailwindcss';
 
+/* ============================================================
+   PEPPERIS DESIGN TOKENS — canonical palette (PEPPERIS_BRAND_SPEC.md)
+   Dark, molecular, clinical. Acid green is THE accent.
+   ============================================================ */
+:root {
+  /* Surfaces */
+  --ink: #0A0B0D;        /* Background — true near-black, slight blue cast */
+  --ink-2: #111317;      /* Card / elevated surface */
+  --ink-3: #1A1D22;      /* Hover surface, table stripe */
+  --steel: #2A2F36;      /* Borders, dividers, hairlines */
+
+  /* Text */
+  --silver-1: #C8CDD3;   /* Body text on dark */
+  --silver-2: #8B9099;   /* Muted body / captions */
+  --silver-3: #5A5F66;   /* Faint metadata */
+  --platinum: #F3F5F7;   /* Headlines, primary text */
+
+  /* Accent — acid green */
+  --accent: #B8E04F;
+  --accent-glow: #D4F08A; /* Hover state */
+  --accent-deep: #7FA52E; /* Active / pressed */
+
+  /* Status */
+  --danger: #E0594F;
+  --warn: #E0B14F;
+  --ok: #6FE04F;
+  --success: #5DD39E;
+
+  /* Radius */
+  --r-sm: 4px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 20px;
+  --r-pill: 9999px;
+
+  /* Type scale */
+  --fs-display-1: 80px;
+  --fs-display-2: 56px;
+  --fs-h1: 40px;
+  --fs-h2: 32px;
+  --fs-h3: 24px;
+  --fs-body: 16px;
+  --fs-small: 14px;
+  --fs-mono: 13px;
+
+  /* Line heights */
+  --lh-display: 1.05;
+  --lh-body: 1.55;
+  --lh-mono: 1.5;
+
+  /* Fonts (wired in layout.tsx via next/font) */
+  --font-display: var(--font-space-grotesk), "Space Grotesk", system-ui, sans-serif;
+  --font-body: var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "JetBrains Mono", monospace;
+
+  /* Raw aliases used by existing inline styles (var(--acid-green)) */
+  --acid-green: var(--accent);
+}
+
 @theme {
-  --color-page-bg: #F9F9F9;
-  --color-card-bg: #F7F7F7;
-  --color-card-border: #E5E5E5;
-  --color-olive: #B8A44C;
-  --color-olive-dark: #A68B4B;
-  --color-text-primary: #1A1A1A;
-  --color-text-secondary: #666666;
-  --color-text-muted: #666666;
-  --color-near-black: #1A1A1A;
-  --color-white-card: #FFFFFF;
-  --color-cream: #F9F9F9;
-  --color-stone: #666666;
-  --color-tertiary: #737373;
-  /* WCAG 2.1 AA accessible text equivalent of brand gold (#B8A44C) for body/eyebrow copy */
-  --color-gold-text: #7A6B2A;
-  --color-dark: #0F0F0E;
-  --color-dark-panel: #161614;
-  --color-dark-card: #1C1C1A;
-  --color-dark-border: #2A2A28;
-  --color-dark-border-hover: #3A3A38;
-  --color-gold: #B8A44C;
-  --color-acid-green: #B8A44C;
-  --color-border-subtle: #E5E5E5;
+  /* ── Pepperis named tokens (use as bg-ink, text-accent, border-steel, …) ── */
+  --color-ink: #0A0B0D;
+  --color-ink-2: #111317;
+  --color-ink-3: #1A1D22;
+  --color-steel: #2A2F36;
+  --color-silver-1: #C8CDD3;
+  --color-silver-2: #8B9099;
+  --color-silver-3: #5A5F66;
+  --color-platinum: #F3F5F7;
+  --color-accent: #B8E04F;
+  --color-accent-glow: #D4F08A;
+  --color-accent-deep: #7FA52E;
+  --color-danger: #E0594F;
+  --color-warn: #E0B14F;
+  --color-ok: #6FE04F;
+  --color-success: #5DD39E;
+
+  /* ── Legacy Nexphoria token names remapped onto the Pepperis dark palette.
+        Components still reference these utility names; remapping the VALUES
+        migrates the whole app to dark without touching component markup. ── */
+  --color-page-bg: #0A0B0D;       /* was #F9F9F9 light */
+  --color-card-bg: #111317;       /* was #F7F7F7 */
+  --color-card-border: #2A2F36;   /* was #E5E5E5 */
+  --color-border-subtle: #2A2F36; /* was #E5E5E5 */
+  --color-olive: #B8E04F;         /* old olive → accent */
+  --color-olive-dark: #7FA52E;
+  --color-text-primary: #F3F5F7;  /* was #1A1A1A */
+  --color-text-secondary: #C8CDD3;
+  --color-text-muted: #8B9099;
+  --color-near-black: #0A0B0D;
+  --color-white-card: #111317;    /* was #FFFFFF */
+  --color-cream: #0A0B0D;         /* was #F9F9F9 */
+  --color-stone: #8B9099;
+  --color-tertiary: #5A5F66;
+  --color-gold: #B8E04F;          /* old gold accent → acid green */
+  --color-gold-text: #B8E04F;
+  --color-acid-green: #B8E04F;
+  --color-dark: #0A0B0D;
+  --color-dark-panel: #111317;
+  --color-dark-card: #1A1D22;
+  --color-dark-border: #2A2F36;
+  --color-dark-border-hover: #3A4049;
+
   --font-sans: var(--font-inter), system-ui, -apple-system, sans-serif;
-  --font-display: var(--font-cormorant), Georgia, serif;
+  --font-display: var(--font-space-grotesk), "Space Grotesk", system-ui, sans-serif;
+  --font-body: var(--font-inter), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "JetBrains Mono", monospace;
 }
 
 @layer base {
@@ -47,34 +128,23 @@
     }
   }
   body {
-    font-family: var(--font-sans);
-    background-color: var(--color-page-bg);
-    color: var(--color-text-primary);
+    font-family: var(--font-body);
+    background-color: var(--ink);
+    color: var(--silver-1);
     overflow-x: hidden;
-    line-height: 1.7;
+    line-height: var(--lh-body);
     position: relative;
   }
-  /* Subtle grain texture overlay */
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.06;
-    z-index: 1;
-    pointer-events: none;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-  }
-  /* Ensure content is above grain */
-  body > * {
-    position: relative;
-    z-index: 2;
-  }
-  /* Serif headings */
+  /* Headlines use the geometric display face */
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-display);
+    color: var(--platinum);
+    letter-spacing: -0.02em;
+    line-height: var(--lh-display);
+  }
+  /* Data / spec values */
+  code, kbd, samp, pre {
+    font-family: var(--font-mono);
   }
 }
 
@@ -392,8 +462,49 @@
 }
 
 ::selection {
-  background-color: var(--color-gold);
-  color: #1A1A1A;
+  background-color: var(--accent);
+  color: var(--ink);
+}
+
+/* ============================================================
+   PEPPERIS GLOBAL UTILITIES (.ppr-*)
+   ============================================================ */
+
+/* Faint hexagonal molecular pattern — radial glow + repeating lines at ~8% */
+.ppr-grid-hex {
+  position: relative;
+  background-color: var(--ink);
+  background-image:
+    radial-gradient(circle at 80% 0%, rgba(184, 224, 79, 0.06) 0%, transparent 55%),
+    repeating-linear-gradient(60deg, rgba(200, 205, 211, 0.08) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(-60deg, rgba(200, 205, 211, 0.08) 0 1px, transparent 1px 28px),
+    repeating-linear-gradient(0deg, rgba(200, 205, 211, 0.08) 0 1px, transparent 1px 48px);
+}
+
+/* Very faint film grain via SVG fractal-noise data URI (~3%) */
+.ppr-noise {
+  position: relative;
+}
+.ppr-noise::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='pnoise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pnoise)'/%3E%3C/svg%3E");
+}
+
+/* 1px gradient hairline — steel fading to transparent */
+.ppr-divider {
+  height: 1px;
+  border: none;
+  background: linear-gradient(90deg, var(--steel) 0%, transparent 100%);
+}
+
+/* Acid-green glow for text and boxes */
+.ppr-accent-glow {
+  text-shadow: 0 0 12px rgba(184, 224, 79, 0.45);
+  box-shadow: 0 0 24px rgba(184, 224, 79, 0.18);
 }
 
 /* ─── Hero scale breathe — slowly zooms 2% on load ─── */
