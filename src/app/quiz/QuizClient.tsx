@@ -3,12 +3,16 @@
 import { useState } from "react";
 import Link from "next/link";
 
-// ─── Types ────────────────────────────────────────────────────────────────────
+// ─── Brand ──────────────────────────────────────────────────────────────────
+const GOLD = "#B8A44C";
+const GOLD_HOVER = "#7A6B2A";
+
+// ─── Types ──────────────────────────────────────────────────────────────────
 
 type Option = {
   id: string;
   label: string;
-  emoji?: string;
+  detail?: string;
   tags: string[];
 };
 
@@ -32,129 +36,114 @@ type ProductRec = {
 };
 
 // ─── Product Catalog (subset relevant for recommendations) ────────────────────
+// Prices and slugs verified against src/lib/products.ts.
 
 const PRODUCTS: ProductRec[] = [
-  { slug: "bpc-157", name: "BPC-157", category: "Recovery & Healing", price: 120, size: "10mg", tagline: "Body Protection Compound", why: "The most studied peptide for tissue repair — angiogenesis, NO pathway, and VEGF receptor activation support the inflammatory-to-proliferative healing transition.", tags: ["recovery", "tendon", "gi", "intermediate", "beginner", "under400"] },
-  { slug: "tb-500", name: "TB-500", category: "Recovery & Healing", price: 90, size: "5mg", tagline: "Thymosin Beta-4 Fragment", why: "Actin-sequestering peptide with potent anti-inflammatory and angiogenic properties — ideal complement to BPC-157 for full-phase recovery research.", tags: ["recovery", "tendon", "cardiac", "intermediate", "under400"] },
-  { slug: "ghk-cu", name: "GHK-Cu", category: "Anti-Aging", price: 96, size: "50mg", tagline: "Copper Peptide Complex", why: "Activates 4,000+ genes involved in ECM remodeling, Nrf2 antioxidant defense, and collagen synthesis — a longevity and repair compound with deep literature.", tags: ["aging", "recovery", "skincare", "beginner", "under400"] },
-  { slug: "wolverine-blend", name: "Wolverine Stack", category: "Recovery & Healing", price: 120, size: "5/5mg blend", tagline: "BPC-157 + TB-500 + GHK-Cu", why: "Pre-formulated recovery triple stack covering all three phases of tissue repair: anti-inflammatory, angiogenic, and ECM remodeling.", tags: ["recovery", "tendon", "cardiac", "intermediate", "under400"] },
-  { slug: "cjc-1295-ipamorelin", name: "CJC-1295 / Ipamorelin", category: "Growth Hormone", price: 108, size: "10mg", tagline: "GHRH + GHRP combination", why: "The gold standard GH axis combination in research — GHRH analog + selective GHRP produces 8-12x greater GH pulse amplitude vs either compound alone (Bowers 1998).", tags: ["gh-axis", "muscle", "fat-loss", "intermediate", "under400"] },
-  { slug: "ipamorelin", name: "Ipamorelin", category: "Growth Hormone", price: 96, size: "10mg", tagline: "Selective GHRP", why: "The most selective GHRP studied — produces clean GH pulses without cortisol, ACTH, or prolactin elevation seen with less selective secretagogues.", tags: ["gh-axis", "muscle", "beginner", "under400"] },
-  { slug: "sermorelin", name: "Sermorelin", category: "Growth Hormone", price: 120, size: "5mg", tagline: "GHRH(1-29) Analog", why: "FDA-approved GHRH analog (Geref) with 11-12 min half-life creating physiologically accurate pulsatile GH stimulation. RCT data: +38% IGF-1, +1.7kg lean mass.", tags: ["gh-axis", "aging", "muscle", "intermediate", "under400"] },
-  { slug: "mk-677", name: "MK-677 (Ibutamoren)", category: "Growth Hormone", price: 89, size: "25mg x 30ct", tagline: "Oral GH Secretagogue", why: "Only oral GHSR-1a full agonist — 24h half-life eliminates injection schedule. Nass 2008 2-year RCT: 39.9% IGF-1 increase, 1.1 kg lean mass gain.", tags: ["gh-axis", "muscle", "sleep", "beginner", "under400"] },
-  { slug: "semaglutide", name: "Semaglutide", category: "Weight Management", price: 99, size: "5mg", tagline: "GLP-1 Receptor Agonist", why: "STEP 1 trial: −14.9% body weight at 68 weeks. SELECT trial: −20% cardiovascular events. The most validated GLP-1 agonist in the research literature.", tags: ["metabolic", "fat-loss", "cardiac", "intermediate", "under400"] },
-  { slug: "tirzepatide", name: "Tirzepatide", category: "Weight Management", price: 180, size: "10mg", tagline: "GLP-1/GIP Dual Agonist", why: "SURMOUNT-1: −20.9% weight loss at 72 weeks — the highest weight reduction in a phase 3 peptide trial. Dual GIP/GLP-1 mechanism improves beta-cell function vs mono-agonists.", tags: ["metabolic", "fat-loss", "over400", "advanced"] },
-  { slug: "retatrutide", name: "Retatrutide", category: "Weight Management", price: 300, size: "10mg", tagline: "Triple Receptor Agonist", why: "NEJM 2023 Phase 2: −24.2% body weight at 48 weeks — best-in-class weight loss across 6 dose cohorts. GIP+GLP-1+Glucagon triple agonism adds hepatic fat clearance.", tags: ["metabolic", "fat-loss", "over400", "advanced"] },
-  { slug: "nad-plus", name: "NAD+", category: "Anti-Aging", price: 144, size: "100mg", tagline: "Nicotinamide Adenine Dinucleotide", why: "NAD+ declines 50% from age 20-50. Sirtuin activation, PARP1 DNA repair, and mitochondrial biogenesis via PGC-1alpha make this the foundational longevity coenzyme.", tags: ["aging", "longevity", "cognitive", "energy", "beginner", "under400"] },
-  { slug: "epitalon", name: "Epitalon", category: "Anti-Aging", price: 120, size: "10mg", tagline: "Telomere Peptide", why: "Khavinson research: 2.4x telomerase activity increase, 200-500bp telomere elongation in vitro, 12-20% lifespan extension in CBA mice. The most studied telomere peptide.", tags: ["aging", "longevity", "immune", "intermediate", "under400"] },
-  { slug: "mots-c", name: "MOTS-c", category: "Anti-Aging", price: 240, size: "10mg", tagline: "Mitochondria-Derived Peptide", why: "Mitochondrial-encoded 16aa peptide. Lee 2015 Cell Metabolism: AMPK activation, GLUT4 nuclear translocation, insulin sensitization in DIO mice. Exercise-mimetic properties.", tags: ["aging", "metabolic", "longevity", "advanced", "over400"] },
-  { slug: "ss-31", name: "SS-31 (Elamipretide)", category: "Anti-Aging", price: 144, size: "10mg", tagline: "Cardiolipin-Targeting Peptide", why: "1000x mitochondrial accumulation, cardiolipin protection, 40-50% infarct reduction in cardiac I/R models (Szeto 2008). The premier mitochondrial protection peptide.", tags: ["aging", "cardiac", "longevity", "intermediate", "under400"] },
-  { slug: "selank", name: "Selank", category: "Cognitive", price: 60, size: "10mg", tagline: "Anxiolytic Tuftsin Analog", why: "Non-GABAergic anxiolytic. BDNF upregulation + IL-6 immunomodulation without sedation or dependency. Kozlovskaya 2002: matching effect to benzodiazepines without tolerance.", tags: ["cognitive", "stress", "immune", "beginner", "under400"] },
-  { slug: "semax", name: "Semax", category: "Cognitive", price: 84, size: "5mg", tagline: "ACTH(4-7)PGP Analog", why: "ACTH fragment without cortisol activation. BDNF+VEGF upregulation (Dolotov 2006). Agapova 2007: VEGF angiogenesis in ischemia models. Kaplan 1996 MCI trial data.", tags: ["cognitive", "neuro", "advanced", "under400"] },
-  { slug: "pt-141", name: "PT-141 (Bremelanotide)", category: "Wellness", price: 120, size: "10mg", tagline: "Melanocortin Receptor Agonist", why: "MC3R/MC4R agonist activating hypothalamic oxytocinergic neurons. RECONNECT Phase 3 (Kingsberg 2019) FDA-approved for female sexual dysfunction. Unique CNS mechanism.", tags: ["hormonal", "intermediate", "under400"] },
-  { slug: "kisspeptin", name: "Kisspeptin-10", category: "Wellness", price: 84, size: "5mg", tagline: "GnRH Pulse Generator", why: "ARC kisspeptin neurons are the GnRH pulse generator — LH pulse frequency master regulator. Dhillo 2005 JCEM: kisspeptin-10 IV LH pulse data. Reproductive axis research.", tags: ["hormonal", "fertility", "intermediate", "under400"] },
-  { slug: "oxytocin", name: "Oxytocin", category: "Wellness", price: 72, size: "5mg", tagline: "Neuropeptide Hormone", why: "PVN/SON synthesis, posterior pituitary release. OTR Gq/PKC signaling. HPA axis dampening, social behavior circuits, pain modulation. Intranasal bioavailability research.", tags: ["cognitive", "stress", "hormonal", "beginner", "under400"] },
-  { slug: "thymosin-alpha-1", name: "Thymosin Alpha-1", category: "Wellness", price: 119, size: "5mg", tagline: "Immune Modulator", why: "TLR2/4/9 signaling, Th1 polarization, NK activation, dendritic cell maturation. HBV/HCV antiviral clinical data. COVID-19 Italy cohort: 11% vs 30% mortality (Zhao 2020 CID).", tags: ["immune", "aging", "intermediate", "under400"] },
-  { slug: "dsip", name: "DSIP", category: "Cognitive", price: 144, size: "10mg", tagline: "Delta Sleep-Inducing Peptide", why: "EEG delta wave promotion, SWS increase, HPA axis modulation (ACTH/cortisol blunting). Monnier 1977 discovery. Antioxidant + pain modulation properties.", tags: ["sleep", "cognitive", "stress", "intermediate", "under400"] },
+  { slug: "bpc-157", name: "BPC-157", category: "Recovery & Healing", price: 50, size: "5mg", tagline: "Body Protection Compound", why: "For recovery-model research: angiogenesis, NO-pathway modulation, and VEGFR2 activation are studied across the inflammatory-to-proliferative tissue-repair transition in rodent models.", tags: ["recovery", "tendon", "gi", "in-vitro", "animal", "endpoint-repair", "novice", "intermediate"] },
+  { slug: "tb-500", name: "TB-500", category: "Recovery & Healing", price: 90, size: "5mg", tagline: "Thymosin Beta-4 Fragment", why: "For tissue-remodeling research: an actin-sequestering fragment studied for anti-inflammatory and angiogenic activity — frequently paired with BPC-157 in full-phase recovery study designs.", tags: ["recovery", "tendon", "cardiac", "animal", "endpoint-repair", "intermediate"] },
+  { slug: "wolverine-blend", name: "Wolverine Blend", category: "Recovery & Healing", price: 120, size: "BPC-157 + TB-500 + GHK-Cu", tagline: "Triple Recovery Blend", why: "For multi-phase recovery-model research: combines anti-inflammatory, angiogenic, and ECM-remodeling mechanisms in one preparation for studies spanning all three repair phases.", tags: ["recovery", "tendon", "cardiac", "animal", "endpoint-repair", "intermediate", "advanced"] },
+  { slug: "cjc-1295-ipamorelin", name: "CJC-1295 / Ipamorelin", category: "Growth Hormone", price: 90, size: "10mg", tagline: "GHRH + GHRP Combination", why: "For GH-axis research: a GHRH analog combined with a selective GHRP, a pairing studied for synergistic GH pulse amplitude relative to either compound alone (Bowers, 1998).", tags: ["gh-axis", "muscle", "endpoint-composition", "intermediate", "advanced"] },
+  { slug: "ipamorelin", name: "Ipamorelin", category: "Growth Hormone", price: 50, size: "5mg", tagline: "Selective GHRP", why: "For GH-secretagogue research: among the most selective GHRPs studied, producing GH pulses without the cortisol, ACTH, or prolactin elevation seen with less selective secretagogues.", tags: ["gh-axis", "muscle", "endpoint-composition", "novice", "intermediate"] },
+  { slug: "sermorelin", name: "Sermorelin", category: "Growth Hormone", price: 90, size: "5mg", tagline: "GHRH(1-29) Analog", why: "For GH-axis pulsatility research: a GHRH(1-29) analog with a short half-life studied for physiologically patterned, pulsatile GH stimulation in preclinical models.", tags: ["gh-axis", "longevity", "muscle", "endpoint-composition", "intermediate"] },
+  { slug: "tesamorelin", name: "Tesamorelin", category: "Growth Hormone", price: 90, size: "5mg", tagline: "Stabilized GHRH Analog", why: "For metabolic GH-axis research: a stabilized GHRH analog studied for visceral-adipose endpoints and IGF-1 response in clinical and preclinical literature.", tags: ["gh-axis", "metabolic", "endpoint-composition", "advanced"] },
+  { slug: "mk-677", name: "MK-677 (Ibutamoren)", category: "Growth Hormone", price: 90, size: "25mg x 30ct", tagline: "Oral GH Secretagogue", why: "For oral GH-secretagogue research: a non-peptide GHSR-1a agonist with a long half-life, studied for sustained IGF-1 elevation in extended-duration protocols.", tags: ["gh-axis", "muscle", "sleep", "endpoint-composition", "novice"] },
+  { slug: "semaglutide", name: "Semaglutide", category: "Weight Management", price: 99, size: "5mg", tagline: "GLP-1 Receptor Agonist", why: "For metabolic research: a long-acting GLP-1 receptor agonist extensively characterized for body-weight and glycemic endpoints across the STEP and SELECT trial programs.", tags: ["metabolic", "endpoint-metabolic", "intermediate", "advanced"] },
+  { slug: "tirzepatide", name: "Tirzepatide", category: "Weight Management", price: 180, size: "10mg", tagline: "GLP-1 / GIP Dual Agonist", why: "For dual-incretin research: a GIP/GLP-1 dual agonist studied for additive effects on body-weight and beta-cell endpoints relative to mono-agonists (SURMOUNT program).", tags: ["metabolic", "endpoint-metabolic", "advanced"] },
+  { slug: "retatrutide", name: "Retatrutide", category: "Weight Management", price: 300, size: "10mg", tagline: "Triple Receptor Agonist", why: "For triple-incretin research: a GIP/GLP-1/glucagon agonist studied for body-weight and hepatic-fat endpoints across dose cohorts (NEJM Phase 2, 2023).", tags: ["metabolic", "endpoint-metabolic", "advanced"] },
+  { slug: "aod-9604", name: "AOD-9604", category: "Weight Management", price: 90, size: "5mg", tagline: "hGH Fragment 176-191", why: "For lipolysis research: a C-terminal hGH fragment studied for adipose-tissue endpoints without the IGF-1 axis activity of full-length GH.", tags: ["metabolic", "endpoint-metabolic", "novice", "intermediate"] },
+  { slug: "ghk-cu", name: "GHK-Cu", category: "Longevity", price: 90, size: "50mg", tagline: "Copper Peptide Complex", why: "For ECM and dermal-cosmetic research: a copper-binding tripeptide studied for gene-expression modulation across collagen synthesis, Nrf2 antioxidant defense, and tissue remodeling.", tags: ["longevity", "dermal", "recovery", "endpoint-repair", "endpoint-longevity", "novice"] },
+  { slug: "glow-blend", name: "Glow Blend", category: "Longevity", price: 96, size: "GHK-Cu + BPC-157 + TB-500", tagline: "Dermal & Recovery Blend", why: "For dermal-cosmetic research: combines a copper peptide with repair-phase compounds for studies on ECM remodeling and skin-model endpoints.", tags: ["dermal", "recovery", "endpoint-repair", "endpoint-longevity", "novice", "intermediate"] },
+  { slug: "nad-plus", name: "NAD+", category: "Longevity", price: 144, size: "100mg", tagline: "Nicotinamide Adenine Dinucleotide", why: "For longevity and energy-metabolism research: a foundational coenzyme studied for sirtuin activation, PARP-mediated DNA repair, and mitochondrial biogenesis via PGC-1alpha.", tags: ["longevity", "metabolic", "endpoint-longevity", "novice", "intermediate"] },
+  { slug: "epitalon", name: "Epitalon", category: "Longevity", price: 90, size: "10mg", tagline: "Telomere Peptide", why: "For telomere-biology research: a tetrapeptide studied for telomerase activity and telomere-length endpoints in vitro and in rodent longevity models (Khavinson).", tags: ["longevity", "immune", "endpoint-longevity", "intermediate", "advanced"] },
+  { slug: "mots-c", name: "MOTS-c", category: "Longevity", price: 240, size: "10mg", tagline: "Mitochondria-Derived Peptide", why: "For mitochondrial-metabolism research: a mitochondrial-encoded peptide studied for AMPK activation and GLUT4 translocation as an exercise-mimetic in metabolic models.", tags: ["longevity", "metabolic", "endpoint-longevity", "endpoint-metabolic", "advanced"] },
+  { slug: "ss-31", name: "SS-31 (Elamipretide)", category: "Longevity", price: 144, size: "10mg", tagline: "Cardiolipin-Targeting Peptide", why: "For mitochondrial-protection research: a cardiolipin-targeting peptide studied for ischemia-reperfusion and cardiac-model endpoints (Szeto, 2008).", tags: ["longevity", "cardiac", "endpoint-longevity", "intermediate", "advanced"] },
+  { slug: "selank", name: "Selank", category: "Cognitive", price: 60, size: "10mg", tagline: "Anxiolytic Tuftsin Analog", why: "For neuro and stress-model research: a non-GABAergic anxiolytic studied for BDNF upregulation and IL-6 immunomodulation without sedation in preclinical models.", tags: ["neuro", "immune", "endpoint-neuro", "novice", "intermediate"] },
+  { slug: "semax", name: "Semax", category: "Cognitive", price: 84, size: "5mg", tagline: "ACTH(4-7)PGP Analog", why: "For neuroprotection research: an ACTH(4-10) fragment studied for BDNF and VEGF upregulation in cerebral-ischemia models without cortisol activation.", tags: ["neuro", "endpoint-neuro", "intermediate", "advanced"] },
+  { slug: "dsip", name: "DSIP", category: "Cognitive", price: 144, size: "10mg", tagline: "Delta Sleep-Inducing Peptide", why: "For sleep-architecture research: a nonapeptide studied for delta-wave EEG promotion and HPA-axis modulation in preclinical sleep models.", tags: ["neuro", "endpoint-neuro", "intermediate"] },
+  { slug: "thymosin-alpha-1", name: "Thymosin Alpha-1", category: "Immune", price: 119, size: "5mg", tagline: "Immune Modulator", why: "For immune-modulation research: a thymic peptide studied for TLR signaling, Th1 polarization, and NK-cell activation in antiviral and immune-senescence models.", tags: ["immune", "longevity", "endpoint-immune", "endpoint-longevity", "intermediate", "advanced"] },
+  { slug: "ll-37", name: "LL-37", category: "Immune", price: 90, size: "5mg", tagline: "Cathelicidin Peptide", why: "For innate-immunity research: a human cathelicidin fragment studied for antimicrobial and immunomodulatory endpoints in host-defense models.", tags: ["immune", "endpoint-immune", "intermediate", "advanced"] },
+  { slug: "kpv", name: "KPV", category: "Immune", price: 60, size: "10mg", tagline: "Alpha-MSH Tripeptide", why: "For inflammation research: an alpha-MSH-derived tripeptide studied for NF-kB pathway modulation in gut and mucosal inflammation models.", tags: ["immune", "gi", "endpoint-immune", "endpoint-repair", "novice", "intermediate"] },
 ];
 
 // ─── Quiz Questions ───────────────────────────────────────────────────────────
 
 const QUESTIONS: Question[] = [
   {
-    id: "focus",
+    id: "domain",
     step: 1,
-    question: "What is your primary research focus?",
-    subtext: "Select the area that best describes your research interest.",
+    question: "What is your primary research domain?",
+    subtext: "Select the area your study is investigating.",
     options: [
-      { id: "recovery", label: "Tissue Repair & Recovery", emoji: "🔬", tags: ["recovery", "tendon"] },
-      { id: "gh-axis", label: "GH Axis & Body Composition", emoji: "📊", tags: ["gh-axis", "muscle"] },
-      { id: "metabolic", label: "Metabolic & Weight Research", emoji: "⚗️", tags: ["metabolic", "fat-loss"] },
-      { id: "aging", label: "Longevity & Anti-Aging", emoji: "🧬", tags: ["aging", "longevity"] },
-      { id: "cognitive", label: "Cognitive & Neuropeptides", emoji: "🧠", tags: ["cognitive", "neuro"] },
-      { id: "hormonal", label: "Hormonal & Reproductive", emoji: "🔭", tags: ["hormonal", "fertility"] },
+      { id: "recovery", label: "Recovery & tissue repair", detail: "Wound, tendon, GI, and connective-tissue models", tags: ["recovery", "tendon"] },
+      { id: "metabolic", label: "Metabolic & body composition", detail: "Adipose, glycemic, and GH-axis endpoints", tags: ["metabolic"] },
+      { id: "neuro", label: "Neuro & cognition", detail: "BDNF, anxiolytic, and neuroprotection models", tags: ["neuro"] },
+      { id: "immune", label: "Immune modulation", detail: "Innate defense and immune-senescence models", tags: ["immune"] },
+      { id: "longevity", label: "Longevity & mitochondrial", detail: "Telomere, NAD+, and mitochondrial endpoints", tags: ["longevity"] },
+      { id: "dermal", label: "Dermal & cosmetic", detail: "ECM remodeling and skin-model endpoints", tags: ["dermal"] },
     ],
   },
   {
-    id: "subfocus",
+    id: "study",
     step: 2,
-    question: "Which specific area interests you most?",
-    subtext: "Help us narrow down your protocol.",
-    options: [], // Dynamically populated based on step 1
+    question: "What study type are you running?",
+    subtext: "This shapes which preparations and formats fit your protocol.",
+    options: [
+      { id: "in-vitro", label: "In vitro", detail: "Cell culture and biochemical assays", tags: ["in-vitro"] },
+      { id: "animal", label: "Animal model", detail: "Rodent or other preclinical in vivo models", tags: ["animal"] },
+      { id: "both", label: "Both in vitro and animal", detail: "Translational study spanning both", tags: ["in-vitro", "animal"] },
+    ],
+  },
+  {
+    id: "endpoint",
+    step: 3,
+    question: "What is your priority endpoint?",
+    subtext: "We weight recommendations toward compounds characterized for this readout.",
+    options: [], // Dynamically populated based on domain
   },
   {
     id: "experience",
-    step: 3,
-    question: "What is your research experience level?",
+    step: 4,
+    question: "Your experience with this compound class?",
     subtext: "This helps us match protocol complexity to your methodology.",
     options: [
-      { id: "beginner", label: "New to peptide research", emoji: "📚", tags: ["beginner"] },
-      { id: "intermediate", label: "Some experience — familiar with reconstitution", emoji: "🔬", tags: ["intermediate"] },
-      { id: "advanced", label: "Advanced — running multi-compound studies", emoji: "⚗️", tags: ["advanced"] },
-    ],
-  },
-  {
-    id: "budget",
-    step: 4,
-    question: "What is your monthly research budget?",
-    subtext: "Per research cycle / monthly supply estimate.",
-    options: [
-      { id: "under200", label: "Under $200 / month", emoji: "💰", tags: ["under200", "under400"] },
-      { id: "200to400", label: "$200 – $400 / month", emoji: "💰", tags: ["under400"] },
-      { id: "over400", label: "Over $400 / month", emoji: "💰", tags: ["over400", "under400"] },
-    ],
-  },
-  {
-    id: "cycle",
-    step: 5,
-    question: "Which research cycle length aligns with your protocol?",
-    subtext: "Longer cycles produce more reliable outcome data.",
-    options: [
-      { id: "3month", label: "3-Month Research Cycle", emoji: "📅", tags: ["3month"] },
-      { id: "6month", label: "6-Month Research Cycle", emoji: "📆", tags: ["6month"] },
-      { id: "flexible", label: "Flexible — not yet decided", emoji: "🔄", tags: ["3month", "6month"] },
+      { id: "novice", label: "New to this compound class", detail: "Prefer well-characterized, single-mechanism compounds", tags: ["novice"] },
+      { id: "intermediate", label: "Some prior experience", detail: "Comfortable with reconstitution and dosing math", tags: ["intermediate"] },
+      { id: "advanced", label: "Advanced", detail: "Running multi-compound or dose-response designs", tags: ["advanced"] },
     ],
   },
 ];
 
-// Sub-focus options by primary focus
-const SUB_FOCUS_MAP: Record<string, Option[]> = {
+// Priority-endpoint options by research domain.
+const ENDPOINT_MAP: Record<string, Option[]> = {
   recovery: [
-    { id: "tendon", label: "Tendon & Ligament Repair", tags: ["tendon"] },
-    { id: "cardiac", label: "Cardiac & Vascular", tags: ["cardiac"] },
-    { id: "gi", label: "GI & Gut Mucosal", tags: ["gi"] },
-    { id: "wound", label: "Wound Healing & Skin", tags: ["skincare"] },
-    { id: "neuro-repair", label: "Neurological Recovery", tags: ["neuro"] },
-  ],
-  "gh-axis": [
-    { id: "muscle", label: "Lean Mass Research", tags: ["muscle"] },
-    { id: "fat-loss", label: "Fat Loss & Body Recomp", tags: ["fat-loss"] },
-    { id: "sleep", label: "Sleep Architecture", tags: ["sleep"] },
-    { id: "igf1", label: "IGF-1 / Growth Factors", tags: ["muscle"] },
+    { id: "repair", label: "Tissue repair rate", detail: "Healing kinetics, angiogenesis, ECM", tags: ["endpoint-repair"] },
+    { id: "inflammation", label: "Inflammation markers", detail: "Cytokine and inflammatory readouts", tags: ["endpoint-repair", "endpoint-immune"] },
+    { id: "gi", label: "GI / mucosal protection", detail: "Gut epithelium and mucosal models", tags: ["endpoint-repair", "gi"] },
   ],
   metabolic: [
-    { id: "obesity", label: "Obesity & Fat Tissue Research", tags: ["fat-loss"] },
-    { id: "insulin", label: "Insulin Sensitivity", tags: ["metabolic"] },
-    { id: "liver", label: "Hepatic / Liver Fat", tags: ["metabolic"] },
-    { id: "mitochondrial", label: "Mitochondrial Metabolism", tags: ["metabolic"] },
+    { id: "weight", label: "Body-weight / adiposity", detail: "Adipose mass and lipolysis endpoints", tags: ["endpoint-metabolic"] },
+    { id: "glycemic", label: "Glycemic control", detail: "Insulin sensitivity and glucose handling", tags: ["endpoint-metabolic"] },
+    { id: "composition", label: "Lean-mass / GH axis", detail: "IGF-1 and body-composition readouts", tags: ["endpoint-composition"] },
   ],
-  aging: [
-    { id: "telomere", label: "Telomere Biology", tags: ["longevity"] },
-    { id: "nad-research", label: "NAD+ / Sirtuin Pathway", tags: ["energy"] },
-    { id: "mito-aging", label: "Mitochondrial Aging", tags: ["aging"] },
-    { id: "immune-aging", label: "Immune Senescence", tags: ["immune"] },
+  neuro: [
+    { id: "cognition", label: "Cognition & memory", detail: "BDNF and learning-model endpoints", tags: ["endpoint-neuro"] },
+    { id: "anxiety", label: "Anxiety / stress models", detail: "Anxiolytic and HPA-axis readouts", tags: ["endpoint-neuro"] },
+    { id: "neuroprotect", label: "Neuroprotection", detail: "Ischemia and injury-model endpoints", tags: ["endpoint-neuro"] },
   ],
-  cognitive: [
-    { id: "anxiety", label: "Anxiety & Stress Models", tags: ["stress"] },
-    { id: "memory", label: "Memory & Cognition", tags: ["neuro"] },
-    { id: "neuro-protect", label: "Neuroprotection", tags: ["neuro"] },
-    { id: "sleep-cog", label: "Sleep & Recovery", tags: ["sleep"] },
+  immune: [
+    { id: "modulation", label: "Immune modulation", detail: "Th1/NK and cytokine endpoints", tags: ["endpoint-immune"] },
+    { id: "antimicrobial", label: "Host defense", detail: "Antimicrobial and innate-immunity models", tags: ["endpoint-immune"] },
+    { id: "senescence", label: "Immune senescence", detail: "Aging-related immune endpoints", tags: ["endpoint-immune", "endpoint-longevity"] },
   ],
-  hormonal: [
-    { id: "lh-fsh", label: "LH/FSH Pulse Research", tags: ["fertility"] },
-    { id: "sexual-function", label: "Sexual Function Models", tags: ["hormonal"] },
-    { id: "stress-axis", label: "HPA Axis & Cortisol", tags: ["stress"] },
-    { id: "social", label: "Social Behavior Circuits", tags: ["cognitive"] },
+  longevity: [
+    { id: "telomere", label: "Telomere biology", detail: "Telomerase and telomere-length endpoints", tags: ["endpoint-longevity"] },
+    { id: "mito", label: "Mitochondrial function", detail: "Bioenergetic and cardiolipin endpoints", tags: ["endpoint-longevity"] },
+    { id: "nad", label: "NAD+ / sirtuin pathway", detail: "Coenzyme and sirtuin-activation endpoints", tags: ["endpoint-longevity", "endpoint-metabolic"] },
+  ],
+  dermal: [
+    { id: "collagen", label: "Collagen / ECM remodeling", detail: "Dermal matrix synthesis endpoints", tags: ["endpoint-repair", "endpoint-longevity"] },
+    { id: "antioxidant", label: "Antioxidant defense", detail: "Nrf2 and oxidative-stress endpoints", tags: ["endpoint-longevity"] },
+    { id: "repair-skin", label: "Skin repair", detail: "Wound-closure and skin-model endpoints", tags: ["endpoint-repair"] },
   ],
 };
 
@@ -168,27 +157,35 @@ function scoreProducts(answers: Record<string, string[]>): ProductRec[] {
     p.tags.forEach((tag) => {
       if (allTags.has(tag)) score += 2;
     });
-    // Bonus: exact focus match
-    const focus = answers["focus"]?.[0];
-    const subfocus = answers["subfocus"]?.[0];
-    if (focus && p.tags.includes(focus)) score += 3;
-    if (subfocus && p.tags.includes(subfocus)) score += 2;
-    // Budget match
-    const budget = answers["budget"]?.[0];
-    if (budget === "under200" && p.price <= 100) score += 2;
-    if (budget === "200to400" && p.price <= 200) score += 1;
+    // Bonus: exact domain match
+    const domain = answers["domain"]?.[0];
+    if (domain && p.tags.includes(domain)) score += 3;
+    // Priority endpoint is heavily weighted.
+    const endpointTags = answers["endpoint"] ?? [];
+    endpointTags.forEach((t) => {
+      if (p.tags.includes(t)) score += 3;
+    });
     // Experience match
     const exp = answers["experience"]?.[0];
-    if (exp === "beginner" && p.tags.includes("beginner")) score += 2;
-    if (exp === "advanced" && p.tags.includes("advanced")) score += 2;
-    if (exp === "intermediate") score += 1;
+    if (exp && p.tags.includes(exp)) score += 2;
     return { ...p, score };
   });
 
   return scored
     .filter((p) => p.score > 0)
     .sort((a, b) => b.score - a.score)
-    .slice(0, 3);
+    .slice(0, 4);
+}
+
+// ─── Persistent RUO chip ──────────────────────────────────────────────────────
+
+function RUOChip() {
+  return (
+    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-white/15 bg-white/5 text-[10px] font-semibold uppercase tracking-widest text-zinc-400">
+      <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: GOLD }} />
+      For Research Use Only
+    </span>
+  );
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -204,10 +201,10 @@ export default function QuizClient() {
 
   function getQuestion(index: number): Question {
     const q = QUESTIONS[index];
-    if (q.id === "subfocus") {
-      const primaryFocus = answers["focus"]?.[0];
-      const subOptions = primaryFocus ? SUB_FOCUS_MAP[primaryFocus] ?? [] : [];
-      return { ...q, options: subOptions };
+    if (q.id === "endpoint") {
+      const domain = answers["domain"]?.[0];
+      const endpointOptions = domain ? ENDPOINT_MAP[domain] ?? [] : [];
+      return { ...q, options: endpointOptions };
     }
     return q;
   }
@@ -235,7 +232,6 @@ export default function QuizClient() {
       setSelectedOption(null);
 
       if (currentStep >= totalSteps) {
-        // Compute results
         const recs = scoreProducts(newAnswers);
         setResults(recs);
         setCurrentStep(totalSteps + 1);
@@ -244,6 +240,12 @@ export default function QuizClient() {
       }
       setIsAnimating(false);
     }, 200);
+  }
+
+  function handleBack() {
+    if (currentStep <= 1) return;
+    setSelectedOption(null);
+    setCurrentStep(currentStep - 1);
   }
 
   function handleRetake() {
@@ -259,7 +261,6 @@ export default function QuizClient() {
   if (currentStep === 0) {
     return (
       <div className="min-h-screen bg-zinc-950 text-white flex flex-col">
-        {/* Breadcrumb */}
         <div className="max-w-5xl mx-auto px-6 pt-8 w-full">
           <nav className="text-sm text-zinc-500">
             <a href="/" className="hover:text-zinc-300 transition-colors">Home</a>
@@ -270,10 +271,12 @@ export default function QuizClient() {
 
         <div className="flex-1 flex flex-col items-center justify-center px-6 py-16">
           <div className="max-w-2xl w-full text-center">
-            {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-[#d4af37]/30 bg-[#d4af37]/10 text-[#d4af37] text-xs font-semibold uppercase tracking-widest mb-8">
+            <div
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-widest mb-8"
+              style={{ borderColor: `${GOLD}55`, backgroundColor: `${GOLD}1A`, color: GOLD }}
+            >
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                <path d="M6 1l1.2 3.6H11L8.4 6.8l1 3.2L6 8l-3.4 2 1-3.2L1 4.6h3.8z" fill="currentColor"/>
+                <path d="M6 1l1.2 3.6H11L8.4 6.8l1 3.2L6 8l-3.4 2 1-3.2L1 4.6h3.8z" fill="currentColor" />
               </svg>
               Protocol Finder
             </div>
@@ -282,19 +285,18 @@ export default function QuizClient() {
               Find Your Research Protocol
             </h1>
             <p className="text-zinc-400 text-lg leading-relaxed mb-10 max-w-xl mx-auto">
-              Answer 5 quick questions about your research focus, experience, and budget. 
-              We&apos;ll recommend the compounds that best match your study design.
+              Four questions about your research domain, study type, and priority endpoint.
+              We map your answers to the research compounds best characterized for your study design.
             </p>
 
-            {/* What to expect */}
             <div className="grid grid-cols-3 gap-4 mb-12 text-left">
               {[
-                { num: "5", label: "Questions", sub: "Takes ~60 seconds" },
-                { num: "3", label: "Recommendations", sub: "Matched to your answers" },
-                { num: "100%", label: "Unbiased", sub: "Algorithm-based scoring" },
+                { num: "4", label: "Questions", sub: "About 60 seconds" },
+                { num: "Up to 4", label: "Compounds", sub: "Matched by endpoint" },
+                { num: "COA", label: "On every lot", sub: "HPLC / ESI-MS verified" },
               ].map((item) => (
-                <div key={item.num} className="bg-white/5 rounded-xl p-4 border border-white/10">
-                  <div className="text-2xl font-bold text-[#d4af37] mb-1">{item.num}</div>
+                <div key={item.label} className="bg-white/5 rounded-xl p-4 border border-white/10">
+                  <div className="text-2xl font-bold mb-1" style={{ color: GOLD }}>{item.num}</div>
                   <div className="text-sm font-medium text-white">{item.label}</div>
                   <div className="text-xs text-zinc-500 mt-0.5">{item.sub}</div>
                 </div>
@@ -303,16 +305,22 @@ export default function QuizClient() {
 
             <button
               onClick={handleStart}
-              className="inline-flex items-center gap-3 px-8 py-4 bg-[#d4af37] text-zinc-950 font-semibold text-sm uppercase tracking-widest rounded-lg hover:bg-[#c4a030] transition-colors"
+              className="inline-flex items-center gap-3 px-8 py-4 font-semibold text-sm uppercase tracking-widest rounded-lg transition-colors"
+              style={{ backgroundColor: GOLD, color: "#0F0F0E" }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = GOLD_HOVER)}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = GOLD)}
             >
-              Start the Quiz
+              Begin
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
             </button>
 
-            <p className="text-zinc-600 text-xs mt-6">
-              For Research Use Only. All recommendations are for in vitro/preclinical research purposes.
+            <div className="mt-8 flex justify-center">
+              <RUOChip />
+            </div>
+            <p className="text-zinc-600 text-xs mt-4">
+              Recommendations are for in vitro / preclinical research purposes only. Not for human or veterinary use.
             </p>
           </div>
         </div>
@@ -325,11 +333,10 @@ export default function QuizClient() {
     return (
       <div className="min-h-screen bg-zinc-950 text-white">
         <div className="max-w-5xl mx-auto px-6 py-16">
-          {/* Header */}
           <div className="text-center mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-semibold uppercase tracking-widest mb-6">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
               Your Protocol Is Ready
             </div>
@@ -337,24 +344,30 @@ export default function QuizClient() {
               Recommended Compounds
             </h1>
             <p className="text-zinc-400 text-lg max-w-xl mx-auto">
-              Based on your research focus, experience level, and budget — here are the compounds most aligned with your study design.
+              Matched to your research domain, study type, and priority endpoint. Each compound below ships
+              with a lot-specific Certificate of Analysis.
             </p>
+            <div className="mt-6 flex justify-center">
+              <RUOChip />
+            </div>
           </div>
 
           {/* Results Grid */}
-          <div className="grid gap-8 md:grid-cols-3 mb-16">
+          <div className="grid gap-8 md:grid-cols-2 mb-16">
             {results.map((product, i) => (
               <div
                 key={product.slug}
-                className="relative bg-zinc-900 border border-white/10 rounded-2xl overflow-hidden hover:border-[#d4af37]/40 transition-colors"
+                className="relative bg-zinc-900 border border-white/10 rounded-2xl overflow-hidden transition-colors hover:border-white/30"
               >
                 {i === 0 && (
-                  <div className="absolute top-4 right-4 px-2 py-1 bg-[#d4af37] text-zinc-950 text-xs font-bold uppercase tracking-wider rounded">
-                    Top Pick
+                  <div
+                    className="absolute top-4 right-4 px-2 py-1 text-xs font-bold uppercase tracking-wider rounded"
+                    style={{ backgroundColor: GOLD, color: "#0F0F0E" }}
+                  >
+                    Best Match
                   </div>
                 )}
-                {/* Product image placeholder */}
-                <div className="bg-zinc-800 h-40 flex items-center justify-center">
+                <div className="bg-zinc-800 h-40 flex items-center justify-center relative">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={`/products/${product.slug}.png`}
@@ -368,24 +381,34 @@ export default function QuizClient() {
                   />
                   <div className="text-zinc-600 text-xs font-mono absolute">{product.slug}</div>
                 </div>
-                {/* Content */}
                 <div className="p-6">
-                  <div className="text-xs text-[#d4af37] font-semibold uppercase tracking-widest mb-2">
+                  <div className="text-xs font-semibold uppercase tracking-widest mb-2" style={{ color: GOLD }}>
                     {product.category}
                   </div>
                   <h3 className="text-xl font-bold mb-1">{product.name}</h3>
                   <p className="text-zinc-400 text-xs mb-4">{product.tagline}</p>
-                  <p className="text-zinc-300 text-sm leading-relaxed mb-6">
-                    {product.why}
-                  </p>
-                  <div className="flex items-center justify-between mb-4">
+                  <p className="text-zinc-300 text-sm leading-relaxed mb-4">{product.why}</p>
+
+                  {/* Verification reinforcement */}
+                  <div className="flex items-center gap-2 mb-6 text-[11px] text-zinc-500 font-medium">
+                    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path d="M8 1l5.5 2.4v3.6c0 3.4-2.3 6.6-5.5 7.5-3.2-.9-5.5-4.1-5.5-7.5V3.4z" stroke={GOLD} strokeWidth="1.2" />
+                      <path d="M5.5 8l1.7 1.7L10.8 6" stroke={GOLD} strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    HPLC / ESI-MS verified · lot-specific COA
+                  </div>
+
+                  <div className="flex items-center justify-between">
                     <div>
                       <div className="text-2xl font-bold">${product.price}</div>
                       <div className="text-zinc-500 text-xs">{product.size}</div>
                     </div>
                     <Link
                       href={`/products/${product.slug}`}
-                      className="px-4 py-2 bg-[#d4af37] text-zinc-950 text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-[#c4a030] transition-colors"
+                      className="px-4 py-2 text-xs font-bold uppercase tracking-wider rounded-lg transition-colors"
+                      style={{ backgroundColor: GOLD, color: "#0F0F0E" }}
+                      onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = GOLD_HOVER)}
+                      onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = GOLD)}
                     >
                       View Product
                     </Link>
@@ -395,17 +418,16 @@ export default function QuizClient() {
             ))}
           </div>
 
-          {/* Protocol Context */}
+          {/* Protocol Summary */}
           <div className="bg-zinc-900 border border-white/10 rounded-2xl p-8 mb-10">
-            <h2 className="text-xl font-bold mb-4">Your Protocol Summary</h2>
+            <h2 className="text-xl font-bold mb-4">Your Study Parameters</h2>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               {Object.entries(answers).map(([key, tags]) => {
-                const q = QUESTIONS.find((q) => q.id === key);
+                const q = QUESTIONS.find((qq) => qq.id === key);
                 const qLabel = q ? q.question.replace("?", "") : key;
-                // Find the matching option
-                const question = key === "subfocus"
-                  ? { ...QUESTIONS[1], options: SUB_FOCUS_MAP[answers["focus"]?.[0]] ?? [] }
-                  : QUESTIONS.find((q) => q.id === key);
+                const question = key === "endpoint"
+                  ? { ...QUESTIONS[2], options: ENDPOINT_MAP[answers["domain"]?.[0]] ?? [] }
+                  : QUESTIONS.find((qq) => qq.id === key);
                 const optionLabel = question?.options.find((o) =>
                   o.tags.some((t) => tags.includes(t))
                 )?.label ?? tags.join(", ");
@@ -425,7 +447,7 @@ export default function QuizClient() {
               onClick={handleRetake}
               className="px-6 py-3 border border-white/20 text-zinc-300 text-sm font-medium rounded-lg hover:border-white/40 hover:text-white transition-colors"
             >
-              Retake Quiz
+              Retake
             </button>
             <Link
               href="/products"
@@ -434,17 +456,18 @@ export default function QuizClient() {
               Browse All Products
             </Link>
             <Link
-              href="/tools/stack-builder"
-              className="px-6 py-3 bg-white/10 text-white text-sm font-medium rounded-lg hover:bg-white/15 transition-colors"
+              href="/build-your-stack"
+              className="px-6 py-3 text-sm font-semibold rounded-lg transition-colors"
+              style={{ backgroundColor: GOLD, color: "#0F0F0E" }}
             >
-              Build Full Stack
+              Build a Full Stack
             </Link>
           </div>
 
-          {/* RUO disclaimer */}
-          <p className="text-center text-zinc-600 text-xs mt-12">
-            For Research Use Only. Not for human consumption. Recommendations are generated algorithmically 
-            based on published research literature and are intended for in vitro / preclinical research purposes only.
+          <p className="text-center text-zinc-600 text-xs mt-12 max-w-2xl mx-auto">
+            For Research Use Only. Not for human or veterinary use. Recommendations are generated
+            algorithmically from published research literature and are intended for in vitro / preclinical
+            research purposes only. They do not describe or imply any health outcome.
           </p>
         </div>
       </div>
@@ -458,35 +481,29 @@ export default function QuizClient() {
     <div className="min-h-screen bg-zinc-950 text-white flex flex-col">
       {/* Top bar */}
       <div className="border-b border-white/10">
-        <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between">
-          <a href="/" className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors">
-            ← Nexphoria
+        <div className="max-w-3xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+          <a href="/" className="text-zinc-500 hover:text-zinc-300 text-sm transition-colors whitespace-nowrap">
+            Nexphoria
           </a>
-          <div className="text-xs text-zinc-500 font-medium">
+          <RUOChip />
+          <div className="text-xs text-zinc-500 font-medium whitespace-nowrap">
             Step {currentStep} of {totalSteps}
           </div>
-          <button
-            onClick={handleRetake}
-            className="text-xs text-zinc-600 hover:text-zinc-400 transition-colors"
-          >
-            Start Over
-          </button>
         </div>
       </div>
 
       {/* Progress bar */}
       <div className="h-1 bg-zinc-800">
         <div
-          className="h-full bg-[#d4af37] transition-all duration-500"
-          style={{ width: `${progress}%` }}
+          className="h-full transition-all duration-500"
+          style={{ width: `${progress}%`, backgroundColor: GOLD }}
         />
       </div>
 
-      {/* Question content */}
+      {/* Question content — single question per screen */}
       <div className={`flex-1 flex flex-col items-center justify-center px-6 py-12 transition-opacity duration-200 ${isAnimating ? "opacity-0" : "opacity-100"}`}>
         <div className="max-w-2xl w-full">
-          {/* Step indicator */}
-          <div className="text-xs text-[#d4af37] font-semibold uppercase tracking-widest mb-4">
+          <div className="text-xs font-semibold uppercase tracking-widest mb-4" style={{ color: GOLD }}>
             Question {currentStep}
           </div>
 
@@ -497,40 +514,53 @@ export default function QuizClient() {
             <p className="text-zinc-400 mb-8">{question.subtext}</p>
           )}
 
-          {/* Options */}
+          {/* Options — large tap targets */}
           <div className="grid gap-3 sm:grid-cols-2 mb-10">
-            {question.options.map((option) => (
-              <button
-                key={option.id}
-                onClick={() => handleSelect(option.id)}
-                className={`text-left px-5 py-4 rounded-xl border transition-all ${
-                  selectedOption === option.id
-                    ? "border-[#d4af37] bg-[#d4af37]/10 text-white"
-                    : "border-white/10 bg-white/3 text-zinc-300 hover:border-white/25 hover:bg-white/5"
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  {option.emoji && (
-                    <span className="text-xl" aria-hidden="true">{option.emoji}</span>
+            {question.options.map((option) => {
+              const isSelected = selectedOption === option.id;
+              return (
+                <button
+                  key={option.id}
+                  onClick={() => handleSelect(option.id)}
+                  className="text-left px-5 py-4 rounded-xl border transition-all min-h-[64px]"
+                  style={
+                    isSelected
+                      ? { borderColor: GOLD, backgroundColor: `${GOLD}1A`, color: "#fff" }
+                      : { borderColor: "rgba(255,255,255,0.1)", backgroundColor: "rgba(255,255,255,0.03)" }
+                  }
+                >
+                  <div className="font-medium text-sm text-white">{option.label}</div>
+                  {option.detail && (
+                    <div className="text-xs text-zinc-400 mt-1 leading-snug">{option.detail}</div>
                   )}
-                  <span className="font-medium text-sm">{option.label}</span>
-                </div>
-              </button>
-            ))}
+                </button>
+              );
+            })}
           </div>
 
-          {/* Next button */}
-          <button
-            onClick={handleNext}
-            disabled={!selectedOption}
-            className={`w-full py-4 rounded-xl font-semibold text-sm uppercase tracking-widest transition-all ${
-              selectedOption
-                ? "bg-[#d4af37] text-zinc-950 hover:bg-[#c4a030]"
-                : "bg-white/5 text-zinc-600 cursor-not-allowed"
-            }`}
-          >
-            {currentStep === totalSteps ? "See My Recommendations →" : "Continue →"}
-          </button>
+          {/* Navigation */}
+          <div className="flex items-center gap-3">
+            {currentStep > 1 && (
+              <button
+                onClick={handleBack}
+                className="px-5 py-4 rounded-xl border border-white/15 text-zinc-300 text-sm font-medium hover:border-white/35 hover:text-white transition-colors"
+              >
+                Back
+              </button>
+            )}
+            <button
+              onClick={handleNext}
+              disabled={!selectedOption}
+              className="flex-1 py-4 rounded-xl font-semibold text-sm uppercase tracking-widest transition-all"
+              style={
+                selectedOption
+                  ? { backgroundColor: GOLD, color: "#0F0F0E" }
+                  : { backgroundColor: "rgba(255,255,255,0.05)", color: "#71717a", cursor: "not-allowed" }
+              }
+            >
+              {currentStep === totalSteps ? "See My Recommendations" : "Continue"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
