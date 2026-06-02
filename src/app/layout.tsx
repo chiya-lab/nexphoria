@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
-import RUOBanner from "@/components/RUOBanner";
+import PprAnnouncementBar from "@/components/chrome/PprAnnouncementBar";
+import PprHeader from "@/components/chrome/PprHeader";
+import PprFooter from "@/components/chrome/PprFooter";
+import PprCartDrawerStub from "@/components/chrome/PprCartDrawerStub";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import ClientModals from "@/components/ClientModals";
 
@@ -249,10 +250,11 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <Header />
+        <PprAnnouncementBar />
+        <PprHeader />
         <main id="main-content">{children}</main>
-        <RUOBanner variant="band" />
-        <Footer />
+        <PprFooter />
+        <PprCartDrawerStub />
         <ClientModals />
       </body>
     </html>
