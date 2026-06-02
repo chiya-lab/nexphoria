@@ -21,6 +21,13 @@ export interface MockProduct {
   subscriptionEligible: boolean;
   addedAt: string; // ISO date — drives "Newest" sort
   rating: number; // mean review score (out of 5)
+  // Optional spec fields surfaced by the /compare matrix. Additive only —
+  // existing consumers ignore these and the shape above is unchanged.
+  halfLife?: string; // approximate circulating half-life
+  solubility?: string; // reconstitution solvent guidance
+  postReconStability?: string; // stability window after reconstitution (refrigerated)
+  typicalResearchDose?: string; // commonly cited research dose range
+  citationsCount?: number; // count of indexed literature references
 }
 
 export type ProductCategory =
@@ -94,6 +101,11 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     subscriptionEligible: true,
     addedAt: "2025-09-02",
     rating: 4.9,
+    halfLife: "~4 h",
+    solubility: "Bacteriostatic water; freely soluble",
+    postReconStability: "≤30 days at 2–8°C",
+    typicalResearchDose: "200–500 mcg/day (research)",
+    citationsCount: 5,
   },
   {
     slug: "tb-500",
@@ -109,6 +121,11 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     subscriptionEligible: true,
     addedAt: "2025-08-18",
     rating: 4.8,
+    halfLife: "~2–3 h",
+    solubility: "Bacteriostatic water; freely soluble",
+    postReconStability: "≤21 days at 2–8°C",
+    typicalResearchDose: "2–2.5 mg/week (research)",
+    citationsCount: 4,
   },
   {
     slug: "ghk-cu",
@@ -124,6 +141,11 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     subscriptionEligible: true,
     addedAt: "2025-07-30",
     rating: 4.7,
+    halfLife: "~1 h",
+    solubility: "Bacteriostatic water; freely soluble",
+    postReconStability: "≤30 days at 2–8°C",
+    typicalResearchDose: "1–2 mg/day (research)",
+    citationsCount: 3,
   },
   {
     slug: "semaglutide",
@@ -139,6 +161,11 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     subscriptionEligible: true,
     addedAt: "2025-11-12",
     rating: 4.9,
+    halfLife: "~7 days",
+    solubility: "Bacteriostatic water; freely soluble",
+    postReconStability: "≤56 days at 2–8°C",
+    typicalResearchDose: "0.25–2.4 mg/week (research)",
+    citationsCount: 6,
   },
   {
     slug: "selank",
@@ -154,6 +181,11 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     subscriptionEligible: true,
     addedAt: "2025-06-21",
     rating: 4.6,
+    halfLife: "~0.5 h",
+    solubility: "Bacteriostatic water; freely soluble",
+    postReconStability: "≤30 days at 2–8°C",
+    typicalResearchDose: "250–500 mcg/day (research)",
+    citationsCount: 3,
   },
   {
     slug: "cerebrolysin",
@@ -169,6 +201,11 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     subscriptionEligible: false,
     addedAt: "2025-10-05",
     rating: 4.5,
+    halfLife: "Not characterized (mixture)",
+    solubility: "Supplied in solution; do not freeze",
+    postReconStability: "Use by labeled expiry; 2–8°C",
+    typicalResearchDose: "Per protocol (research)",
+    citationsCount: 2,
   },
   {
     slug: "thymosin-alpha-1",
@@ -184,6 +221,11 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     subscriptionEligible: true,
     addedAt: "2025-09-28",
     rating: 4.8,
+    halfLife: "~2 h",
+    solubility: "Bacteriostatic water; freely soluble",
+    postReconStability: "≤30 days at 2–8°C",
+    typicalResearchDose: "1.6 mg twice weekly (research)",
+    citationsCount: 4,
   },
   {
     slug: "epitalon",
@@ -199,6 +241,11 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     subscriptionEligible: true,
     addedAt: "2025-08-09",
     rating: 4.7,
+    halfLife: "~0.5 h",
+    solubility: "Bacteriostatic water; freely soluble",
+    postReconStability: "≤30 days at 2–8°C",
+    typicalResearchDose: "5–10 mg/day (research)",
+    citationsCount: 3,
   },
   {
     slug: "tesamorelin",
@@ -214,6 +261,11 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     subscriptionEligible: true,
     addedAt: "2025-10-22",
     rating: 4.8,
+    halfLife: "~26–38 min",
+    solubility: "Bacteriostatic water; freely soluble",
+    postReconStability: "≤14 days at 2–8°C",
+    typicalResearchDose: "1–2 mg/day (research)",
+    citationsCount: 4,
   },
   {
     slug: "cjc-1295",
@@ -229,6 +281,11 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     subscriptionEligible: true,
     addedAt: "2025-07-14",
     rating: 4.7,
+    halfLife: "~6–8 days (DAC)",
+    solubility: "Bacteriostatic water; freely soluble",
+    postReconStability: "≤30 days at 2–8°C",
+    typicalResearchDose: "1–2 mg/week (research)",
+    citationsCount: 3,
   },
   {
     slug: "mots-c",
@@ -244,6 +301,11 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     subscriptionEligible: true,
     addedAt: "2025-11-01",
     rating: 4.6,
+    halfLife: "Not well characterized",
+    solubility: "Bacteriostatic water; freely soluble",
+    postReconStability: "≤21 days at 2–8°C",
+    typicalResearchDose: "5–10 mg/day (research)",
+    citationsCount: 3,
   },
   {
     slug: "ipamorelin",
@@ -259,6 +321,11 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     subscriptionEligible: true,
     addedAt: "2025-06-30",
     rating: 4.8,
+    halfLife: "~2 h",
+    solubility: "Bacteriostatic water; freely soluble",
+    postReconStability: "≤30 days at 2–8°C",
+    typicalResearchDose: "200–300 mcg/day (research)",
+    citationsCount: 3,
   },
   {
     slug: "hexarelin",
@@ -274,6 +341,11 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     subscriptionEligible: true,
     addedAt: "2025-09-15",
     rating: 4.5,
+    halfLife: "~55 min",
+    solubility: "Bacteriostatic water; freely soluble",
+    postReconStability: "≤21 days at 2–8°C",
+    typicalResearchDose: "100–200 mcg/day (research)",
+    citationsCount: 2,
   },
   {
     slug: "nad-plus",
@@ -289,6 +361,11 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     subscriptionEligible: true,
     addedAt: "2025-10-30",
     rating: 4.7,
+    halfLife: "Rapid (NAD+ turnover)",
+    solubility: "Bacteriostatic water; freely soluble",
+    postReconStability: "≤14 days at 2–8°C",
+    typicalResearchDose: "50–100 mg/day (research)",
+    citationsCount: 4,
   },
 ];
 
