@@ -135,108 +135,37 @@ export default function ProductsClient({ initialCategory }: { initialCategory?: 
     <div className="pb-20 px-6 md:px-10" style={{ backgroundColor: "#F9F9F9" }}>
       <div className="max-w-7xl mx-auto">
         {/* Page header */}
-        <div className="pt-24 mb-8 flex items-start justify-between gap-4 flex-wrap">
-          <div>
-            <p className="eyebrow mb-3">Catalog</p>
-            <h1 className="text-3xl md:text-4xl font-medium tracking-tight">
-              All Compounds
-            </h1>
-            <p
-            className="text-sm mt-2 font-medium"
-            style={{ color: "#7A6B2A", letterSpacing: "0.04em" }}
-          >
-            {products.length} research-grade compounds
+        <div className="pt-24 mb-6">
+          <p className="eyebrow mb-3">Catalog</p>
+          <h1 className="text-3xl md:text-4xl font-medium tracking-tight">
+            All Compounds
+          </h1>
+          <p className="text-sm mt-2.5 max-w-2xl" style={{ color: "#555", lineHeight: 1.65 }}>
+            {products.length} research-grade peptide compounds. Independently verified by
+            HPLC / ESI-MS, lot-specific Certificate of Analysis with every order, cold-chain
+            packed for 48-hour delivery.
           </p>
-          </div>
-
-          <div
-            className="flex items-center gap-3 mt-2 pb-2"
-            style={{ borderBottom: "1px solid #E8E5DF" }}
-          >
-            {/* Sort dropdown */}
-            <div className="relative" ref={sortRef}>
-              <button
-                onClick={() => setSortOpen(!sortOpen)}
-                className="flex items-center gap-1.5 transition-opacity hover:opacity-60"
-                style={{
-                  fontSize: "0.7rem",
-                  letterSpacing: "0.15em",
-                  textTransform: "uppercase",
-                  color: "#555",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: "10px 0",
-                  minHeight: "44px",
-                  fontWeight: 500,
-                }}
-              >
-                {activeSortLabel}
-                <ChevronDown
-                  size={11}
-                  className="transition-transform"
-                  style={{ transform: sortOpen ? "rotate(180deg)" : "rotate(0deg)", color: "#7A6B2A" }}
-                />
-              </button>
-              {sortOpen && (
-                <div
-                  className="absolute left-0 sm:left-auto sm:right-0 top-full mt-1.5 w-48 rounded-xl border border-[#ECEAE4] bg-white shadow-lg z-30 py-1"
-                >
-                  {SORT_OPTIONS.map((opt) => (
-                    <button
-                      key={opt.key}
-                      onClick={() => { setSortKey(opt.key); setSortOpen(false); }}
-                      className="w-full text-left px-4 py-2.5 text-sm hover:bg-[#F7F5F0] transition-colors"
-                      style={{
-                        color: sortKey === opt.key ? "#B8A44C" : "#333",
-                        fontWeight: sortKey === opt.key ? 600 : 400,
-                      }}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Compare toggle */}
-            <button
-              onClick={toggleCompareMode}
-              className="flex items-center gap-1.5 transition-colors"
-              style={{
-                fontSize: "0.7rem",
-                letterSpacing: "0.15em",
-                textTransform: "uppercase",
-                color: compareMode ? "#B8A44C" : "#999",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                padding: "10px 0",
-                minHeight: "44px",
-                fontWeight: 500,
-              }}
-              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#B8A44C"; }}
-              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = compareMode ? "#B8A44C" : "#999"; }}
-            >
-              <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
-                <rect x="1" y="1" width="5" height="12" rx="1" stroke="currentColor" strokeWidth="1.25" />
-                <rect x="8" y="1" width="5" height="12" rx="1" stroke="currentColor" strokeWidth="1.25" />
-              </svg>
-              {compareMode ? "Exit Compare" : "Compare"}
-            </button>
-          </div>
         </div>
 
-        {/* Search bar */}
-        <div className="relative mb-4">
-          <div className="relative flex items-center">
+        {/* PRIMARY: Search bar — promoted, larger, gold-bordered when focused */}
+        <div className="relative mb-3">
+          <div
+            className="relative flex items-center transition-all"
+            style={{
+              border: "1px solid #D8D4CC",
+              borderRadius: "999px",
+              backgroundColor: "#FFFFFF",
+              boxShadow: "0 1px 2px rgba(0,0,0,0.02)",
+            }}
+          >
             <svg
-              className="absolute left-4 pointer-events-none"
-              width="16"
-              height="16"
+              className="absolute left-5 pointer-events-none"
+              width="18"
+              height="18"
               viewBox="0 0 16 16"
               fill="none"
-              style={{ color: "#999" }}
+              style={{ color: "#7A6B2A" }}
+              aria-hidden="true"
             >
               <circle cx="6.5" cy="6.5" r="5" stroke="currentColor" strokeWidth="1.5" />
               <line x1="10.5" y1="10.5" x2="14.5" y2="14.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
@@ -246,36 +175,116 @@ export default function ProductsClient({ initialCategory }: { initialCategory?: 
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search compounds by name, category..."
-              className="w-full pl-10 pr-10 py-3 text-sm outline-none transition-all"
+              placeholder="Search compounds — name, category, application…"
+              aria-label="Search compounds"
+              className="w-full pl-12 pr-12 text-base outline-none"
               style={{
-                background: "none",
+                background: "transparent",
                 border: "none",
-                borderBottom: "1px solid #D8D4CC",
-                borderRadius: 0,
+                borderRadius: "999px",
                 color: "#1A1A1A",
+                height: "56px",
               }}
               onFocus={(e) => {
-                e.currentTarget.style.borderBottomColor = "#B8A44C";
+                (e.currentTarget.parentElement as HTMLDivElement).style.borderColor = "#B8A44C";
+                (e.currentTarget.parentElement as HTMLDivElement).style.boxShadow = "0 0 0 3px rgba(184,164,76,0.12)";
               }}
               onBlur={(e) => {
-                e.currentTarget.style.borderBottomColor = "#D8D4CC";
+                (e.currentTarget.parentElement as HTMLDivElement).style.borderColor = "#D8D4CC";
+                (e.currentTarget.parentElement as HTMLDivElement).style.boxShadow = "0 1px 2px rgba(0,0,0,0.02)";
               }}
             />
             {searchQuery && (
               <button
                 onClick={() => { setSearchQuery(""); inputRef.current?.focus(); }}
-                className="absolute right-3 flex items-center justify-center w-6 h-6 rounded-full transition-colors"
+                className="absolute right-4 flex items-center justify-center w-7 h-7 rounded-full transition-colors"
                 style={{ backgroundColor: "#ECEAE4", color: "#666" }}
                 aria-label="Clear search"
               >
-                <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+                <svg width="10" height="10" viewBox="0 0 10 10" fill="none" aria-hidden="true">
                   <line x1="1.5" y1="1.5" x2="8.5" y2="8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                   <line x1="8.5" y1="1.5" x2="1.5" y2="8.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
                 </svg>
               </button>
             )}
           </div>
+        </div>
+
+        {/* Sort + Compare row — secondary controls, sort visible, compare hidden on mobile */}
+        <div className="flex items-center justify-between gap-3 mb-4" style={{ borderBottom: "1px solid #E8E5DF", paddingBottom: "0.5rem" }}>
+          {/* Sort dropdown */}
+          <div className="relative" ref={sortRef}>
+            <button
+              onClick={() => setSortOpen(!sortOpen)}
+              className="flex items-center gap-1.5 transition-opacity hover:opacity-60"
+              style={{
+                fontSize: "0.7rem",
+                letterSpacing: "0.15em",
+                textTransform: "uppercase",
+                color: "#555",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: "10px 0",
+                minHeight: "44px",
+                fontWeight: 500,
+              }}
+              aria-label={`Sort: ${activeSortLabel}`}
+            >
+              Sort: {activeSortLabel}
+              <ChevronDown
+                size={11}
+                className="transition-transform"
+                style={{ transform: sortOpen ? "rotate(180deg)" : "rotate(0deg)", color: "#7A6B2A" }}
+              />
+            </button>
+            {sortOpen && (
+              <div
+                className="absolute left-0 top-full mt-1.5 w-48 rounded-xl border border-[#ECEAE4] bg-white shadow-lg z-30 py-1"
+              >
+                {SORT_OPTIONS.map((opt) => (
+                  <button
+                    key={opt.key}
+                    onClick={() => { setSortKey(opt.key); setSortOpen(false); }}
+                    className="w-full text-left px-4 py-2.5 text-sm hover:bg-[#F7F5F0] transition-colors"
+                    style={{
+                      color: sortKey === opt.key ? "#B8A44C" : "#333",
+                      fontWeight: sortKey === opt.key ? 600 : 400,
+                    }}
+                  >
+                    {opt.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Compare toggle — hidden on mobile (sm:flex), promoted to text-only utility on desktop */}
+          <button
+            onClick={toggleCompareMode}
+            className="hidden sm:inline-flex items-center gap-1.5 transition-colors"
+            style={{
+              fontSize: "0.7rem",
+              letterSpacing: "0.15em",
+              textTransform: "uppercase",
+              color: compareMode ? "#B8A44C" : "#999",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              padding: "10px 0",
+              minHeight: "44px",
+              fontWeight: 500,
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.color = "#B8A44C"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.color = compareMode ? "#B8A44C" : "#999"; }}
+            aria-label={compareMode ? "Exit compare mode" : "Enter compare mode"}
+          >
+            <svg width="13" height="13" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+              <rect x="1" y="1" width="5" height="12" rx="1" stroke="currentColor" strokeWidth="1.25" />
+              <rect x="8" y="1" width="5" height="12" rx="1" stroke="currentColor" strokeWidth="1.25" />
+            </svg>
+            {compareMode ? "Exit Compare" : "Compare"}
+          </button>
         </div>
 
         {/* Compare mode banner */}
