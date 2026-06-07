@@ -119,9 +119,9 @@ const GUIDES = [
 ];
 
 const QUICK_LINKS = [
-  { label: "Interactive Tools", href: "/tools", desc: "19+ calculators and planners" },
+  { label: "COA Library", href: "/coa", desc: "Search certificates of analysis by lot" },
   { label: "Compound Index", href: "/compounds", desc: "All 34 research compounds" },
-  { label: "Research Journal", href: "/blog", desc: "76+ peer-reviewed articles" },
+  { label: "Interactive Tools", href: "/tools", desc: "19+ calculators and planners" },
   { label: "Protocol Finder", href: "/quiz", desc: "Match compounds to your research" },
 ];
 

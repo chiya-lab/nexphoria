@@ -5,18 +5,20 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { products } from "@/lib/products";
 import { hasProductPhoto, getProductImagePath } from "@/lib/product-images";
+import { hasCoa, labPartnerFor } from "@/lib/coa";
 import Breadcrumb from "@/components/Breadcrumb";
 import { X, Plus, ArrowRight, ExternalLink } from "lucide-react";
 
-const MAX = 3;
+const MAX = 4;
 
 const ROW_DEFS: { label: string; key: string; badge?: boolean; strong?: boolean }[] = [
-  { label: "Category", key: "category" },
+  { label: "Research Domain", key: "category" },
   { label: "Size", key: "size" },
   { label: "Price (from)", key: "basePrice", strong: true },
   { label: "Molecular Weight", key: "molecularWeight" },
   { label: "Purity", key: "purity", badge: true },
   { label: "CAS Number", key: "casNumber" },
+  { label: "Lab-Partner Tested", key: "labPartner" },
   { label: "Storage", key: "storage" },
   { label: "Appearance", key: "appearance" },
 ];
@@ -33,6 +35,7 @@ function getBasePrice(p: Product): string {
 
 function getCellValue(p: Product, key: string): string {
   if (key === "basePrice") return getBasePrice(p);
+  if (key === "labPartner") return hasCoa(p.slug) ? labPartnerFor(p.slug) : "—";
   const val = (p as Record<string, unknown>)[key];
   if (val === undefined || val === null) return "—";
   return String(val);
