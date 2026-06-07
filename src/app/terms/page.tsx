@@ -2,6 +2,7 @@ import Link from "next/link";
 import { ArrowLeft, AlertTriangle, Shield, Scale } from "lucide-react";
 import type { Metadata } from "next";
 import Breadcrumb from "@/components/Breadcrumb";
+import LegalToc, { type TocItem } from "@/components/LegalToc";
 
 export const metadata: Metadata = {
   title: "Terms of Service | Nexphoria Research Peptides",
@@ -464,6 +465,11 @@ const sections = [
   },
 ];
 
+const TOC_ITEMS: TocItem[] = sections.map((s) => ({
+  id: s.id,
+  label: `${s.number}. ${s.title.length > 32 ? s.title.slice(0, 32) + "…" : s.title}`,
+}));
+
 export default function TermsPage() {
   const lastUpdated = "May 29, 2026";
 
@@ -489,7 +495,7 @@ export default function TermsPage() {
       </div>
 
       <div style={{ paddingTop: "80px" }}>
-        <div className="max-w-4xl mx-auto px-6 md:px-12 py-12">
+        <div className="max-w-6xl mx-auto px-6 md:px-12 py-12">
           <Breadcrumb
             variant="dark"
             className="mb-8"
@@ -517,25 +523,47 @@ export default function TermsPage() {
               </span>
             </div>
             <h1
-              className="mb-3 text-4xl font-bold tracking-tight lg:text-5xl"
+              className="mb-4 text-4xl font-bold tracking-tight lg:text-5xl"
               style={{ color: "#FDFCF8" }}
             >
               Terms of Service
             </h1>
-            <p className="text-sm" style={{ color: "#6B6B6B" }}>
-              Last updated: {lastUpdated}
-            </p>
+            <span
+              className="inline-flex items-center rounded-full px-3 py-1 text-xs font-medium"
+              style={{
+                backgroundColor: "rgba(212,175,55,0.10)",
+                border: "1px solid rgba(212,175,55,0.30)",
+                color: "#d4af37",
+              }}
+            >
+              Last Updated: {lastUpdated}
+            </span>
           </div>
 
-          {/* Quick nav */}
-          <nav
-            className="mb-10 rounded-lg p-5 border"
+          {/* Two-column reading layout: sticky TOC + content */}
+          <div className="lg:grid lg:grid-cols-[240px_minmax(0,1fr)] lg:gap-12">
+            {/* Sticky TOC — desktop only */}
+            <aside className="hidden lg:block">
+              <div className="sticky" style={{ top: "104px" }}>
+                <LegalToc items={TOC_ITEMS} variant="dark" title="Sections" />
+              </div>
+            </aside>
+
+            {/* Content column */}
+            <div className="min-w-0" style={{ maxWidth: "48rem" }}>
+
+          {/* Mobile quick nav — collapsible list shown only on small screens */}
+          <details
+            className="lg:hidden mb-8 rounded-lg border"
             style={{ backgroundColor: "#111111", borderColor: "rgba(255,255,255,0.08)" }}
           >
-            <p className="text-xs font-semibold tracking-wider uppercase mb-3" style={{ color: "#d4af37" }}>
-              Sections
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-1.5">
+            <summary
+              className="cursor-pointer px-5 py-3 text-xs font-semibold tracking-wider uppercase"
+              style={{ color: "#d4af37" }}
+            >
+              Jump to Section
+            </summary>
+            <div className="grid grid-cols-1 gap-1.5 px-5 pb-4">
               {sections.map((s) => (
                 <a
                   key={s.id}
@@ -543,11 +571,11 @@ export default function TermsPage() {
                   className="text-xs py-1 transition-colors hover:underline"
                   style={{ color: "#9CA3AF" }}
                 >
-                  {s.number}. {s.title.length > 35 ? s.title.slice(0, 35) + "…" : s.title}
+                  {s.number}. {s.title.length > 38 ? s.title.slice(0, 38) + "…" : s.title}
                 </a>
               ))}
             </div>
-          </nav>
+          </details>
 
           {/* Sections */}
           <div className="space-y-10 text-sm leading-relaxed" style={{ color: "#A0A0A0" }}>
@@ -602,6 +630,10 @@ export default function TermsPage() {
               Contact
             </Link>
           </div>
+            </div>
+            {/* end content column */}
+          </div>
+          {/* end reading grid */}
         </div>
       </div>
     </div>
