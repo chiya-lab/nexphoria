@@ -3,6 +3,7 @@ import Link from "next/link";
 import { articles } from "@/lib/blog";
 import Breadcrumb from "@/components/Breadcrumb";
 import { categoryToSlug } from "./category/[category]/page";
+import BlogIndexClient, { type BlogCardData } from "./BlogIndexClient";
 
 export const metadata: Metadata = {
   title: "Research Blog | Nexphoria",
@@ -46,17 +47,6 @@ const categoryColors: Record<string, string> = {
   "Compound Profiles": "#B8A44C",
 };
 
-// Derive unique categories with counts for the filter bar
-function getCategoryStats(articleList: typeof articles) {
-  const counts: Record<string, number> = {};
-  for (const a of articleList) {
-    counts[a.category] = (counts[a.category] ?? 0) + 1;
-  }
-  return Object.entries(counts)
-    .sort((a, b) => b[1] - a[1])
-    .map(([name, count]) => ({ name, count, slug: categoryToSlug(name) }));
-}
-
 export default function BlogIndexPage() {
   const sorted = [...articles].sort(
     (a, b) =>
@@ -64,7 +54,17 @@ export default function BlogIndexPage() {
   );
 
   const [featured, ...rest] = sorted;
-  const categoryStats = getCategoryStats(articles);
+
+  const cardData: BlogCardData[] = rest.map((a) => ({
+    slug: a.slug,
+    title: a.title,
+    description: a.description,
+    category: a.category,
+    categorySlug: categoryToSlug(a.category),
+    readMinutes: a.readMinutes,
+    publishedAt: a.publishedAt,
+    publishedLabel: formatDate(a.publishedAt),
+  }));
 
   return (
     <>
@@ -79,7 +79,7 @@ export default function BlogIndexPage() {
           className="relative px-6 pt-32 pb-16 md:pt-40 md:pb-20"
           style={{ backgroundColor: "#010101" }}
         >
-          <div className="max-w-5xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             <Breadcrumb
               variant="dark"
               className="mb-6"
@@ -116,45 +116,9 @@ export default function BlogIndexPage() {
           </div>
         </section>
 
-        {/* Category filter nav */}
-        <section
-          className="px-6 py-5"
-          style={{ backgroundColor: "#0e0e0e", borderBottom: "1px solid rgba(255,255,255,0.07)" }}
-        >
-          <div className="max-w-5xl mx-auto">
-            <div className="flex flex-wrap gap-2 items-center">
-              <span
-                className="text-xs px-4 py-2 rounded-full"
-                style={{
-                  backgroundColor: "#B8A44C",
-                  border: "1px solid #B8A44C",
-                  color: "#010101",
-                  fontWeight: 600,
-                }}
-              >
-                All ({articles.length})
-              </span>
-              {categoryStats.map((c) => (
-                <Link
-                  key={c.slug}
-                  href={`/blog/category/${c.slug}`}
-                  className="text-xs px-4 py-2 rounded-full transition-colors hover:border-white/40 hover:text-white"
-                  style={{
-                    backgroundColor: "transparent",
-                    border: "1px solid rgba(255,255,255,0.2)",
-                    color: "#A0A0A0",
-                  }}
-                >
-                  {c.name} ({c.count})
-                </Link>
-              ))}
-            </div>
-          </div>
-        </section>
-
         {/* Featured article */}
         <section className="px-6 py-20 md:py-28" style={{ backgroundColor: "#EAE7E3" }}>
-          <div className="max-w-5xl mx-auto">
+          <div className="max-w-6xl mx-auto">
             <p
               className="text-xs uppercase tracking-widest mb-6"
               style={{ color: "#B8A44C" }}
@@ -162,7 +126,7 @@ export default function BlogIndexPage() {
               Featured Article
             </p>
             <div
-              className="rounded-lg overflow-hidden group"
+              className="rounded-2xl overflow-hidden group card-shadow"
               style={{
                 border: "1px solid rgba(0,0,0,0.06)",
                 borderTop: `3px solid ${categoryColors[featured.category] || "#C9DD69"}`,
@@ -225,104 +189,8 @@ export default function BlogIndexPage() {
           </div>
         </section>
 
-        {/* Article grid */}
-        <section className="px-6 py-20 md:py-28">
-          <div className="max-w-5xl mx-auto">
-            {rest.length > 0 && (
-              <>
-                <p
-                  className="text-xs uppercase tracking-widest mb-8"
-                  style={{ color: "#B8A44C" }}
-                >
-                  More Articles
-                </p>
-                <div className="grid md:grid-cols-2 gap-6">
-                  {rest.map((article) => (
-                    <div
-                      key={article.slug}
-                      className="group"
-                    >
-                      <div
-                        className="rounded-lg h-full"
-                        style={{
-                          border: "1px solid rgba(0,0,0,0.06)",
-                          borderTop: `2px solid ${
-                            categoryColors[article.category] || "#C9DD69"
-                          }`,
-                          backgroundColor: "#fff",
-                        }}
-                      >
-                        <div className="p-7">
-                          <div className="flex flex-wrap items-center gap-3 mb-4">
-                            <Link
-                              href={`/blog/category/${categoryToSlug(article.category)}`}
-                              className="text-xs uppercase tracking-widest px-2 py-0.5 rounded-full hover:opacity-80 transition-opacity"
-                              style={{
-                                backgroundColor:
-                                  categoryColors[article.category] || "#C9DD69",
-                                color: "#010101",
-                              }}
-                            >
-                              {article.category}
-                            </Link>
-                            <span
-                              className="text-xs"
-                              style={{ color: "#A0A0A0" }}
-                            >
-                              {article.readMinutes} min
-                            </span>
-                          </div>
-                          <h3
-                            className="text-lg mb-3"
-                            style={{
-                              fontWeight: 500,
-                              color: "#010101",
-                              lineHeight: 1.3,
-                              letterSpacing: "-0.01em",
-                            }}
-                          >
-                            <Link
-                              href={`/blog/${article.slug}`}
-                              className="hover:opacity-80 transition-opacity"
-                              style={{ color: "inherit" }}
-                            >
-                              {article.title}
-                            </Link>
-                          </h3>
-                          <p
-                            className="text-sm mb-5"
-                            style={{
-                              color: "#666",
-                              lineHeight: 1.65,
-                              fontWeight: 300,
-                            }}
-                          >
-                            {article.description}
-                          </p>
-                          <div className="flex items-center justify-between">
-                            <span
-                              className="text-xs"
-                              style={{ color: "#A0A0A0" }}
-                            >
-                              {formatDate(article.publishedAt)}
-                            </span>
-                            <Link
-                              href={`/blog/${article.slug}`}
-                              className="text-xs inline-flex items-center gap-1"
-                              style={{ color: "#B8923A", fontWeight: 500 }}
-                            >
-                              Read <span aria-hidden>→</span>
-                            </Link>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-        </section>
+        {/* Filterable article grid with load-more */}
+        <BlogIndexClient articles={cardData} />
 
         {/* Bottom CTA */}
         <section
