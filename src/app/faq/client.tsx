@@ -399,13 +399,33 @@ function FaqItem({ q, a }: { q: string; a: string | ReactNode }) {
   );
 }
 
+function faqText(node: string | ReactNode): string {
+  if (typeof node === "string") return node;
+  return "";
+}
+
 export default function FaqClient() {
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [query, setQuery] = useState("");
 
-  const visibleFaqs =
-    activeCategory === null
-      ? faqs
-      : faqs.filter((f) => f.category === activeCategory);
+  const trimmedQuery = query.trim().toLowerCase();
+
+  const visibleFaqs = faqs
+    .filter((f) => activeCategory === null || f.category === activeCategory)
+    .map((section) => {
+      if (!trimmedQuery) return section;
+      const categoryMatch = section.category.toLowerCase().includes(trimmedQuery);
+      if (categoryMatch) return section;
+      const items = section.items.filter(
+        (item) =>
+          item.q.toLowerCase().includes(trimmedQuery) ||
+          faqText(item.a).toLowerCase().includes(trimmedQuery)
+      );
+      return { ...section, items };
+    })
+    .filter((section) => section.items.length > 0);
+
+  const hasResults = visibleFaqs.length > 0;
 
   return (
     <div style={{ backgroundColor: "#EAE7E3", minHeight: "100vh" }}>
@@ -471,6 +491,40 @@ export default function FaqClient() {
         </div>
       </div>
 
+      {/* Search */}
+      <div className="px-6 md:px-12 pb-6">
+        <div className="max-w-4xl mx-auto relative">
+          <svg
+            className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#7F7F7D"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <path d="m21 21-4.3-4.3" />
+          </svg>
+          <input
+            type="search"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search questions — purity, shipping, COA, returns…"
+            aria-label="Search frequently asked questions"
+            className="w-full rounded-xl pl-11 pr-4 py-3 text-sm outline-none focus:ring-2"
+            style={{
+              backgroundColor: "#fff",
+              border: "1px solid rgba(0,0,0,0.1)",
+              color: "#010101",
+            }}
+          />
+        </div>
+      </div>
+
       {/* Category filter pills */}
       <div className="px-6 md:px-12 pb-10">
         <div className="max-w-4xl mx-auto flex flex-wrap gap-2">
@@ -517,6 +571,20 @@ export default function FaqClient() {
       {/* FAQ sections */}
       <section className="px-6 md:px-12 pb-24">
         <div className="max-w-4xl mx-auto space-y-14">
+          {!hasResults && (
+            <div
+              className="rounded-xl p-10 text-center"
+              style={{ backgroundColor: "#fff", border: "1px solid rgba(0,0,0,0.06)" }}
+            >
+              <p className="text-sm" style={{ color: "#7F7F7D", lineHeight: 1.7 }}>
+                No questions match “{query.trim()}”. Try a different term, or email us at{" "}
+                <a href="mailto:research@nexphoria.com" className="underline" style={{ color: "#010101" }}>
+                  research@nexphoria.com
+                </a>
+                .
+              </p>
+            </div>
+          )}
           {visibleFaqs.map((section) => (
             <div key={section.category}>
               <h2
@@ -537,6 +605,49 @@ export default function FaqClient() {
               </div>
             </div>
           ))}
+        </div>
+      </section>
+
+      {/* Learn more cross-links */}
+      <section className="px-6 md:px-12 pb-16">
+        <div className="max-w-4xl mx-auto">
+          <p
+            className="text-xs uppercase mb-6"
+            style={{ color: "#B8A44C", letterSpacing: "0.2em", fontWeight: 600 }}
+          >
+            Learn More
+          </p>
+          <div className="grid sm:grid-cols-2 gap-4">
+            {[
+              {
+                href: "/science",
+                title: "How we verify every lot",
+                body: "Independent HPLC and ESI-MS testing, analyst sign-off, and lot-traceable COAs — the methodology behind our purity claims.",
+              },
+              {
+                href: "/manufacturing",
+                title: "From synthesis to cold-chain",
+                body: "How research compounds move from synthesis through verification to temperature-controlled delivery at your bench.",
+              },
+            ].map((card) => (
+              <Link
+                key={card.href}
+                href={card.href}
+                className="group rounded-xl p-6 transition-colors"
+                style={{ backgroundColor: "#fff", border: "1px solid rgba(0,0,0,0.06)" }}
+              >
+                <h3 className="text-base font-medium mb-2" style={{ color: "#010101" }}>
+                  {card.title}
+                </h3>
+                <p className="text-sm" style={{ color: "#7F7F7D", lineHeight: 1.7 }}>
+                  {card.body}
+                </p>
+                <span className="text-xs uppercase mt-4 inline-block" style={{ color: "#B8A44C", letterSpacing: "0.1em" }}>
+                  Read more →
+                </span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

@@ -97,7 +97,7 @@ const faqItems = [
   },
   {
     q: "What if my order arrives warm or damaged?",
-    a: "Document the condition immediately with photos. Email support at hello@nexphoria.com within 24 hours of delivery with your order number and images. We will assess and, if the cold-chain integrity was clearly compromised in transit, issue a replacement at no charge. We do not offer refunds on compounds — only replacements for verified transit damage.",
+    a: "Document the condition immediately with photos. Email support at research@nexphoria.com within 24 hours of delivery with your order number and images. We will assess and, if the cold-chain integrity was clearly compromised in transit, issue a replacement at no charge. We do not offer refunds on compounds — only replacements for verified transit damage.",
   },
   {
     q: "Do you require a signature on delivery?",
@@ -558,7 +558,7 @@ export default function ShippingPage() {
                 ),
                 steps: [
                   "Photograph the package, seal, and vials immediately",
-                  "Email hello@nexphoria.com within 24 hours of delivery",
+                  "Email research@nexphoria.com within 24 hours of delivery",
                   "Include your order number and all photos",
                   "We'll assess and ship a replacement if damage is verified",
                 ],
@@ -642,11 +642,11 @@ export default function ShippingPage() {
             reconstituted, or used are not eligible for replacement or credit.
             Contact{" "}
             <a
-              href="mailto:hello@nexphoria.com"
+              href="mailto:research@nexphoria.com"
               style={{ color: "#5A7A3A" }}
               className="underline"
             >
-              hello@nexphoria.com
+              research@nexphoria.com
             </a>{" "}
             within the time windows above.
           </div>

@@ -170,6 +170,45 @@ export default function WholesaleClient() {
         </div>
       </section>
 
+      {/* Verification trust signals */}
+      <section className="py-14 border-b" style={{ backgroundColor: "#FFFFFF", borderColor: "var(--dark-border)" }}>
+        <div className="container-nex">
+          <div className="grid md:grid-cols-3 gap-px" style={{ backgroundColor: "var(--dark-border)" }}>
+            {[
+              {
+                title: "Independent Verification",
+                body: "Every lot is analyzed by independent laboratories — Janoshik Analytical and Freedom Diagnostics — using RP-HPLC and ESI-MS. No in-house-only numbers.",
+              },
+              {
+                title: "Lot-Specific COA",
+                body: "Each shipment carries a lot-specific Certificate of Analysis, traceable to the named testing lab. Documentation travels with the compound, not after it.",
+              },
+              {
+                title: "Cold-Chain Packed",
+                body: "Cold-chain packed every shipment. Temperature-controlled packaging protects compound integrity from our facility to your bench.",
+              },
+            ].map((item, i) => (
+              <motion.div
+                key={item.title}
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true }}
+                variants={fadeUp}
+                custom={i * 0.1}
+                className="p-8"
+                style={{ backgroundColor: "var(--dark-card)" }}
+              >
+                <CheckCircle2 className="w-5 h-5 text-acid-green flex-shrink-0 mb-4" strokeWidth={1.5} />
+                <h3 className="text-base font-bold mb-2" style={{ fontFamily: "Georgia, serif", color: "#FDFCF8" }}>
+                  {item.title}
+                </h3>
+                <p className="text-sm leading-relaxed text-secondary">{item.body}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Services Grid */}
       <section className="py-24" style={{ backgroundColor: "#F5F3F0" }}>
         <div className="container-nex">
