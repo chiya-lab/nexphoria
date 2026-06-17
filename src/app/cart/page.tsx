@@ -4,9 +4,21 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { Plus, Minus, X, ArrowRight, ShoppingBag, RefreshCw, FlaskConical } from "lucide-react";
-import { useCart, getItemUnitPrice, getCadenceLabel } from "@/lib/cart";
+import {
+  Plus,
+  Minus,
+  X,
+  ArrowRight,
+  ArrowLeft,
+  ShoppingBag,
+  RefreshCw,
+  FlaskConical,
+  ShieldCheck,
+  Snowflake,
+} from "lucide-react";
+import { useCart, getItemUnitPrice } from "@/lib/cart";
 import { getProductImagePath, hasProductPhoto } from "@/lib/product-images";
+import { products, type Product } from "@/lib/products";
 import ProductVial from "@/components/ProductVial";
 import RUOBanner from "@/components/RUOBanner";
 
@@ -48,6 +60,15 @@ function ProductThumb({
   );
 }
 
+// Three featured compounds for the empty-cart state. Prefer POPULAR-badged,
+// in-stock products; fall back to the first available compounds.
+function getFeaturedCompounds(): Product[] {
+  const available = products.filter((p) => !p.comingSoon);
+  const popular = available.filter((p) => p.badge === "POPULAR");
+  const featured = [...popular, ...available.filter((p) => p.badge !== "POPULAR")];
+  return featured.slice(0, 3);
+}
+
 export default function CartPage() {
   const router = useRouter();
   const { items, updateQuantity, removeItem, getTotalPrice, getTotalItems } = useCart();
@@ -76,7 +97,7 @@ export default function CartPage() {
     <div className="min-h-screen" style={{ backgroundColor: "var(--color-page-bg)" }}>
       <RUOBanner />
 
-      <main className="max-w-4xl mx-auto px-4 py-12 sm:py-16">
+      <main className="max-w-4xl mx-auto px-4 py-12 sm:py-16 pb-32 lg:pb-16">
         {/* Header */}
         <div className="mb-10">
           <p
@@ -101,40 +122,103 @@ export default function CartPage() {
 
         {totalItems === 0 ? (
           /* Empty State */
-          <div className="text-center py-20">
-            <div
-              className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
-              style={{ backgroundColor: "#F5F5F0", border: "1px solid #E5E5E5" }}
-            >
-              <ShoppingBag className="w-7 h-7" style={{ color: "#999" }} />
+          <div className="py-6">
+            <div className="text-center mb-12">
+              <div
+                className="w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6"
+                style={{ backgroundColor: "#F5F5F0", border: "1px solid #E5E5E5" }}
+              >
+                <ShoppingBag className="w-7 h-7" style={{ color: "var(--color-gold)" }} />
+              </div>
+              <p
+                className="text-lg mb-2"
+                style={{
+                  fontFamily: "var(--font-display)",
+                  fontWeight: 300,
+                  color: "var(--color-text-primary)",
+                }}
+              >
+                No compounds selected yet
+              </p>
+              <p className="text-sm mb-8 max-w-md mx-auto" style={{ color: "var(--color-text-secondary)", lineHeight: 1.6 }}>
+                Every Nexphoria order ships cold-chain with a lot-specific Certificate of
+                Analysis. Begin with one of our most-requested research-grade compounds.
+              </p>
+              <Link
+                href="/products"
+                className="btn-acid"
+                style={{ minHeight: "48px" }}
+              >
+                View All Compounds
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </div>
-            <p
-              className="text-lg mb-2"
-              style={{
-                fontFamily: "var(--font-display)",
-                fontWeight: 300,
-                color: "var(--color-text-primary)",
-              }}
-            >
-              No compounds selected
-            </p>
-            <p className="text-sm mb-8" style={{ color: "var(--color-text-secondary)" }}>
-              Browse our research compound catalog to begin your order.
-            </p>
-            <Link
-              href="/products"
-              className="inline-flex items-center gap-2 text-sm font-medium uppercase transition-all"
-              style={{
-                letterSpacing: "0.12em",
-                color: "var(--color-text-primary)",
-                borderBottom: "1px solid var(--color-gold)",
-                paddingBottom: "2px",
-                textDecoration: "none",
-              }}
-            >
-              Browse Compounds
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+
+            {/* Featured compound suggestions */}
+            <div>
+              <p
+                className="text-[10px] uppercase mb-4 text-center"
+                style={{ letterSpacing: "0.18em", color: "var(--color-text-secondary)", fontWeight: 500 }}
+              >
+                Frequently ordered
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {getFeaturedCompounds().map((product) => {
+                  const price = product.dosages?.[0]?.price ?? product.price;
+                  const size = product.dosages?.[0]?.size ?? product.size;
+                  return (
+                    <Link
+                      key={product.slug}
+                      href={`/products/${product.slug}`}
+                      className="group rounded-2xl p-5 flex flex-col items-center text-center transition-all card-shadow card-shadow-hover"
+                      style={{
+                        backgroundColor: "#FFFFFF",
+                        border: "1px solid #E5E5E5",
+                        textDecoration: "none",
+                      }}
+                    >
+                      <div
+                        className="w-20 h-20 rounded-xl overflow-hidden flex items-center justify-center mb-4"
+                        style={{
+                          backgroundColor: `${product.accentColor}10`,
+                          border: `1px solid ${product.accentColor}30`,
+                        }}
+                      >
+                        <ProductThumb
+                          slug={product.slug}
+                          name={product.name}
+                          dosage={size}
+                          category={product.category}
+                          accentColor={product.accentColor}
+                        />
+                      </div>
+                      <h3
+                        className="text-sm font-medium mb-1"
+                        style={{
+                          fontFamily: "var(--font-display)",
+                          color: "var(--color-text-primary)",
+                        }}
+                      >
+                        {product.name}
+                      </h3>
+                      <p
+                        className="text-[11px] mb-3 line-clamp-2"
+                        style={{ color: "var(--color-text-secondary)", lineHeight: 1.5 }}
+                      >
+                        {product.category} · {product.purity}
+                      </p>
+                      <span
+                        className="mt-auto inline-flex items-center gap-1 text-xs font-medium uppercase transition-opacity group-hover:opacity-70"
+                        style={{ letterSpacing: "0.1em", color: "var(--color-gold-text)" }}
+                      >
+                        From ${price}
+                        <ArrowRight className="w-3 h-3" />
+                      </span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8">
@@ -173,7 +257,7 @@ export default function CartPage() {
                   className="mb-6 p-3 rounded-lg flex items-center gap-2"
                   style={{ backgroundColor: "rgba(184,164,76,0.06)", border: "1px solid rgba(184,164,76,0.2)" }}
                 >
-                  <FlaskConical className="w-4 h-4 flex-shrink-0" style={{ color: "var(--color-gold)" }} />
+                  <Snowflake className="w-4 h-4 flex-shrink-0" style={{ color: "var(--color-gold)" }} />
                   <p className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
                     Free cold-chain shipping included with your order
                   </p>
@@ -231,13 +315,19 @@ export default function CartPage() {
                             </Link>
                             <p className="text-xs mt-0.5" style={{ color: "var(--color-text-secondary)" }}>
                               {item.selectedDosage?.size || item.product.size}
-                              {item.format === "pen" && " · Pen Format"}
+                              {" · "}
+                              {item.format === "pen" ? "Pen Format" : "Vial"}
                               {isSubscription && (
                                 <span className="ml-1.5 inline-flex items-center gap-1" style={{ color: "var(--color-gold)" }}>
                                   <RefreshCw className="w-2.5 h-2.5" />
                                   Monthly Auto-Ship
                                 </span>
                               )}
+                            </p>
+                            {/* Lot status / COA trust signal */}
+                            <p className="text-[11px] mt-1 inline-flex items-center gap-1" style={{ color: "var(--color-gold-text)" }}>
+                              <ShieldCheck className="w-3 h-3 flex-shrink-0" />
+                              In stock · lot-specific COA included
                             </p>
                           </div>
                           <button
@@ -259,7 +349,7 @@ export default function CartPage() {
                             <button
                               onClick={() => updateQuantity(item.product.slug, item.format, Math.max(1, item.quantity - 1))}
                               className="flex items-center justify-center transition-colors hover:bg-gray-100"
-                              style={{ width: "36px", height: "36px", background: "none", border: "none", cursor: "pointer" }}
+                              style={{ width: "44px", height: "44px", background: "none", border: "none", cursor: "pointer" }}
                               aria-label="Decrease quantity"
                               disabled={item.quantity <= 1}
                             >
@@ -274,7 +364,7 @@ export default function CartPage() {
                             <button
                               onClick={() => updateQuantity(item.product.slug, item.format, item.quantity + 1)}
                               className="flex items-center justify-center transition-colors hover:bg-gray-100"
-                              style={{ width: "36px", height: "36px", background: "none", border: "none", cursor: "pointer" }}
+                              style={{ width: "44px", height: "44px", background: "none", border: "none", cursor: "pointer" }}
                               aria-label="Increase quantity"
                             >
                               <Plus className="w-3.5 h-3.5" style={{ color: "#666" }} />
@@ -317,7 +407,8 @@ export default function CartPage() {
                     textDecoration: "none",
                   }}
                 >
-                  ← Continue Shopping
+                  <ArrowLeft className="w-3.5 h-3.5" />
+                  Continue Shopping
                 </Link>
               </div>
             </div>
@@ -415,16 +506,13 @@ export default function CartPage() {
                 {/* Trust strip */}
                 <div className="mt-4 space-y-2">
                   {[
-                    "HPLC-verified purity ≥99%",
-                    "Cold-chain shipping on every order",
-                    "Certificate of Analysis enclosed",
-                  ].map((item) => (
-                    <div key={item} className="flex items-center gap-2 text-[11px]" style={{ color: "var(--color-text-secondary)" }}>
-                      <div
-                        className="w-1 h-1 rounded-full flex-shrink-0"
-                        style={{ backgroundColor: "var(--color-gold)" }}
-                      />
-                      {item}
+                    { icon: <FlaskConical className="w-3.5 h-3.5 flex-shrink-0" />, label: "Independent HPLC / ESI-MS verification" },
+                    { icon: <Snowflake className="w-3.5 h-3.5 flex-shrink-0" />, label: "Cold-chain packed every shipment" },
+                    { icon: <ShieldCheck className="w-3.5 h-3.5 flex-shrink-0" />, label: "Lot-specific COA enclosed" },
+                  ].map((row) => (
+                    <div key={row.label} className="flex items-center gap-2 text-[11px]" style={{ color: "var(--color-text-secondary)" }}>
+                      <span style={{ color: "var(--color-gold)" }}>{row.icon}</span>
+                      {row.label}
                     </div>
                   ))}
                 </div>
@@ -439,10 +527,46 @@ export default function CartPage() {
           style={{ borderTop: "1px solid #E5E5E5" }}
         >
           <p className="text-[11px] uppercase" style={{ letterSpacing: "0.12em", color: "#999" }}>
-            For Research Use Only — Not for human consumption or clinical application
+            For qualified research use only — not for human consumption or clinical application
           </p>
         </div>
       </main>
+
+      {/* Mobile sticky checkout bar */}
+      {totalItems > 0 && (
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 border-t mobile-sticky-cta" style={{ zIndex: 40 }}>
+          <div className="flex items-center justify-between gap-4">
+            <div className="min-w-0">
+              <p className="text-xs" style={{ color: "var(--color-text-secondary)" }}>
+                {totalItems} item{totalItems !== 1 ? "s" : ""}
+              </p>
+              <p
+                className="text-xl"
+                style={{ fontFamily: "var(--font-display)", fontWeight: 300, color: "var(--color-text-primary)", lineHeight: 1.2 }}
+              >
+                ${totalPrice.toFixed(2)}
+              </p>
+            </div>
+            <button
+              onClick={() => router.push("/checkout")}
+              className="flex items-center gap-2 flex-shrink-0 font-medium uppercase transition-all active:scale-[0.97]"
+              style={{
+                height: "48px",
+                padding: "0 24px",
+                fontSize: "11px",
+                letterSpacing: "0.15em",
+                backgroundColor: "#1A1A1A",
+                color: "#F9F9F9",
+                borderRadius: "999px",
+                border: "none",
+                cursor: "pointer",
+              }}
+            >
+              Checkout <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
