@@ -6,6 +6,7 @@ import PprHeader from "@/components/chrome/PprHeader";
 import PprFooter from "@/components/chrome/PprFooter";
 import GoogleAnalytics from "@/components/GoogleAnalytics";
 import ClientModals from "@/components/ClientModals";
+import FloatingAdvisorWidget from "@/components/chrome/FloatingAdvisorWidget";
 
 // Body — Inter (dense, ubiquitous)
 const inter = Inter({
@@ -260,6 +261,7 @@ export default function RootLayout({
         <main id="main-content">{children}</main>
         <PprFooter />
         <ClientModals />
+        <FloatingAdvisorWidget />
       </body>
     </html>
   );
