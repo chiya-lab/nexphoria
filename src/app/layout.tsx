@@ -226,12 +226,12 @@ export default function RootLayout({
         { }
         <link rel="preload" as="image" href="/brand/packaging-unboxing.webp" type="image/webp"
           media="(min-width: 769px)"
-          // @ts-ignore fetchpriority is valid HTML attr
+          // @ts-expect-error fetchpriority is valid HTML attr
           fetchpriority="high"
         />
         <link rel="preload" as="image" href="/brand/packaging-unboxing-mobile.webp" type="image/webp"
           media="(max-width: 768px)"
-          // @ts-ignore fetchpriority is valid HTML attr
+          // @ts-expect-error fetchpriority is valid HTML attr
           fetchpriority="high"
         />
         <link rel="icon" href="/favicon.png" type="image/png" />
