@@ -16,8 +16,6 @@ export default function FloatingAdvisorWidget() {
     return () => window.removeEventListener('open-advisor', handleOpenAdvisor);
   }, []);
 
-  // Focus trap? Not needed for now.
-
   // Body scroll lock when open
   useEffect(() => {
     if (isOpen) {
@@ -40,15 +38,17 @@ export default function FloatingAdvisorWidget() {
       <button
         onClick={() => setIsOpen(true)}
         aria-label="Open Protocol Advisor"
-        className="fixed bottom-8 right-3 sm:right-8 z-50 flex items-center justify-center w-10 h-10 rounded-full border-2 border-[#B8A44C]/50 bg-[#B8A44C]/5 hover:bg-[#B8A44C]/10 transition-all duration-200"
-        style={{ color: '#B8A44C' }}
+        className="fixed bottom-8 right-3 sm:right-8 z-50 flex items-center justify-center w-12 h-12 rounded-full border-2 border-[hsl(48,42%,60%)/50] bg-[hsl(48,42%,60%)/10] hover:bg-[hsl(48,42%,60%)/15] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(48,42%,60%)/50] transition-all duration-200"
+        style={{ color: 'hsl(48,42%,60%)' }}
       >
         {/* Abstract bio-doc/molecule icon */}
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
           <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="2" fill="none"/>
           <path d="M12 8v4m0 4v4" stroke="currentColor" strokeWidth="2"/>
           <path d="M8 12h4m4 0h4" stroke="currentColor" strokeWidth="2"/>
         </svg>
+        {/* Subtle pulse animation */}
+        <span className="absolute inset-0 rounded-full animate-pulse" style={{ backgroundColor: 'hsl(48,42%,60%)', opacity: '0.2' }} aria-hidden="true"></span>
       </button>
 
       {/* Modal / Panel */}
@@ -82,8 +82,8 @@ export default function FloatingAdvisorWidget() {
               {/* Header */}
               <div className="flex items-center justify-between px-4 py-3 border-b" style={{ borderColor: '#E5E5E5' }}>
                 <div className="flex items-center gap-2">
-                  <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F5F5F5' }}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ backgroundColor: '#F5F5F5' }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                       <circle cx="12" cy="12" r="8" stroke="currentColor" strokeWidth="2" fill="none"/>
                       <path d="M12 8v4m0 4v4" stroke="currentColor" strokeWidth="2"/>
                       <path d="M8 12h4m4 0h4" stroke="currentColor" strokeWidth="2"/>
@@ -93,7 +93,7 @@ export default function FloatingAdvisorWidget() {
                 </div>
                 <button
                   onClick={handleClose}
-                  className="p-1 rounded hover:bg-[#F5F5F5]"
+                  className="p-1 rounded hover:bg-[#F5F5F5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(48,42%,60%)/50]"
                   aria-label="Close"
                 >
                   <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
