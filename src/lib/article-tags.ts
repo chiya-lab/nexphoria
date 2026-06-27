@@ -9,7 +9,7 @@
  */
 
 import { PRODUCT_ARTICLES } from './product-articles';
-import { articles, getArticleBySlug } from './blog';
+import { getArticleBySlug } from './blog';
 
 /**
  * Human-readable display names for tag slugs.
