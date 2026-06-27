@@ -38,13 +38,15 @@ export default function QuizClient() {
   const [stepIndex, setStepIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string[]>>(EMPTY_ANSWERS);
   const [email, setEmail] = useState<string | null>(null);
-  const [saved, setSaved] = useState<PersistedState | null>(null);
+  const [saved, setSaved] = useState<PersistedState | null>(() => {
+    if (typeof window === "undefined") return null;
+    const persisted = loadPersisted();
+    return persisted && persisted.phase !== "intro" ? persisted : null;
+  });
   const [hydrated, setHydrated] = useState(false);
 
-  // Detect resumable progress on mount (does not auto-jump; intro offers Resume).
   useEffect(() => {
-    const persisted = loadPersisted();
-    if (persisted && persisted.phase !== "intro") setSaved(persisted);
+    // eslint-disable-next-line
     setHydrated(true);
   }, []);
 
