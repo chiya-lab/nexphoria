@@ -239,7 +239,7 @@ export interface InventoryRow {
 }
 
 function buildInventory(): InventoryRow[] {
-  return MOCK_PRODUCTS.map((p: MockProduct, i) => {
+  return MOCK_PRODUCTS.map((p: MockProduct) => {
     const unitsMonth = 20 + Math.floor(rand() * 220);
     const dailyBurn = Math.max(0.5, unitsMonth / 30);
     const daysOfCover = Math.round(p.stock / dailyBurn);
@@ -276,7 +276,7 @@ export interface ProductRow {
   rating: number;
 }
 
-export const PRODUCT_ROWS: ProductRow[] = MOCK_PRODUCTS.map((p, i) => {
+export const PRODUCT_ROWS: ProductRow[] = MOCK_PRODUCTS.map((p) => {
   const unitsMonth = INVENTORY.find((r) => r.slug === p.slug)?.unitsMonth ?? 50;
   const unitsPrevMonth = Math.max(5, Math.round(unitsMonth * (0.7 + rand() * 0.6)));
   const momPct = round2(((unitsMonth - unitsPrevMonth) / unitsPrevMonth) * 100);
