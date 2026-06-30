@@ -374,6 +374,29 @@ export function Footer() {
           </div>
         </div>
 
+        {/* Lab partner credits */}
+        <div className="mb-10 flex flex-col items-center gap-2.5">
+          <p
+            className="text-[10px] uppercase font-medium"
+            style={{ letterSpacing: "0.2em", color: "#B8A44C" }}
+          >
+            Independently Verified By
+          </p>
+          <div className="flex items-center flex-wrap justify-center gap-x-6 gap-y-2">
+            <span className="text-xs" style={{ color: "rgba(255,255,255,0.45)" }}>
+              Janoshik Analytical
+            </span>
+            <span aria-hidden="true" style={{ color: "rgba(255,255,255,0.15)" }}>·</span>
+            <span className="text-xs" style={{ color: "rgba(255,255,255,0.45)" }}>
+              Freedom Diagnostics
+            </span>
+            <span aria-hidden="true" style={{ color: "rgba(255,255,255,0.15)" }}>·</span>
+            <span className="text-xs" style={{ color: "rgba(255,255,255,0.45)" }}>
+              HPLC &amp; MS Third-Party Testing
+            </span>
+          </div>
+        </div>
+
         {/* Compliance disclaimer */}
         <div className="mb-10" style={{ borderTop: "1px solid rgba(255,255,255,0.07)", paddingTop: "2rem" }}>
           <p

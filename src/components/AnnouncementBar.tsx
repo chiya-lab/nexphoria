@@ -59,16 +59,21 @@ export default function AnnouncementBar() {
     <div
       className={`w-full relative${slideUp ? " announcement-slide-up" : ""}`}
       style={{
-        backgroundColor: "#F5F3EE",
-        borderBottom: "1px solid #E8E5DF",
+        backgroundColor: "#1A1A18",
+        borderBottom: "1px solid rgba(184,164,76,0.25)",
       }}
     >
       <div className="flex items-center justify-center py-2.5 px-10 overflow-hidden">
+        <span
+          aria-hidden="true"
+          className="mr-2.5 inline-block w-1 h-1 rounded-full flex-shrink-0"
+          style={{ backgroundColor: "#B8A44C", opacity: visible ? 1 : 0, transition: "opacity 0.3s ease" }}
+        />
         <p
           className="text-[10px] uppercase font-medium transition-opacity whitespace-nowrap overflow-hidden text-ellipsis"
           style={{
             letterSpacing: "0.15em",
-            color: "#666666",
+            color: "#B8A44C",
             opacity: visible ? 1 : 0,
             transition: "opacity 0.3s ease",
             lineHeight: 1.5,
@@ -81,8 +86,8 @@ export default function AnnouncementBar() {
       <button
         onClick={handleDismiss}
         aria-label="Dismiss announcement"
-        className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-6 h-6 rounded-full transition-colors hover:bg-black/5"
-        style={{ color: "#999999" }}
+        className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center w-6 h-6 rounded-full transition-colors hover:bg-white/10"
+        style={{ color: "rgba(184,164,76,0.7)" }}
       >
         <X size={12} strokeWidth={2} aria-hidden="true" />
       </button>
