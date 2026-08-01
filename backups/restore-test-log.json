@@ -15,5 +15,23 @@
       "No backup artifact available — CLOUDFLARE_API_TOKEN secret must be added to GitHub Actions secrets before backup workflow can succeed"
     ],
     "notes": "Monthly restore test skipped for June 2026. Unblock: add CLOUDFLARE_API_TOKEN to https://github.com/chiya-lab/nexphoria/settings/secrets/actions with a Cloudflare API token scoped to KV read access on namespace 67bb9d9a4fa440fe94b1adcfb977c16c."
+  },
+  {
+    "test_date": "2026-07-31",
+    "test_timestamp": "2026-07-31T23:59:00Z",
+    "backup_file": "none",
+    "status": "skipped",
+    "key_count": 0,
+    "checks": [
+      "SKIP: No backup artifact available — kv-backup workflow has still never succeeded (0 successful runs)",
+      "SKIP: Root cause unchanged: CLOUDFLARE_API_TOKEN secret not configured in GitHub Actions repository secrets (tracked by NEX-2841)",
+      "SKIP: kv-backup.yml still runs daily and exits with 'ERROR: CLOUDFLARE_API_TOKEN is not set' (confirmed in run 30607000402, 2026-07-31)",
+      "SKIP: kv-restore-test.yml manual-dispatch runs on 2026-07-01 (28497515024, 28494017768, 28492905794) all failed — no successful backup artifact to download",
+      "SKIP: Restore test cannot proceed without a valid backup file"
+    ],
+    "failures": [
+      "No backup artifact available — CLOUDFLARE_API_TOKEN secret must be added to GitHub Actions secrets before backup workflow can succeed"
+    ],
+    "notes": "Monthly restore test skipped for July 2026. Same operational blocker as June (NEX-2841). Unblock: add CLOUDFLARE_API_TOKEN to https://github.com/chiya-lab/nexphoria/settings/secrets/actions with a Cloudflare API token scoped to KV read access on namespace 67bb9d9a4fa440fe94b1adcfb977c16c. Once the daily kv-backup workflow produces a successful artifact, re-enable the schedule in kv-restore-test.yml and this test will validate real data."
   }
 ]
