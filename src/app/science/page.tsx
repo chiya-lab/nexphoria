@@ -44,6 +44,38 @@ const qualityCards = [
   },
 ];
 
+const glossary = [
+  {
+    term: "Purity",
+    def: "The percentage of the sample that is the intended compound, measured by RP-HPLC as the target peak's share of total UV peak area. Higher purity means fewer truncated sequences, deletion products, and process residues.",
+  },
+  {
+    term: "Identity",
+    def: "Confirmation that the compound is the molecule it claims to be, established by ESI mass spectrometry matching the observed molecular mass to the theoretical mass of the intended sequence. Identity and purity are separate questions.",
+  },
+  {
+    term: "Lot",
+    def: "A single, traceable production run. Every vial carries a lot number that ties it to its synthesis date, testing date, analyst, and raw-material source — so a COA always corresponds to a specific lot, not a generic claim.",
+  },
+  {
+    term: "RUO",
+    def: "Research Use Only. These compounds are supplied strictly for in vitro and animal-model research. They are not drugs, are not for human or veterinary use, and carry no claims of clinical benefit.",
+  },
+];
+
+const labPartners = [
+  {
+    name: "Janoshik Analytical",
+    methods: "HPLC · ESI-MS · NMR",
+    sub: "Independent laboratory verifying purity, molecular identity, and structure for each lot.",
+  },
+  {
+    name: "Freedom Diagnostics",
+    methods: "LC-MS/MS · GC-MS",
+    sub: "ISO/IEC 17025-aligned quantitative analysis and residual-solvent screening.",
+  },
+];
+
 const scienceSchema = {
   "@context": "https://schema.org",
   "@type": "WebPage",
@@ -230,6 +262,71 @@ export default function SciencePage() {
                 <p className="text-sm" style={{ color: "#7F7F7D", lineHeight: 1.6 }}>
                   {card.desc}
                 </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* How to read a COA + glossary */}
+      <section className="py-24 px-6 md:px-12" style={{ backgroundColor: "#FFFFFF" }}>
+        <div className="max-w-5xl mx-auto">
+          <p className="text-xs uppercase mb-4" style={{ color: "#B8923A", letterSpacing: "0.25em" }}>
+            Reading the Data
+          </p>
+          <h2 className="text-3xl mb-6" style={{ fontWeight: 200, color: "#010101" }}>
+            How to Read a Certificate of Analysis
+          </h2>
+          <p className="text-sm max-w-2xl mb-10" style={{ color: "#7F7F7D", lineHeight: 1.8 }}>
+            A COA reports what an independent lab measured for one specific lot. Read the purity
+            figure (RP-HPLC peak area), confirm identity (ESI-MS mass match), and check that the lot
+            number on the document matches the lot number on your vial. Our full walkthrough explains
+            each line.
+          </p>
+          <Link href="/guides/how-to-read-coa" className="btn-primary inline-block mb-16">
+            Read the COA Guide →
+          </Link>
+
+          <div className="grid md:grid-cols-2 gap-x-12 gap-y-8 border-t pt-12" style={{ borderColor: "rgba(0,0,0,0.08)" }}>
+            {glossary.map((g) => (
+              <div key={g.term}>
+                <h3 className="text-lg mb-2" style={{ fontWeight: 400, color: "#010101" }}>
+                  {g.term}
+                </h3>
+                <p className="text-sm" style={{ color: "#7F7F7D", lineHeight: 1.7 }}>
+                  {g.def}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Independent testing partners */}
+      <section className="py-24 px-6 md:px-12" style={{ backgroundColor: "#EAE7E3" }}>
+        <div className="max-w-5xl mx-auto">
+          <p className="text-xs uppercase mb-4" style={{ color: "#B8923A", letterSpacing: "0.25em" }}>
+            Independent Testing Partners
+          </p>
+          <h2 className="text-3xl mb-6" style={{ fontWeight: 200, color: "#010101" }}>
+            Who Verifies Our Compounds
+          </h2>
+          <p className="text-sm max-w-2xl mb-10" style={{ color: "#7F7F7D", lineHeight: 1.8 }}>
+            We do not test our own products. Each lot is characterized by accredited, independent
+            laboratories, and their results appear on the Certificate of Analysis we ship with it.
+          </p>
+          <div className="grid md:grid-cols-2 gap-6">
+            {labPartners.map((p) => (
+              <div
+                key={p.name}
+                className="p-8 rounded-lg"
+                style={{ backgroundColor: "#FFFFFF", border: "1px solid rgba(0,0,0,0.06)", borderTop: "2px solid #B8923A" }}
+              >
+                <h3 className="text-xl mb-1" style={{ fontWeight: 300, color: "#010101" }}>
+                  {p.name}
+                </h3>
+                <div className="text-xs font-mono mb-3" style={{ color: "#B8923A" }}>{p.methods}</div>
+                <p className="text-sm" style={{ color: "#7F7F7D", lineHeight: 1.7 }}>{p.sub}</p>
               </div>
             ))}
           </div>

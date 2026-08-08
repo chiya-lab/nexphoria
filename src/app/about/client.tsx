@@ -3,8 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowRight, FlaskConical, Shield, Award, Microscope, CheckCircle2 } from "lucide-react";
+import { ArrowRight, FlaskConical, Shield, Award, Microscope } from "lucide-react";
 import TrustBadges from "@/components/TrustBadges";
+import RUOBanner from "@/components/RUOBanner";
 
 const fadeUp = {
   hidden: { opacity: 0, y: 24 },
@@ -434,6 +435,13 @@ export default function AboutClient() {
           <Link href="/products" className="btn-primary whitespace-nowrap">
             Browse Compounds <ArrowRight className="w-4 h-4" />
           </Link>
+        </div>
+      </section>
+
+      {/* Research Use Only */}
+      <section className="px-6 py-16" style={{ backgroundColor: "#0F0F0E" }}>
+        <div className="max-w-3xl mx-auto">
+          <RUOBanner variant="card" tone="dark" />
         </div>
       </section>
     </div>
